@@ -1,3 +1,9 @@
+<!-- The FACTS in this document are placed in the public domain
+     (CC0-1.0), deliberately and separately from the GPL on the code
+     beside it: the most likely reader is someone carrying a table
+     from here into a kernel patch, and the kernel is GPL-2.0-only.
+     Copy any of it, with or without attribution. -->
+
 # The Topping M62's vendor control protocol
 
 The M62 is a USB audio interface whose analogue gains, output
