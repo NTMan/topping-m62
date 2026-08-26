@@ -362,6 +362,51 @@ kernel without it, or waits for a kernel-side channel. That
 trade-off was known and accepted when the road was chosen; it is
 recorded here so nobody rediscovers it as a bug.
 
+### The claim is a keep-out sign, not a key (**verified**)
+
+It is easy to read the paragraph above as "the driver owns the
+endpoints, so nobody else can use them". That is not what happens,
+and the difference decides where a second program would have to
+look for room.
+
+Unbinding the vendor interface from `snd-usb-audio` by hand, while
+the driver was loaded and the card was working:
+
+```
+# echo 3-1.3:1.4 > /sys/bus/usb/drivers/snd-usb-audio/unbind
+# echo 3-1.3:1.4 > /sys/bus/usb/drivers/usbhid/bind
+sh: line 1: echo: write error: No such device
+```
+
+The `unbind` succeeds and the sound card survives it untouched
+(`aplay -l` still lists it). The `bind` fails with `ENODEV`, which
+is `hid_add_device()` refusing a device that is in
+`hid_ignore_list`. So handing the interface back is not enough:
+**the entry in the ignore list is what keeps `usbhid` away, not
+the claim.**
+
+And in that state, with the interface owned by nobody, the driver
+kept writing to the card. Reads had stopped -- the mixer control
+froze on its last announced value, because usbcore kills the URBs
+on an interface it is unbinding -- but `cset` still moved the
+gain on the hardware. `usb_interrupt_msg()` takes a
+`struct usb_device` and an endpoint address; interface ownership
+is an agreement between drivers, not a lock on the wire.
+
+Two consequences worth carrying:
+
+* if a way for a driver and a userspace program to coexist is
+  ever wanted, it lies on the `hid_ignore_list` side rather than
+  the ownership side. `hid.quirks=...:0x40000000`
+  (`HID_QUIRK_NO_IGNORE`) removes the entry, but only from the
+  kernel command line -- the module parameter is read-only at
+  runtime -- and even then the quirk reclaims the interface at
+  probe, so the entry alone does not open the road;
+* writing to this channel without owning the interface is
+  possible and is not therefore right. Two writers on one
+  endpoint with no arbitration is how a card ends up in a state
+  neither of them believes in.
+
 ## A note on capturing
 
 The frames above were read from `hidraw` while M Control Center
