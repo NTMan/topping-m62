@@ -204,6 +204,43 @@ a capture of the whole dropdown walked in a stated order, and the
 mechanism is **verified**: pointing HP away from the bus being
 played silences it, pointing it back restores the sound.
 
+### The selectors cannot be read, and that is now permanent
+
+The device announces jack detection, battery, firmware version,
+meters, mutes and the input gains by itself. It never announces
+the SOURCE SELECTORS -- which bus each output listens to, which
+source each loopback takes -- and no request has been found that
+returns them. M Control Center does not appear to ask either: on
+connect it pushes its whole workspace to the device rather than
+reading anything back, which serves an application whose truth
+lives in its own workspace file.
+
+TOPPING were asked directly, on 21 August 2026, whether such a
+command exists and whether one could be added. Their answer of
+28 August, in their own order: the M62 has no official Linux
+support, so they can give no technical support or compatibility
+guarantee for a third-party Linux driver; the vendor control
+interface -- command definitions, attribute mappings, status
+reporting -- is a proprietary internal protocol, which they
+cannot disclose and whose content, as derived from USB analysis,
+they cannot confirm; for the same reason they cannot provide the
+command that reads the current source selection; and they cannot
+commit to adding such an interface, or to changing the reporting
+mechanism, in a future firmware.
+
+They asked for nothing. No objection to this document, no claim,
+no request to stop -- a refusal to participate rather than a
+dispute.
+
+What it settles is the design. Unreadable selectors are not a
+gap waiting on a firmware release, they are a property of the
+device. Anything built on this protocol has to own the state it
+writes: set a known selection when it attaches, and treat its
+own cache as the truth from that moment. The cost is that a
+device arriving from another host loses what that host left,
+which is a fair price against a control that can be moved and
+never read.
+
 ### The mixer matrix
 
 **Target = mix and output channel, property = SOURCE channel,
