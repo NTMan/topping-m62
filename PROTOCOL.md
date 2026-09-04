@@ -556,22 +556,61 @@ What remains reachable only through this protocol:
 * the EQ blocks,
 * `11/05`, the save-to-device command.
 
-Note that the quirk road claims the HID interface for
-snd-usb-audio and adds the card to `hid_ignore_list`, which means
-**no `hidraw` node**, which means this protocol is not reachable
-from userspace on a kernel carrying that quirk. A program built
-on this document therefore either predates the quirk, runs on a
-kernel without it, or waits for a kernel-side channel. That
-trade-off was known and accepted when the road was chosen; it is
-recorded here so nobody rediscovers it as a bug.
+There are two roads, and which one lands upstream is not settled
+at the time of writing. They differ in exactly the thing a
+userspace program cares about.
 
-It may not be permanent. A second road is being tried at the
-maintainer's suggestion: a HID driver bound normally, joined to
-snd-usb-audio through the component framework
-(`include/linux/component.h`). On that road the `hid_ignore_list`
-entry has to go and a `hidraw` node can coexist with the driver.
-Nothing is settled. The two-writers caution below applies more on
-that road, not less.
+**The mixer-quirk road**, posted as v8, claims the HID interface
+for snd-usb-audio and adds the card to `hid_ignore_list`, which
+means **no `hidraw` node**: on a kernel carrying that quirk this
+protocol is not reachable from userspace at all. A program built
+on this document either predates the quirk, runs on a kernel
+without it, or waits for a kernel-side channel. That trade-off was
+known and accepted when the road was chosen; it is recorded here
+so nobody rediscovers it as a bug.
+
+**The component road**, posted as an RFC on 4 September 2026 at
+the maintainer's suggestion, splits the work in two: a HID driver
+bound the ordinary way (`drivers/hid/hid-topping-m62.c`), joined
+to snd-usb-audio through the component framework
+(`include/linux/component.h`), with the mixer quirk reduced to the
+component master. On that road the `hid_ignore_list` entry is gone
+and **a `hidraw` node coexists with the driver**, so this protocol
+stays reachable.
+
+That road has been built and run rather than merely proposed:
+
+* the controls appear 54 to 57 ms after the HID probe, and because
+  the master is added from inside `snd_usb_create_mixer()` the
+  bind is synchronous and they exist before the card is
+  registered;
+* two M62s on one host bind to their own cards, the match being by
+  descent from the shared USB device;
+* nothing is claimed, so unbinding the audio interface stops the
+  keepalive, which under the quirk road it did not.
+
+The two-writers caution below applies more on the component road,
+not less: there the driver and a `hidraw` program really can reach
+the same endpoint at the same time, with nothing arbitrating
+between them.
+
+### One wart worth knowing about the component road
+
+The controls are created when the HID driver binds and removed
+when it unbinds, so unloading and reloading that module takes them
+off a card that stays registered throughout and puts them back
+with fresh numids. ALSA reports this properly -- nine
+`SNDRV_CTL_EVENT_MASK_REMOVE`, then nine `MASK_ADD` -- but
+WirePlumber enumerates a device's elements once and does not act
+on those events, so its mixer keeps showing the old set and its
+faders stop following the hardware until `wireplumber` is
+restarted. Restarting `pipewire` is not needed.
+
+This is not specific to the M62: any driver that adds controls to
+a live card will hit it. It is mentioned here because reloading
+the module is the obvious way to test anything, and the symptom
+looks like a driver bug when it is not one.
+
 
 ### The claim is a keep-out sign, not a key (**verified**)
 
