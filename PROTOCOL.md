@@ -114,47 +114,86 @@ gets a less complete stream (**verified**: the driver written
 without the repeat lost notifications after minutes; with it,
 panel-knob changes still arrive ten minutes after boot).
 
-**`11/26 = 1` does NOT return the card's state** (**verified**),
-and this document said otherwise until 4 September 2026. See "What
-the card never tells you", which now covers every control rather
-than the selectors alone.
+**The card reports itself in two waves after a subscribe.** The
+first arrives about 0.9 s in and carries the jack state of every
+input and output. The second follows about 4.3 s later -- roughly
+5.2 s after the subscribe -- and repeats the jacks, adds the output
+mutes, and adds **the gain of each input whose jack is present**
+(**verified**, with every state restorer on the host disabled: a
+gain set by hand to 50 on the front panel came back as
+`0x21/04 = 50`, and twenty-two outgoing frames in the whole run,
+all of them `11/24` or `11/26`).
 
-On a host with every state restorer disabled -- no `alsactl`, no
-udev rule, no wireplumber -- a subscribe followed by `11/26`
-produced 2589 inbound frames in thirty-one seconds, all of them
-level meters, plus two `11/19` and one `11/18`. No gain, no
-volume, no selector, at any delay. Repeated on a cold start, an
-ordinary replug, and a driver reload with the card left in place.
+An input with nothing plugged into it is not reported. Neither is
+an output volume, even with headphones connected, and neither is a
+selector.
 
-M Control Center does not use it as a request either: it sends
-`11/26` **after** its bulk push, not before. In a capture of MCC
-connecting, all 162 outgoing frames are writes and not one is a
-read.
+**Everything a hand moves is reported as it moves** (**verified**):
+turning the Mic-1 knob from 50 to 53 and back produced seventeen
+`0x21/04` frames, one per step; turning the headphone volume
+produced five `0x64/03` frames. Note that an output pair reports
+only the target this document lists -- `0x64`, not `0x63`.
 
-`11/26` is followed, in some captures and not others, by an
-inbound dump of the EQ blocks (`0x91`..`0x94`, `0xa1`..`0xaa`,
-ten properties each), ending with `11/25 = 1` sent three times:
-~2.8 s after MCC's, ~3.6 s after this driver's. It never contains
-a gain, a volume or a selector. **Guessed:** `11/26` asks for a
-DSP-block dump and `11/25` terminates it.
+### What the card is actually telling you
 
-### Where the earlier reading came from
+The rule that fits every capture: **the card reports what a hand
+does to the hardware, not what its settings are.**
 
-Worth keeping rather than erasing, because the mistake was a
-reasonable one and its shape is instructive.
+Jack states, mutes, battery and the gain of a connected input are
+physical facts it knows by itself, so they arrive unasked. An
+output volume is a setting and is not in the connect report -- but
+its knob is on the front panel, so turning it is an event and the
+event is reported. A source selector has no front-panel control at
+all, so no event can exist, and nothing about it ever arrives.
 
-The original captures were taken from `hidraw` **while M Control
-Center drove the card from another host**. Values arriving in that
-situation were MCC's own writes reaching a second listener, not
-the card volunteering anything. With no other host writing,
-nothing arrives -- which is why "the gains land about five seconds
-in" held for two years of captures and then evaporated the first
-time the card was watched in isolation.
+That is why the selectors are unreadable, and it is a stronger
+statement than "no command was found": there is nothing to command.
+A host that did not set the selector cannot learn it, and only a
+query added to the firmware would change that.
 
-**Guessed, and worth half an hour to settle:** whether the card
-broadcasts one subscriber's writes to another at all. Run a
-`hidraw` listener alongside the bound kernel driver, write a gain
-with `amixer`, and see whether an inbound `0x21/04` appears.
+**`11/26` is not a state request.** M Control Center sends it
+**after** its bulk push, not before, and in a capture of MCC
+connecting all 162 outgoing frames are writes with not one read.
+In some captures it is followed by an inbound dump of the EQ
+blocks (`0x91`..`0x94`, `0xa1`..`0xaa`, ten properties each),
+ending with `11/25 = 1` sent three times: ~2.8 s after MCC's,
+~3.6 s after this driver's. That dump never contains a gain, a
+volume or a selector, and it does not appear every time.
+**Guessed:** `11/26` asks for a DSP-block dump and `11/25`
+terminates it. Whether the two-wave report above is a response to
+it or simply periodic is untested -- the interval between the two
+waves is the same 4.27 s in every capture, which argues for
+periodic.
+
+### How this was got wrong twice
+
+Kept rather than erased, because the shape of the mistake is
+instructive and the same trap is waiting for the next reader.
+
+Until 4 September 2026 this document said the gains land about
+five seconds after the announce, and for a few hours that morning
+it said the opposite -- that nothing can be read at all. Both
+readings came from captures with a blind spot.
+
+The original ones were taken from `hidraw` **while M Control
+Center drove the card from another host**, so it was not possible
+to tell the card's own report from MCC's writes reaching a second
+listener. The correction went too far because it rested on two
+captures that each hid the report for a different reason: in four
+of them the host's state restorers wrote to the card about 90 ms
+after the bind, so the report at 5.2 s described their write; in
+the one clean capture nothing was plugged into any input, and an
+input with no jack is not reported.
+
+**The lesson for anyone capturing this card: disable
+`alsa-restore`, the `90-alsa-restore` udev rule and wireplumber,
+and have something plugged into the input you are watching.**
+Either omission produces a convincing false negative.
+
+**Guessed, still worth half an hour:** whether the card broadcasts
+one subscriber's writes to another. Run a `hidraw` listener
+alongside the bound kernel driver, write a gain with `amixer`, and
+see whether an inbound `0x21/04` appears.
 
 ### The connect sequence
 
@@ -259,20 +298,19 @@ a capture of the whole dropdown walked in a stated order, and the
 mechanism is **verified**: pointing HP away from the bus being
 played silences it, pointing it back restores the sound.
 
-### Nothing can be read, and that is now permanent
+### The selectors cannot be read, and that is permanent
 
-This section was written about the source selectors. Captures of
-4 September 2026 widened it to everything: **no control on this
-card can be read.** Not the selectors, not the output volumes,
-not the input gains. The only inbound information is the meter
-stream and a notification when a hand moves a front-panel
-control.
+This section was written about the source selectors, briefly
+widened to everything on 4 September 2026, and narrowed back the
+same day when the measurement was repeated properly. What holds is
+the original claim, now with a reason behind it.
 
-M Control Center does not read either: on connect it pushes its
-whole workspace to the device rather than asking anything, which
-serves an application whose truth lives in its own workspace
-file. That was inferred here before it was measured; it is now
-**verified**, 162 outgoing frames and no reads.
+A source selector has no control on the front panel. Since the
+card reports events rather than settings (see "What the card is
+actually telling you"), there is no event it could report, and
+nothing about a selector has ever arrived in any capture. A host
+that did not write the selector cannot learn where the output is
+pointing.
 
 TOPPING were asked directly, on 21 August 2026, whether such a
 command exists and whether one could be added. Their answer of
@@ -291,25 +329,52 @@ They asked for nothing. No objection to this document, no claim,
 no request to stop -- a refusal to participate rather than a
 dispute.
 
-Read against what was measured afterwards, their answer was not
-a refusal to disclose a command. There is no command. They were
-describing the hardware.
+Read against what was measured afterwards, their answer about the
+selector was not a refusal to disclose a command. There is no
+command, and given how the card reports, there is nothing for a
+command to be built on short of new firmware.
 
-What it settles is the design. An unreadable card is not a gap
-waiting on a firmware release, it is a property of the device.
-Anything built on this protocol has to own the state it writes:
-put the card into a known state when it attaches, and treat its
-own cache as the truth from that moment. The cost is that a
-device arriving from another host loses what that host left.
+What it settles is the design. A program can write a selector and
+can never learn it, so the honest shape is an extra first item
+meaning "unknown, the device does not report this", refused as a
+change and accepted as a no-op restore.
 
-That cost is not hypothetical. Mic-1 was set to 70 by hand on the
-front panel from Linux and confirmed through the control; the Mac
-had 50 stored from an earlier session. Forty milliseconds after
-connecting to the Mac, MCC wrote `0x21/04 = 50` and the panel
-followed. That write is the only mention of `0x21/04` anywhere in
-the capture. **The gain of a microphone preamplifier on this card
-is decided by whichever piece of software connected most
-recently, and no host can find out what it currently is.**
+### What a program can and cannot know
+
+                        at connect                  later
+  five input gains      yes, if the jack is         at every turn
+                        present, ~5.2 s in          of the knob
+  two output volumes    no                          at every turn
+  two selectors         no                          never
+
+The two output volumes are knowable but not immediately: nothing
+reports them until a hand moves the knob. A program that shows one
+before then is showing a guess.
+
+And the guess is dangerous in a specific way: the output taper
+puts mute at index 0 and full scale at index 99, so a program that
+defaults to zero tells the user the headphone output is silent
+when it may be at maximum.
+
+**Writing a "sensible default" at connect is the wrong answer for
+the gains**, because the card is about to report them: a write at
+90 ms destroys a value that would have arrived at 5.2 s. Anything
+that wants the truth has to not publish, or not accept writes,
+until the second wave lands.
+
+### A device arriving from another host
+
+Mic-1 was set to 70 by hand on the front panel from Linux and
+confirmed through the control; the Mac had 50 stored from an
+earlier session. Forty milliseconds after connecting to the Mac,
+MCC wrote `0x21/04 = 50` and the panel followed. That write is the
+only mention of `0x21/04` anywhere in the capture.
+
+So a setting made by hand does not survive being plugged into
+another host that has its own stored state -- not because the card
+forgets, but because the host imposes. On Linux the same is done
+by `alsactl`, the `90-alsa-restore` udev rule and wireplumber,
+each independently, within about 90 ms of the card appearing.
 
 ### The mixer matrix
 
@@ -414,64 +479,52 @@ decibels, which confirms the reading twice over.
 
 ## What the card never tells you
 
-**It never tells you anything you did not write.** There is no
-device to host frame carrying a gain, a volume or a selector in
-any capture: not on a freshly enumerated card, not with a
-listener subscribed within milliseconds, not after `11/24` and
-`11/26`, not on a cold start with the battery drained of any
-say in it. Earlier versions of this document said gains and
-volumes were echoed and only the selector was not; see
-"Subscription, the announce, and the keepalive" for why that
-looked true.
+Exactly two things, and one class of thing.
 
-On Linux this was masked for a long time, because at least three
-mechanisms write stored state back on every plug:
+**The two source selectors**, for the reason given above: no
+front-panel control, so no event, so nothing to report. Permanent
+short of new firmware.
+
+**An output volume before anyone has touched it.** It is not in
+the connect report and only a hand on the knob produces one. A
+program that shows a number before that is showing a guess, and
+the guess is dangerous in a particular direction: the taper puts
+mute at index 0 and full scale at index 99, so defaulting to zero
+tells the user the headphone output is silent when it may be at
+maximum.
+
+**The gain of an input with nothing plugged into it.** Reported
+only when the jack is present.
+
+Everything else the card volunteers: jacks, mutes, battery,
+identity, meters, the gain of a connected input, and any change a
+hand makes on the panel.
+
+### Why this looks worse than it is on Linux
+
+At least three mechanisms write stored state back on every plug,
+each within about 90 ms of the card appearing:
 `alsa-restore.service` -- whose `ExecStop` is `alsactl store`, so
-stopping it rewrites the file you were about to move aside --
-the `90-alsa-restore` udev rule on card add, and wireplumber's
-own device state. Disable all three and the controls read zero
-while the panel plainly does not.
+stopping it rewrites the file you were about to move aside -- the
+`90-alsa-restore` udev rule on card add, and wireplumber's own
+device state.
 
-A program that displays a value it did not itself write is
-displaying a guess.
+The card's own report of the input gains arrives at about 5.2 s.
+So on an ordinary system the restorers win by a factor of fifty,
+and what the card reports at 5.2 s is the restorer's write coming
+back rather than the position the panel had. Nothing is wrong with
+either party; they are simply racing, and the host always wins.
 
-**On writing a known state at attach.** This document has said
-both that a program must "set a known selection when it
-attaches" and that "writing a sensible default at probe is the
-wrong answer -- it is exactly MCC's habit". Those cannot both
-stand, and now that the same reasoning covers all nine controls
-rather than the selectors alone, the contradiction has to be
-resolved rather than lived with.
+**Anything that wants the truth has to not enter that race** --
+not publish its controls, or not accept writes to them, until the
+second wave has landed. Writing a "sensible default" at connect,
+as MCC does and as `init_cur_mix_raw()` does for devices with a
+broken `GET_CUR`, is the wrong answer here: it destroys a value
+that was about to arrive.
 
-The argument for writing: a value shown but never verified is a
-lie, and for an output volume whose scale has mute at one end it
-can be a dangerous one. The argument against: it destroys a
-setting the user may have made deliberately on the panel, which
-is precisely the MCC behaviour that makes this card unpleasant
-to share between hosts.
-
-`sound/usb/mixer.c` has already faced this for devices whose
-`GET_CUR` does not work, and chose the first:
-
-```c
-/* forcibly initialize the current mixer value; if GET_CUR fails,
- * set to the minimum as default
- */
-static void init_cur_mix_raw(...)
-{
-	err = snd_usb_get_cur_mix_value(cval, ch, idx, &val);
-	if (!err)
-		return;
-	...
-	snd_usb_set_cur_mix_value(cval, ch, idx, cval->min);
-}
-```
-
-Write the minimum, cache it, and the reported value is true
-because the driver made it true -- and safe, because the minimum
-is the safe end. The selectors do not fit that shape, since their
-minimum is the "Unknown" item and writing it is a no-op. As of
-this writing the question is with the ALSA maintainer.
+The selectors remain outside all of this. Nothing will ever
+report them, so the honest shape stays an extra first item meaning
+"unknown, the device does not report this".
 
 ## Still unknown
 
