@@ -672,3 +672,274 @@ gone in under a second.
 conclusions in a row came from reasoning over an assumed
 procedure: a shell transcript is not a protocol, and a capture
 without the operator's actions beside it is a list of numbers.
+
+## The same channel on the E2x2 OTG
+
+The TOPPING Professional E2x2 OTG, `152a:8756`, is driven by a
+different program, TOPPING Professional Control Center, and speaks
+the same channel: the same interface layout, the same transport and
+the same frame. The connect sequence and the whole address map are
+its own.
+
+Everything in this section comes from three captures made on
+2 October 2026 with Wireshark on macOS (`XHC1`,
+`LINKTYPE_USB_DARWIN`), of Control Center V1.09 driving a card
+that reports hardware V1.01 and firmware V1.10. Nothing has been
+written to this card from Linux yet, so nothing below is
+**verified**; as in the rest of this document, anything unmarked
+is **decoded**.
+
+### The captures
+
+* `E2x2-1.pcapng`, 109.6 s, started in the middle of a session.
+  The gain knobs of IN 1, IN 2 and the Mobile strip were turned
+  +0 -> +20 -> +10 -> +0, in that order; then IN 1's MON, 48V,
+  INST, SOLO, MUTE and ø (phase) were pressed once each, in that
+  order.
+* `E2x2-2.pcapng`, 300.8 s. The Output 1+2 fader taken to -inf
+  (it writes `0x31`/`0x32`); 48V on IN 1 switched off; the card
+  switched off and on, Control Center reconnecting 42 s later;
+  then, on IN 1, MUTE off, ø off, ø on; the Output 1+2 selector
+  walked through its whole menu in menu order and back to
+  Playback 1/2; the Mobile OUT and S/PDIF OUT selectors each set to
+  Mix A and back, which sent nothing (see the end of this
+  section); MON on IN 1 pressed twice on the front panel; Gain
+  under Phone Out switched and switched back.
+* `E2x2-3.pcapng`, 74.4 s. Mobile OUT set to Mix A and S/PDIF OUT
+  to Mix B; then the card switched off and on, Control Center
+  reconnecting 0.45 s later.
+
+Across the three, all 969 frames the program wrote carry `0000`
+in the checksum field, and all 8714 non-empty frames the card sent
+carry a valid CRC-16/MODBUS: the frame and the direction
+discriminator described above apply unchanged. An idle poll
+returns sixteen zeros, as on the M62.
+
+### The USB side
+
+From the enumeration in `E2x2-2.pcapng`:
+
+| Interface | Class | What it is |
+| --- | --- | --- |
+| 0 | `01/01/20` | AudioControl, UAC2 |
+| 1 | `01/02/20` | AudioStreaming, playback: 8 channels, 24 bits in 4-byte subslots, alternate settings 1 and 2 |
+| 2 | `01/02/20` | AudioStreaming, capture: 10 channels, 24 bits in 4-byte subslots |
+| 3 | `fe/01/01` | "Topping DFU" -- **never write to it**, as on the M62 |
+| 4 | `03/00/00` | HID: interrupt IN `0x83`, OUT `0x02`, `wMaxPacketSize` 64, `bInterval` 5 |
+
+The report descriptor is 27 bytes and matches the M62's, as
+described under Transport, in every field:
+
+```
+05 01 09 00 a1 01 15 00 25 ff 19 01 29 08 95 10
+75 08 81 02 19 01 29 08 91 02 c0
+```
+
+`bcdDevice` is `0x0110`, the same V1.10 that the program shows as
+the firmware version and that `12/02` reports. There are two
+configurations, byte-identical.
+
+Every terminal and both streaming interfaces declare
+`bmChannelConfig` 0, and the channels are named through
+`iChannelNames`, 11 for playback and 19 for capture:
+
+```
+11 Playback 1/SPDIF 1      19 Analogue 1
+12 Playback 2/SPDIF 2      20 Analogue 2
+13..18 Playback 3..8       21 Mobile 1
+                           22 Mobile 2
+                           23..28 Loopback 1..6
+```
+
+The clock is "Topping Internal Clock" (clock source 41 behind
+clock selector 40). Feature units 10 (playback) and 11 (capture)
+offer mute and volume on the master and on every channel.
+
+### The connect sequence
+
+**There is no subscription and no keepalive.** After the power-on
+in `E2x2-2.pcapng` the card sent its first frame 24 ms after
+`SET_CONFIGURATION`, 42 s before the program wrote anything, and
+no `11/24` appears in any of the three captures.
+
+Unasked, after power-on, the card:
+
+* sends every meter at -96.0 (`-960`), each every 68 ms, for about
+  7.5 s; after that a meter is sent only while its level is above
+  -96.0;
+* announces `21/03` and `23/03` (INST on IN 1 and IN 2), `11/03`
+  and `35/03`.
+
+INST survives a power cycle: in both reconnects the card announced
+IN 1's INST as it was last set, before the program had written
+anything.
+
+Control Center's push after the reconnect in `E2x2-2.pcapng`,
+timed from its first frame:
+
+```
+0.000  OUT  11/01 = 1     card answers 11/01 = 1, then sends
+                          12/01, 12/02, 11/02, 11/04, 11/06
+0.004  OUT  37/01..37/06 = 1
+ ...        132 more      selectors, faders, matrix, input
+                          switches, input gains
+0.284  OUT  24/05         the last write
+```
+
+No `11/20` bracket, no `11/26`, no `11/24`. In `E2x2-3.pcapng` the
+same push came 0.45 s after the card appeared, **without `11/01`**
+-- the other 138 frames identical and in the same order -- and the
+card sent none of `12/01`, `12/02`, `11/02`, `11/04`, `11/06`.
+**Guessed:** `11/01` asks for identification rather than opening a
+session. Whether the card takes writes from a host that never sent
+it is untested.
+
+### The address map
+
+Blocked by function, but not as on the M62, where `0x3x` is the
+matrix and `0x6x` the outputs:
+
+| Block | Meaning |
+| --- | --- |
+| `0x11` | the device itself |
+| `0x12` | identification |
+| `0x2x` | inputs |
+| `0x3x` | Output 1+2 and Mobile OUT |
+| `0x4x` | meters only, `0x41`..`0x48` property `01` (**guessed**: the eight playback channels) |
+| `0x5x` | loopbacks and S/PDIF OUT |
+| `0x6x` | mixer matrix |
+
+#### Inputs
+
+Targets: `0x21` IN 1, `0x22` Mobile IN, `0x23` IN 2, and `0x24`,
+which has no strip in the program (**guessed**: the second Mobile
+channel).
+
+This is not the M62's order, so the evidence. In `E2x2-1.pcapng`
+the knobs were turned in the order IN 1, IN 2, Mobile and wrote
+`0x21`, `0x23`, `0x22`; at +16 to +20 dB `0x21` and `0x23`
+reported noise between -90.3 and -80.7 dB, while `0x22` sent no
+level at all. After the power-on in `E2x2-2.pcapng` only `0x21`
+and `0x23` showed a transient, and only they had INST announced.
+`0x24` is written like the others in the push and by SOLO and
+MUTE, and its level stays silent.
+
+| Property | Meaning |
+| --- | --- |
+| `01` | MON (1 = on) |
+| `02` | 48V (1 = on) |
+| `03` | INST (1 = on) |
+| `04` | level meter, tenths of a decibel |
+| `05` | digital gain, **signed** Q25 |
+
+`01`, `02` and `03` are confirmed by the card 26 to 200 ms after a
+write, and a MON press on the front panel arrives by itself:
+pressed twice, it came as `21/01 = 0`, then `21/01 = 1`, with
+nothing written.
+
+`05` is never reported. Control Center offers +0 to +20 dB in
+1 dB steps (+1 dB = 37648680, +20 dB = 335544320). The published
+specification gives 58 dB of analogue gain on the front-panel
+knob plus 20 dB of digital gain: the 20 dB is this property, and
+the analogue part has none.
+
+SOLO, MUTE and ø have no properties of their own; the program
+folds all three into `05`:
+
+* MUTE writes 0;
+* ø negates the value: with ø lit, switching MUTE off wrote
+  `21/05 = -2^25`, ø off wrote `+2^25`, ø on again `-2^25`;
+* SOLO writes 0 to the other three inputs, `0x24` included. MUTE
+  pressed while soloed wrote 0 to IN 1 and the others back to
+  their gains.
+
+#### Outputs and selectors
+
+| Target | Property | Meaning |
+| --- | --- | --- |
+| `0x35` | `01` | Output 1+2 source |
+| `0x35` | `02` | Gain under Phone Out, the headphone amplifier's gain switch (1 = on); confirmed by the card |
+| `0x35` | `03` | announced by the card, 0; meaning unknown |
+| `0x36` | `01` | Mobile OUT source |
+| `0x36` | `02` | written 0 in the push; meaning unknown |
+| `0x5c` | `01` | S/PDIF OUT source |
+| `0x57`, `0x58`, `0x59` | `01` | Loopback 1+2, 3+4, 5+6 source |
+| `0x37` | `01`..`06` | written 1 in the push; meaning unknown |
+
+**No selector is ever reported**, and neither is an input gain:
+nothing on these selector properties or on `0x21`..`0x24/05` came
+from the card in any of the three captures.
+
+Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
+`0x33`/`0x34` and `0x5a`/`0x5b` and of `0x51`..`0x56`; 0 is -inf.
+`0x31`/`0x32` is Output 1+2: it is the fader taken to -inf at the
+start of `E2x2-2.pcapng`, and on the way down it wrote whole
+decibels from -1 dB to about -80 dB, then a few values a fraction
+of a decibel off, then 0. **Guessed**, by their place next to the
+selectors: `0x33`/`0x34` Mobile OUT, `0x51`..`0x56` the three
+loopbacks, `0x5a`/`0x5b` S/PDIF OUT. By the published
+specification the headphone and line volumes are analogue
+potentiometers on the front panel, and no property for them
+appears in any capture.
+
+#### The source selector's values
+
+```
+ 1 IN 1           7 Playback 1/2    11 Mix A
+ 2 Mobile IN      8 Playback 3/4    12 Mix B
+ 3 IN 2           9 Playback 5/6    13 Mix C
+ 5 IN 1+2        10 Playback 7/8    14 Mix D
+```
+
+4 and 6 are not offered by the program. The input values follow
+the input targets: `0x21` is 1, `0x22` is 2, `0x23` is 3.
+
+Decoded from the Output 1+2 menu walked in a stated order in
+`E2x2-2.pcapng`. The push after the reconnect agrees with the
+screen (the loopbacks at 8, 9, 10, that is Playback 3/4, 5/6,
+7/8), and in `E2x2-3.pcapng` Mix A and Mix B came out as 11 and 12
+on `0x36` and `0x5c`. One numbering serves all six selectors, and
+no item in it has the value it has on the M62.
+
+#### The mixer matrix
+
+Targets `0x61`..`0x68`, properties `01`..`0c`, Q25: the M62's
+model with four mixes and twelve sources. **Guessed** from the
+default values in the push: `0x61`/`0x62` are Mix A left and
+right, and so on to `0x67`/`0x68` for Mix D; the sources are `01`
+IN 1, `02` IN 2, `03`/`04` Mobile, `05`..`0c` Playback 1..8. The
+two mono sources sit at -6.02 dB on both sides (`0x00fffff0`);
+each stereo source is at unity on its own side and at zero on the
+other. For unity the program writes `0x01ffffe0` here rather than
+`2^25`.
+
+#### Device scope and identification
+
+`11/02 = 1`, `11/04 = 1` and `11/06 = 0` follow `11/01`;
+`11/03 = 0` is announced after power-on and repeated after the
+push. None of the four is decoded. No `11/05`, `11/20`, `11/24`,
+`11/25` or `11/26` was ever written.
+
+Identification lives at `0x12` as two 16-bit halves rather than
+the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
+`12/02 = 0x0001000a`, firmware V1.10.
+
+### Still unknown on the E2x2
+
+* what `0x24` is;
+* `0x35/03`, `0x36/02`, `0x37/01`..`06`;
+* `11/02`, `11/03`, `11/04`, `11/06`;
+* selector values 4 and 6;
+* which fader pairs are Mobile OUT, S/PDIF OUT and the loopbacks;
+* whether the card needs `11/01` before it takes writes.
+
+### A capture with no frame proves nothing
+
+In `E2x2-2.pcapng` the Mobile OUT and S/PDIF OUT selectors were
+each set to Mix A and back, and the program sent nothing at all:
+in that window the interrupt polling has no gap longer than 5 ms,
+and the card's own frames are present. In `E2x2-3.pcapng` the same
+kind of change went out at once, to `0x36` and `0x5c`. What
+differed between the two sessions is not known. A capture with no
+frame for an action does not show that the action has no address;
+repeat it before concluding anything.
