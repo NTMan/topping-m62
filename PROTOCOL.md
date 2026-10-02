@@ -681,8 +681,8 @@ the same channel: the same interface layout, the same transport and
 the same frame. The connect sequence and the whole address map are
 its own.
 
-Everything in this section comes from three captures made on
-2 October 2026 with Wireshark on macOS (`XHC1`,
+Everything in this section comes from four captures made on
+2 October 2026 (UTC) with Wireshark on macOS (`XHC1`,
 `LINKTYPE_USB_DARWIN`), of Control Center V1.09 driving a card
 that reports hardware V1.01 and firmware V1.10. Nothing has been
 written to this card from Linux yet, so nothing below is
@@ -708,9 +708,12 @@ is **decoded**.
 * `E2x2-3.pcapng`, 74.4 s. Mobile OUT set to Mix A and S/PDIF OUT
   to Mix B; then the card switched off and on, Control Center
   reconnecting 0.45 s later.
+* `E2x2-4.pcapng`, 29.1 s, with music playing through the card.
+  The headphone, TRS and AUX buttons of the Output 1+2 strip
+  switched off in that order, then on in the same order.
 
-Across the three, all 969 frames the program wrote carry `0000`
-in the checksum field, and all 8714 non-empty frames the card sent
+Across the four, all 999 frames the program wrote carry `0000`
+in the checksum field, and all 13846 non-empty frames the card sent
 carry a valid CRC-16/MODBUS: the frame and the direction
 discriminator described above apply unchanged. An idle poll
 returns sixteen zeros, as on the M62.
@@ -864,11 +867,20 @@ folds all three into `05`:
 | `0x36` | `02` | written 0 in the push; meaning unknown |
 | `0x5c` | `01` | S/PDIF OUT source |
 | `0x57`, `0x58`, `0x59` | `01` | Loopback 1+2, 3+4, 5+6 source |
-| `0x37` | `01`..`06` | written 1 in the push; meaning unknown |
+| `0x37` | `01`, `03`, `05` | Output 1+2's headphone, TRS and AUX outputs (1 = on) |
+| `0x37` | `02`, `04`, `06` | written 1 in the push; meaning unknown |
+
+A press on any of the three output buttons writes all three --
+`37/01`, `37/03`, `37/05`, the whole current state -- and then the
+Output 1+2 fader pair `31/03`, `32/03` at its current value.
+Decoded from `E2x2-4.pcapng`, where each of the six presses
+changed exactly one of the three, in the stated order. The card
+confirms none of it, and with music playing no meter reacted to an
+output being switched off.
 
 **No selector is ever reported**, and neither is an input gain:
 nothing on these selector properties or on `0x21`..`0x24/05` came
-from the card in any of the three captures.
+from the card in any of the four captures.
 
 Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
 `0x33`/`0x34` and `0x5a`/`0x5b` and of `0x51`..`0x56`; 0 is -inf.
@@ -927,11 +939,12 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 ### Still unknown on the E2x2
 
 * what `0x24` is;
-* `0x35/03`, `0x36/02`, `0x37/01`..`06`;
+* `0x35/03`, `0x36/02`, and `37/02`, `37/04`, `37/06`;
 * `11/02`, `11/03`, `11/04`, `11/06`;
 * selector values 4 and 6;
 * which fader pairs are Mobile OUT, S/PDIF OUT and the loopbacks;
-* whether the card needs `11/01` before it takes writes.
+* whether the card needs `11/01` before it takes writes;
+* why `33/01` arrives twice per meter cycle and `34/01` never.
 
 ### A capture with no frame proves nothing
 
