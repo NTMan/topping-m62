@@ -335,9 +335,20 @@ command, and given how the card reports, there is nothing for a
 command to be built on short of new firmware.
 
 What it settles is the design. A program can write a selector and
-can never learn it, so the honest shape is an extra first item
-meaning "unknown, the device does not report this", refused as a
-change and accepted as a no-op restore.
+can never learn it, so a program that takes charge of the card has
+to decide the selector rather than ask about it. Since v8 the driver
+does exactly that: it writes both selectors when it first binds --
+Playback 1/2, the host's main stream, with the mixer out of the path
+-- and from then on its own cache is the truth, which the restorers
+then overwrite with whatever the system remembers.
+
+An earlier design showed an extra first item instead, meaning
+"unknown, the device does not report this". It was honest about the
+card and wrong about the system: a sound settings panel always shows
+something selected, and what it shows has to be true. The vendor's
+application takes the same view from the other side, writing its
+whole workspace to the card at connect without reading anything
+back.
 
 ### What a program can and cannot know
 
@@ -361,6 +372,11 @@ the gains**, because the card is about to report them: a write at
 90 ms destroys a value that would have arrived at 5.2 s. Anything
 that wants the truth has to not publish, or not accept writes,
 until the second wave lands.
+
+For the other two rows nothing will arrive, so there the default is
+the right answer, and since v8 the driver gives it: at its first
+bind it writes both selectors and both output volumes, which makes
+what it shows what the card holds.
 
 ### A device arriving from another host
 
@@ -491,7 +507,11 @@ program that shows a number before that is showing a guess, and
 the guess is dangerous in a particular direction: the taper puts
 mute at index 0 and full scale at index 99, so defaulting to zero
 tells the user the headphone output is silent when it may be at
-maximum.
+maximum. The driver turns the guess into a fact by writing it: at
+its first bind the analogue headphone stage goes to its quiet end,
+as `init_cur_mix_raw()` in snd-usb-audio does for a volume whose
+`GET_CUR` fails, and the digital stream to a phone to unity, where
+it changes nothing.
 
 **The gain of an input with nothing plugged into it.** Reported
 only when the jack is present.
@@ -502,12 +522,15 @@ hand makes on the panel.
 
 ### Why this looks worse than it is on Linux
 
-At least three mechanisms write stored state back on every plug,
-each within about 90 ms of the card appearing:
-`alsa-restore.service` -- whose `ExecStop` is `alsactl store`, so
-stopping it rewrites the file you were about to move aside -- the
-`90-alsa-restore` udev rule on card add, and wireplumber's own
-device state.
+Stored state is written back on every plug, within about 90 ms of
+the card appearing, by `alsactl` and by wireplumber's own device
+state. On the machine these notes come from, `alsactl` runs as the
+daemon of `alsa-state.service` (`alsactl ... rdaemon`): it restores
+when a card appears and, while it runs, saves what changed every
+300 s. `alsa-restore.service`, the variant whose `ExecStop` is
+`alsactl store`, is inactive there. Either way the file is
+rewritten behind your back, so a copy moved aside to experiment
+with is overwritten within minutes.
 
 The card's own report of the input gains arrives at about 5.2 s.
 So on an ordinary system the restorers win by a factor of fifty,
@@ -515,16 +538,17 @@ and what the card reports at 5.2 s is the restorer's write coming
 back rather than the position the panel had. Nothing is wrong with
 either party; they are simply racing, and the host always wins.
 
-**Anything that wants the truth has to not enter that race** --
-not publish its controls, or not accept writes to them, until the
-second wave has landed. Writing a "sensible default" at connect,
-as MCC does and as `init_cur_mix_raw()` does for devices with a
-broken `GET_CUR`, is the wrong answer here: it destroys a value
-that was about to arrive.
+**Anything that wants the truth about the gains has to not enter
+that race** -- not publish its controls, or not accept writes to
+them, until the second wave has landed. Writing a "sensible
+default" for them at connect, as MCC does, destroys a value that
+was about to arrive.
 
-The selectors remain outside all of this. Nothing will ever
-report them, so the honest shape stays an extra first item meaning
-"unknown, the device does not report this".
+For everything the card does not report, the race is the point: the
+host owns those values, the driver writes its defaults at its first
+bind, and the restorers then write what the system remembers on top.
+The selectors are the plainest case -- nothing will ever report
+them, so the last host to write one is right by definition.
 
 ## Still unknown
 
@@ -539,9 +563,9 @@ in firmware.
 
 ## Where the boundary with the kernel runs
 
-A usb-audio mixer quirk for this card is upstream at the time of
-writing. What it covers, and what a userspace program should
-therefore leave alone:
+The kernel series for this card -- v8 at the time of writing --
+makes these ordinary ALSA controls on the card snd-usb-audio
+creates, and a userspace program should therefore leave them alone:
 
 * input gains (IN 1, IN 2, AUX, BT, OTG IN),
 * output volumes (HP, OTG OUT),
@@ -556,27 +580,27 @@ What remains reachable only through this protocol:
 * the EQ blocks,
 * `11/05`, the save-to-device command.
 
-There are two roads, and which one lands upstream is not settled
-at the time of writing. They differ in exactly the thing a
+Two roads were tried, and they differ in exactly the thing a
 userspace program cares about.
 
-**The mixer-quirk road**, posted as v8, claims the HID interface
-for snd-usb-audio and adds the card to `hid_ignore_list`, which
-means **no `hidraw` node**: on a kernel carrying that quirk this
-protocol is not reachable from userspace at all. A program built
-on this document either predates the quirk, runs on a kernel
-without it, or waits for a kernel-side channel. That trade-off was
-known and accepted when the road was chosen; it is recorded here
-so nobody rediscovers it as a bug.
+**The mixer-quirk road**, posted in August 2026, claimed the HID
+interface for snd-usb-audio and added the card to
+`hid_ignore_list`, which meant **no `hidraw` node**: on a kernel
+carrying it this protocol was not reachable from userspace at all.
+It was dropped.
 
-**The component road**, posted as an RFC on 4 September 2026 at
-the maintainer's suggestion, splits the work in two: a HID driver
-bound the ordinary way (`drivers/hid/hid-topping-m62.c`), joined
-to snd-usb-audio through the component framework
-(`include/linux/component.h`), with the mixer quirk reduced to the
-component master. On that road the `hid_ignore_list` entry is gone
-and **a `hidraw` node coexists with the driver**, so this protocol
-stays reachable.
+**The component road**, posted since 4 September 2026 at the
+maintainer's suggestion, splits the work in two: a HID driver bound
+the ordinary way (`drivers/hid/hid-topping-m62.c`) and the M62's
+mixer quirk in snd-usb-audio (`sound/usb/mixer_topping.c`), joined
+through the component framework (`include/linux/component.h`) with
+the quirk as the master. The `hid_ignore_list` entry is gone and
+**a `hidraw` node coexists with the driver**, so this protocol stays
+reachable. Since v8 the controls themselves are snd-usb-audio's and
+the HID driver is the transport: at bind it fills in the
+`struct topping_m62_component` the master owns
+(`include/sound/topping_m62.h`) with an operation that sends a
+frame, and it passes on every valid frame the card reports.
 
 That road has been built and run rather than merely proposed:
 
@@ -594,22 +618,46 @@ not less: there the driver and a `hidraw` program really can reach
 the same endpoint at the same time, with nothing arbitrating
 between them.
 
-### One wart worth knowing about the component road
+### Why the controls outlive the HID driver (**verified**)
 
-The controls are created when the HID driver binds and removed
-when it unbinds, so unloading and reloading that module takes them
-off a card that stays registered throughout and puts them back
-with fresh numids. ALSA reports this properly -- nine
-`SNDRV_CTL_EVENT_MASK_REMOVE`, then nine `MASK_ADD` -- but
-WirePlumber enumerates a device's elements once and does not act
-on those events, so its mixer keeps showing the old set and its
-faders stop following the hardware until `wireplumber` is
-restarted. Restarting `pipewire` is not needed.
+Up to v7 the controls were created when the HID driver bound and
+removed when it unbound, so reloading that module took them off a
+card that stayed registered throughout and put them back with
+fresh numids -- the kernel only ever counts numids up. Each of the
+following was seen on 3 October 2026:
 
-This is not specific to the M62: any driver that adds controls to
-a live card will hit it. It is mentioned here because reloading
-the module is the obvious way to test anything, and the symptom
-looks like a driver bug when it is not one.
+* the desktop's volume showed zero after a reload while the card
+  went on playing at its own level: WirePlumber enumerates a
+  device's elements once and does not follow them being removed
+  and added again;
+* a volume the card was still holding read as zero: the driver's
+  cache came back empty, and nothing reports an output volume
+  until its knob turns;
+* the stored `alsactl` state stopped matching: `alsactl` looks a
+  control up by its numid, treats a different one as a mismatch
+  and falls back to its generic init, which writes -20 dB into any
+  control named `Headphone Playback Volume` -- here the analogue
+  headphone stage. The state daemon then saved the new numids
+  within five minutes, numids that would not exist after the next
+  boot.
+
+Since v8 the controls are created once, at the first bind, and stay
+until the card goes. Unbinding the HID driver keeps them; a value
+written meanwhile goes to the cache; the next bind writes every
+known value back to the card. They are not marked inactive either:
+a first cut of v8 did that, and the desktop volume dropped to zero
+exactly as before, because alsa-lib's simple mixer handles an
+`SNDRV_CTL_EVENT_MASK_INFO` by removing the element and adding it
+again (`simple_event()` in `src/mixer/simple_none.c`).
+
+Verified the same day, with PipeWire running: across four reloads
+of `hid-topping-m62` the controls kept numids 11 to 19,
+`amixer -c M62 contents` was identical before and after, and
+`wpctl get-volume @DEFAULT_AUDIO_SINK@` read 0.25 before and after.
+`Headphone Playback Volume` set to 30 while the module was unloaded
+read 30 after it was loaded again, and one step of the front-panel
+knob then brought the card's own report of 31 -- the card had been
+set to 30 by the new bind.
 
 
 ### The claim is a keep-out sign, not a key (**verified**)
