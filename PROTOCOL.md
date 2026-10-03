@@ -591,15 +591,15 @@ It was dropped.
 
 **The component road**, posted since 4 September 2026 at the
 maintainer's suggestion, splits the work in two: a HID driver bound
-the ordinary way (`drivers/hid/hid-topping-m62.c`) and the M62's
+the ordinary way (`drivers/hid/hid-topping.c`) and the M62's
 mixer quirk in snd-usb-audio (`sound/usb/mixer_topping.c`), joined
 through the component framework (`include/linux/component.h`) with
 the quirk as the master. The `hid_ignore_list` entry is gone and
 **a `hidraw` node coexists with the driver**, so this protocol stays
 reachable. Since v8 the controls themselves are snd-usb-audio's and
 the HID driver is the transport: at bind it fills in the
-`struct topping_m62_component` the master owns
-(`include/sound/topping_m62.h`) with an operation that sends a
+`struct topping_component` the master owns
+(`include/sound/topping.h`) with an operation that sends a
 frame, and it passes on every valid frame the card reports.
 
 That road has been built and run rather than merely proposed:
@@ -651,13 +651,17 @@ exactly as before, because alsa-lib's simple mixer handles an
 again (`simple_event()` in `src/mixer/simple_none.c`).
 
 Verified the same day, with PipeWire running: across four reloads
-of `hid-topping-m62` the controls kept numids 11 to 19,
+of the HID driver, then still named `hid-topping-m62`, the controls
+kept numids 11 to 19,
 `amixer -c M62 contents` was identical before and after, and
 `wpctl get-volume @DEFAULT_AUDIO_SINK@` read 0.25 before and after.
 `Headphone Playback Volume` set to 30 while the module was unloaded
 read 30 after it was loaded again, and one step of the front-panel
 knob then brought the card's own report of 31 -- the card had been
-set to 30 by the new bind.
+set to 30 by the new bind. The runs were repeated after the rename
+to `hid-topping`, with a second M62 connected, and gave the same
+results; that time the volume was set to 20 before the unload, so
+the knob step also showed that the 30 had reached the card.
 
 
 ### The claim is a keep-out sign, not a key (**verified**)
