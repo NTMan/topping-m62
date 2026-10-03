@@ -733,10 +733,11 @@ the same channel: the same interface layout, the same transport and
 the same frame. The connect sequence and the whole address map are
 its own.
 
-Everything in this section comes from four captures made on
-2 October 2026 (UTC) with Wireshark on macOS (`XHC1`,
-`LINKTYPE_USB_DARWIN`), of Control Center V1.09 driving a card
-that reports hardware V1.01 and firmware V1.10. Nothing has been
+Everything in this section comes from captures made with Wireshark
+on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
+a card that reports hardware V1.01 and firmware V1.10: four on
+2 October 2026 (UTC) with Control Center V1.09, and a fifth on
+3 October. Nothing has been
 written to this card from Linux yet, so nothing below is
 **verified**; as in the rest of this document, anything unmarked
 is **decoded**.
@@ -763,9 +764,14 @@ is **decoded**.
 * `E2x2-4.pcapng`, 29.1 s, with music playing through the card.
   The headphone, TRS and AUX buttons of the Output 1+2 strip
   switched off in that order, then on in the same order.
+* `E2x2-5.pcapng`, 179.0 s. Control Center connected 1.0 s in and
+  pushed its state; then the faders of Mobile OUT, S/PDIF OUT,
+  Loopback 1+2, Loopback 3+4 and Loopback 5+6 were each taken down
+  to about -20 dB and back to 0 dB, one at a time and in that
+  order.
 
-Across the four, all 999 frames the program wrote carry `0000`
-in the checksum field, and all 13846 non-empty frames the card sent
+Across the five, all 1596 frames the program wrote carry `0000`
+in the checksum field, and all 20162 non-empty frames the card sent
 carry a valid CRC-16/MODBUS: the frame and the direction
 discriminator described above apply unchanged. An idle poll
 returns sixteen zeros, as on the M62.
@@ -860,7 +866,7 @@ matrix and `0x6x` the outputs:
 | `0x12` | identification |
 | `0x2x` | inputs |
 | `0x3x` | Output 1+2 and Mobile OUT |
-| `0x4x` | meters only, `0x41`..`0x48` property `01` (**guessed**: the eight playback channels) |
+| `0x4x` | meters only, `0x41`..`0x48` property `01`: the eight playback channels, `0x43`..`0x48` **guessed** (see Output meters) |
 | `0x5x` | loopbacks and S/PDIF OUT |
 | `0x6x` | mixer matrix |
 
@@ -939,12 +945,34 @@ Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
 `0x31`/`0x32` is Output 1+2: it is the fader taken to -inf at the
 start of `E2x2-2.pcapng`, and on the way down it wrote whole
 decibels from -1 dB to about -80 dB, then a few values a fraction
-of a decibel off, then 0. **Guessed**, by their place next to the
-selectors: `0x33`/`0x34` Mobile OUT, `0x51`..`0x56` the three
-loopbacks, `0x5a`/`0x5b` S/PDIF OUT. By the published
+of a decibel off, then 0. The others were moved one at a time in
+`E2x2-5.pcapng`, in a stated order: `0x33`/`0x34` is Mobile OUT,
+`0x5a`/`0x5b` S/PDIF OUT, and `0x51`/`0x52`, `0x53`/`0x54` and
+`0x55`/`0x56` Loopback 1+2, 3+4 and 5+6. A fader writes the same
+value to both targets of its pair, in whole decibels, and the card
+confirms none of it. By the published
 specification the headphone and line volumes are analogue
 potentiometers on the front panel, and no property for them
 appears in any capture.
+
+#### Output meters
+
+Output 1+2, Mobile OUT and the three loopbacks report two level
+meters each, properties `01` and `02`, in tenths of a decibel like
+the inputs' `04`; S/PDIF OUT reports only `02`. What the two
+measure is not known: in `E2x2-4.pcapng`, with music playing, both
+follow the music on Output 1+2.
+
+Mobile OUT reports its right channel's `01` under the left target:
+`33/01` arrives twice per cycle, the second 2 ms after the first,
+and `34/01` never. In `E2x2-4.pcapng` the first of the two follows
+Output 1+2's left meter and the second its right one: of 427
+pairs, 187 equal `31/01` and `32/01` exactly, against 5 crossed.
+
+`0x41`..`0x48` property `01` are the playback channels: in
+`E2x2-4.pcapng` the music lit `0x41` and `0x42` and none of the
+other six. That `0x43`..`0x48` are Playback 3..8 in order is
+**guessed**.
 
 #### The source selector's values
 
@@ -994,9 +1022,9 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 * `0x35/03`, `0x36/02`, and `37/02`, `37/04`, `37/06`;
 * `11/02`, `11/03`, `11/04`, `11/06`;
 * selector values 4 and 6;
-* which fader pairs are Mobile OUT, S/PDIF OUT and the loopbacks;
 * whether the card needs `11/01` before it takes writes;
-* why `33/01` arrives twice per meter cycle and `34/01` never.
+* what output meter properties `01` and `02` measure, and why
+  S/PDIF OUT has no `01`.
 
 ### A capture with no frame proves nothing
 
