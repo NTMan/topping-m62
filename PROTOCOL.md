@@ -450,6 +450,19 @@ back. `M62-loopbacks-2.pcapng` starts with the connect push, then
 Loopback 1/2's fader goes to the top and back. The menu's items and
 the +12 are read off the program's screen.
 
+**Verified from Linux** on 5 October 2026 (primary-ws, PipeWire
+stopped, the frames signed as the driver signs them, `lb.wav`): a
+1 kHz tone with a -20 dBFS peak played into Playback 1/2 while all
+sixteen capture columns were recorded, and the writes went out five
+seconds apart. The tone was on AUX8 and AUX9, the Loopback 1/2
+columns, at -23.01 dBFS RMS before the first write. `0x51/02 = 13`
+turned both columns into digital zero at the same moment, and `= 12`
+brought the tone back. -20 dB and then +12 dB written to `0x51/03`
+and `0x52/03` moved both columns by -20.00 and +12.00 dB. In each of
+the three gain changes AUX8 moved 70 to 90 ms before AUX9, the gap
+between the two writes: `0x51` sets the left column and `0x52` the
+right.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3), `11/05`
