@@ -411,9 +411,34 @@ off-diagonal.
 
 ### Loopback sources
 
-Targets `0x51`..`0x58`. Property `02` is the source number from
-the table above, `03` is a gain. Values seen in captures: 10 BT,
-11 OTG IN, 12 Playback 1/2, 13 Playback 3/4.
+Targets `0x51`..`0x58`, a pair per loopback: Loopback 1/2 is
+`0x51`/`0x52`, 3/4 is `0x53`/`0x54`, 5/6 is `0x55`/`0x56`, 7/8 is
+`0x57`/`0x58`.
+
+| Property | Meaning |
+| --- | --- |
+| `02` | source select, numbered as in "The source selector's values" |
+| `03` | gain, Q25, 0 dB = 2^25 |
+
+**The source is written to the FIRST target of the pair only** --
+`0x51/02`, `0x53/02`, `0x55/02`, `0x57/02`. The outputs are the
+other way round: their selector goes to the second target.
+
+The gain is written to both targets. M Control Center moves it in
+whole decibels down to -89 dB and then writes 0 for off; above 0 dB
+it went to +1 dB, and how far up it goes was not tried.
+
+The card reports neither property: no frame from the card carries
+a target in `0x51`..`0x58`.
+
+Decoded from `M62-loopbacks.pcapng` (5 October 2026, macOS; M
+Control Center was already connected when the capture started, so
+it holds no connect push). Each loopback's source was changed once
+and back -- 6 IN 1, 7 IN 2, 9 AUX and 10 BT out, 12, 13, 10 and 11
+back -- and each fader was taken to the bottom and back. Before and
+after, the program showed Loopback 1/2 on Playback 1/2, 3/4 on
+Playback 3/4, 5/6 on BT and 7/8 on OTG IN, every fader at 0 dB;
+those four sources are the values earlier captures had shown.
 
 ### Device scope and identification
 
