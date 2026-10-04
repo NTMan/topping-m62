@@ -737,10 +737,10 @@ Everything in this section comes from captures made with Wireshark
 on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
 a card that reports hardware V1.01 and firmware V1.10: four on
 2 October 2026 (UTC) with Control Center V1.09, a fifth on
-3 October and three on 4 October. Nothing has been
-written to this card from Linux yet, so nothing below is
-**verified**; as in the rest of this document, anything unmarked
-is **decoded**.
+3 October and three on 4 October. Writing to the card from Linux
+began on 4 October, with `tools/e2x2.py`; what those writes showed
+is marked **verified** (see Writing from Linux below), and as in
+the rest of this document anything unmarked is **decoded**.
 
 ### The captures
 
@@ -915,9 +915,12 @@ MUTE, and before `E2x2-6_1.pcapng` its level stayed silent.
 | `05` | digital gain, **signed** Q25 |
 
 `01`, `02` and `03` are confirmed by the card 26 to 200 ms after a
-write, and a MON press on the front panel arrives by itself:
-pressed twice, it came as `21/01 = 0`, then `21/01 = 1`, with
-nothing written.
+write, and a MON press on the front panel arrives by itself: pressed
+twice, it came as `21/01 = 0`, then `21/01 = 1`, with nothing
+written. Only a write that changes the value is confirmed: a write
+of the current value gets no answer, though the card still acts on
+it (see Writing from Linux). Confirmations and panel presses usually
+arrive twice, a few milliseconds apart (**verified**).
 
 `05` is never reported. Control Center offers +0 to +20 dB in
 1 dB steps (+1 dB = 37648680, +20 dB = 335544320). The published
@@ -968,7 +971,7 @@ output being switched off.
 
 **No selector is ever reported**, and neither is an input gain:
 nothing on these selector properties or on `0x21`..`0x24/05` came
-from the card in any of the four captures.
+from the card in any of the eight captures.
 
 Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
 `0x33`/`0x34` and `0x5a`/`0x5b` and of `0x51`..`0x56`; 0 is -inf.
@@ -1057,15 +1060,47 @@ on IN 1. At 100 they do not: with the microphone at up to -57.6 dB
 and nothing playing, `01` stayed at -96. The card also announces the
 knob after power-on and after `11/01`; the program never writes it.
 
-Control Center's connect silences the monitor mix until the knob
-is turned. After the push, Output 1+2's `01` drops to -96 and stays
+Control Center's connect silences the monitor mix until the knob is
+turned. After the push, Output 1+2's `01` drops to -96 and stays
 there -- no microphone, and no music once the music plays -- until
-the knob moves: in `E2x2-7.pcapng` from the push at 45.7 s until
-the knob moved at 102.6 s, which Mikhail also heard; in
-`E2x2-5.pcapng` from its push at 1.0 s to the end of the capture;
-and in `E2x2-8.pcapng` from its push at 73.5 s until the knob moved
-at 102.9 s, with the microphone on IN 1 at up to -53 dB throughout.
-Which of the push's writes does it is not known.
+the knob moves: in `E2x2-7.pcapng` from the push at 45.7 s until the
+knob moved at 102.6 s, which Mikhail also heard; in `E2x2-5.pcapng`
+from its push at 1.0 s to the end of the capture; and in
+`E2x2-8.pcapng` from its push at 73.5 s until the knob moved at
+102.9 s, with the microphone on IN 1 at up to -53 dB throughout. The
+write that does it is `23/01 = 0`, MON off on IN 2 (see Writing from
+Linux).
+
+#### Writing from Linux
+
+All of it **verified** on 4 October with `tools/e2x2.py`, the card
+on Linux and powered only from USB, MON on IN 1 and the monitor mix
+knob at or near its leftmost position. With nothing plugged into
+IN 1, its own noise through MON gave Output 1+2's `01` -72 to
+-81 dB, enough to see the monitor mix work or stop.
+
+The card takes writes in Control Center's own format, checksum
+`0000`, and needs no `11/01` first: after the cable was moved from
+the Mac, `21/01 = 0` and `21/01 = 1` were each confirmed about
+100 ms later, and `01` went to -96 and came back.
+
+Replaying Control Center's push in seven groups -- `11/01`, the
+output jacks, `35/02` and `36/02`, the sources, the faders, the
+matrix, the inputs -- left the monitor mix alone until the inputs;
+split further, the inputs' group silenced it through one write,
+`23/01 = 0`. That write silences the monitor mix whether or not it
+changes anything: IN 2's MON already off, or switched from on to
+off, `01` went to -96 within a second, every one of eight times.
+Pressed on the front panel, the same MON off on IN 2 does not:
+twice, with `01` unchanged. MON off on the Mobile input, written as
+`22/01 = 0` or `24/01 = 0` with its MON already off, does not
+either.
+
+What brings the monitor mix back is turning the knob, or a MON on
+written from the host, changed or not: so far `21/01 = 1` with IN
+1's MON already on, and `23/01 = 1` switching IN 2's on. Writing the
+knob does not: `35/03 = 0`, `= 1` and `= 0` again left `01` at -96,
+and the card answered none of them.
 
 #### Device scope and identification
 
@@ -1088,9 +1123,8 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 * `0x36/02`, and `37/02`, `37/04`, `37/06`;
 * `11/02`, `11/03`, `11/04`;
 * selector values 4 and 6;
-* whether the card needs `11/01` before it takes writes;
-* which write of Control Center's connect silences the monitor mix
-  until the knob is turned;
+* whether MON off on IN 1, written from the host, also silences
+  what IN 2 or the Mobile input still monitor;
 * whether `24/05` acts on the right Mobile channel;
 * what `01` and `02` measure on Mobile OUT and the loopbacks, and
   why S/PDIF OUT has no `01`.
