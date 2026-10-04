@@ -1098,6 +1098,31 @@ from its push at 1.0 s to the end of the capture; and in
 write that does it is `23/01 = 0`, MON off on IN 2 (see Writing from
 Linux).
 
+#### After power-on
+
+After every power-on the card mixes as though monitoring were on,
+whatever its MON buttons show. The monitor mix knob stays in the
+playback path: at its rightmost position playback passes in full, at
+its leftmost none of it does. It stays so until MON on IN 1 and on
+IN 2 have each been switched off since the power-on -- from the
+panel or by a write, one at a time or together, in either order.
+Found by Mikhail by hand on 4 October, on Linux and on the Mac; on
+the Mac the knob keeps acting on playback until Control Center
+connects, and stops as soon as it does, because its push writes MON
+on both.
+
+Written from Linux (**verified**, 4 October): after a power-on, with
+the knob at its leftmost position, both MON off and music playing,
+Output 1+2's `01` showed nothing; `21/01 = 0` and `23/01 = 0` --
+both already off, so the card confirmed neither -- brought the music
+to -22 dB within a second.
+
+So a host that wants the card to play the same after every power-on
+writes MON on both inputs at every connect, as Control Center does.
+Writing MON off on IN 2 while IN 1 still monitors has the side
+effect described under Writing from Linux, and a MON on written
+afterwards undoes it.
+
 #### Writing from Linux
 
 All of it **verified** on 4 October with `tools/e2x2.py`, the card
