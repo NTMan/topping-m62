@@ -3,11 +3,14 @@
 
     sudo e2x2.py listen                      # what the card sends, until Ctrl-C
     sudo e2x2.py listen --seconds 30 --meter 31/01 --meter 21/04
+    sudo e2x2.py listen --wait --seconds 15  # from the moment it is switched on
     sudo e2x2.py send 21/01=0                # MON off on IN 1
     sudo e2x2.py send @frames.txt            # one TT/PP=VALUE per line
 
 listen opens the card's hidraw node read-only, so it cannot write
-anything. send writes the frames given, in the order given, in the
+anything. With --wait it first waits for the card to go away and come
+back, then opens it at once, so that what the card says right after
+power-on is not missed. send writes the frames given, in the order given, in the
 format Control Center uses -- 22 33 20 01 01 TT PP value, checksum 0000
 -- and then prints what the card sends during --wait seconds.
 
@@ -142,7 +145,7 @@ def parse_meter(text):
     return target, prop
 
 
-def find_node():
+def find_node(required=True):
     found = []
     for path in sorted(glob.glob("/sys/class/hidraw/hidraw*")):
         try:
@@ -152,6 +155,8 @@ def find_node():
         except OSError:
             continue
     if not found:
+        if not required:
+            return None
         sys.exit("no E2x2 OTG (152a:8756) found")
     if len(found) > 1:
         sys.exit("more than one E2x2 OTG: %s; name one with --node" % " ".join(found))
@@ -234,6 +239,8 @@ def main():
                             help="print what the card sends")
     listen.add_argument("--seconds", type=float,
                         help="stop after this long (default: Ctrl-C)")
+    listen.add_argument("--wait", action="store_true",
+                        help="wait for the card to be switched off and on")
     send = sub.add_parser("send", parents=[common],
                           help="write frames, then listen")
     send.add_argument("frames", nargs="+", type=parse_frame,
@@ -246,12 +253,33 @@ def main():
                       help="seconds to listen afterwards (default 1)")
     args = parser.parse_args()
 
-    node = args.node or find_node()
     flags = os.O_RDONLY if args.command == "listen" else os.O_RDWR
-    try:
-        fd = os.open(node, flags | os.O_NONBLOCK)
-    except OSError as exc:
-        sys.exit("cannot open %s: %s" % (node, exc))
+    if args.command == "listen" and args.wait:
+        print("waiting: switch the card off, then on (Ctrl-C to stop)")
+        try:
+            while find_node(required=False):
+                time.sleep(0.01)
+            node = None
+            while not node:
+                time.sleep(0.01)
+                node = find_node(required=False)
+        except KeyboardInterrupt:
+            return
+        # the node can appear a moment before it can be opened
+        for _ in range(200):
+            try:
+                fd = os.open(node, flags | os.O_NONBLOCK)
+                break
+            except OSError:
+                time.sleep(0.01)
+        else:
+            sys.exit("cannot open %s" % node)
+    else:
+        node = args.node or find_node()
+        try:
+            fd = os.open(node, flags | os.O_NONBLOCK)
+        except OSError as exc:
+            sys.exit("cannot open %s: %s" % (node, exc))
     start = time.monotonic()
     printer = Printer(args.meter, start)
     print("%s on %s%s" % (args.command, node,
