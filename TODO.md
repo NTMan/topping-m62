@@ -3,7 +3,7 @@
 Everything agreed on and not yet done, kept here rather than in
 anyone's memory. An item leaves the list when it is done.
 
-## Series v9
+## The next posting of the series
 
 Sent after review of v8, or about two weeks after v8 if no review
 comes, in which case it doubles as the ping.
@@ -26,7 +26,7 @@ the loopback columns. Left before posting:
   knob. The card reports the knob when it turns and in its answer to
   `11/01`, and `11/01` does not disturb the monitor mix.
 
-## UCM, after v9
+## UCM, once the next posting is out
 
 - #826: the three renamed controls it checks -- `Headphone Playback
   Route`, `Mic1 Analog Capture Volume`, `Mic2 Analog Capture
