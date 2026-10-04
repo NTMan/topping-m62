@@ -1050,6 +1050,12 @@ muted and IN 2 raised by 20 dB they showed IN 2's on both sides.
 Neither carried a tone on the Mobile input's right channel that 2
 showed at -0.1 dB. What tells 4 from 6 apart was not found.
 
+Written to Loopback 1+2's source, `57/01`, the same values put the
+same sources on the loopback's meters `51/02` and `52/02`: 1 IN 1 on
+both, 2 the Mobile input with a tone on its right channel on `52/02`
+only, and 8 Playback 3/4, with nothing playing there, silence on
+both (**verified**, 4 October).
+
 Decoded from the Output 1+2 menu walked in a stated order in
 `E2x2-2.pcapng`. The push after the reconnect agrees with the
 screen (the loopbacks at 8, 9, 10, that is Playback 3/4, 5/6,
