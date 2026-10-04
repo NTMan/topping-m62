@@ -737,7 +737,7 @@ Everything in this section comes from captures made with Wireshark
 on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
 a card that reports hardware V1.01 and firmware V1.10: four on
 2 October 2026 (UTC) with Control Center V1.09, a fifth on
-3 October and two on 4 October. Nothing has been
+3 October and three on 4 October. Nothing has been
 written to this card from Linux yet, so nothing below is
 **verified**; as in the rest of this document, anything unmarked
 is **decoded**.
@@ -782,9 +782,15 @@ is **decoded**.
   music played from the Mac, and the monitor mix knob on the front
   panel was turned away from its leftmost position three times,
   back to it after the first two.
+* `E2x2-8.pcapng`, 115.3 s, with Control Center connected and the
+  phone on the OTG port. The monitor mix knob was turned to its
+  rightmost position and back to its leftmost; the phone was pulled
+  out of the OTG port; Control Center was quit and started again,
+  reconnecting 73.5 s in; the phone was plugged back in; the knob
+  was touched once more.
 
-Across the seven, all 2101 frames the program wrote carry `0000`
-in the checksum field, and all 44418 non-empty frames the card sent
+Across the eight, all 2240 frames the program wrote carry `0000`
+in the checksum field, and all 50920 non-empty frames the card sent
 carry a valid CRC-16/MODBUS: the frame and the direction
 discriminator described above apply unchanged. An idle poll
 returns sixteen zeros, as on the M62.
@@ -944,7 +950,7 @@ folds all three into `05`:
 | --- | --- | --- |
 | `0x35` | `01` | Output 1+2 source |
 | `0x35` | `02` | Gain under Phone Out, the headphone amplifier's gain switch (1 = on); confirmed by the card |
-| `0x35` | `03` | the front-panel monitor mix knob, reported by the card |
+| `0x35` | `03` | the front-panel monitor mix knob, 0..100, reported by the card |
 | `0x36` | `01` | Mobile OUT source |
 | `0x36` | `02` | written 0 in the push; meaning unknown |
 | `0x5c` | `01` | S/PDIF OUT source |
@@ -1044,27 +1050,34 @@ other. For unity the program writes `0x01ffffe0` here rather than
 `35/03` is the monitor mix knob on the front panel, which sets how
 much of the inputs and of the playback reaches the headphones. The
 card reports it whenever it is turned, with nothing written, as an
-integer: in `E2x2-7.pcapng`, turned three times, it went from 0 up
-to 21 and ended at 15. At the leftmost position, where Mikhail heard
-only the inputs, it reads 0. The card also announces it after
-power-on and after `11/01`; the program never writes it.
+integer from 0 at the leftmost position to 100 at the rightmost
+(`E2x2-8.pcapng`). At 0 the inputs reach the headphones: Mikhail
+heard only them there, and Output 1+2's `01` carried the microphone
+on IN 1. At 100 they do not: with the microphone at up to -57.6 dB
+and nothing playing, `01` stayed at -96. The card also announces the
+knob after power-on and after `11/01`; the program never writes it.
 
 Control Center's connect silences the monitor mix until the knob
 is turned. After the push, Output 1+2's `01` drops to -96 and stays
 there -- no microphone, and no music once the music plays -- until
 the knob moves: in `E2x2-7.pcapng` from the push at 45.7 s until
-the knob moved at 102.6 s, which Mikhail also heard, and in
-`E2x2-5.pcapng` from its push at 1.0 s to the end of the capture.
+the knob moved at 102.6 s, which Mikhail also heard; in
+`E2x2-5.pcapng` from its push at 1.0 s to the end of the capture;
+and in `E2x2-8.pcapng` from its push at 73.5 s until the knob moved
+at 102.9 s, with the microphone on IN 1 at up to -53 dB throughout.
 Which of the push's writes does it is not known.
 
 #### Device scope and identification
 
-`11/02 = 1` and `11/04 = 1` follow `11/01`, and so does `11/06`:
-as 0 in `E2x2-2.pcapng` and `E2x2-5.pcapng`, as 1 in
-`E2x2-7.pcapng`, with a phone on the OTG port. `11/03 = 0` is
-announced after power-on and repeated after the push. None of the
-four is decoded. No `11/05`, `11/20`, `11/24`,
-`11/25` or `11/26` was ever written.
+`11/06` is the OTG port: 1 with a phone connected, 0 without. The
+card announces it whenever it changes -- in `E2x2-8.pcapng`, 0 when
+the phone was pulled out and 1 when it was plugged back in -- and
+after `11/01`.
+
+`11/02 = 1` and `11/04 = 1` follow `11/01`; `11/03 = 0` is announced
+after power-on and repeated after the push. None of the three is
+decoded. No `11/05`, `11/20`, `11/24`, `11/25` or `11/26` was ever
+written.
 
 Identification lives at `0x12` as two 16-bit halves rather than
 the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
@@ -1073,13 +1086,12 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 ### Still unknown on the E2x2
 
 * `0x36/02`, and `37/02`, `37/04`, `37/06`;
-* `11/02`, `11/03`, `11/04`, `11/06`;
+* `11/02`, `11/03`, `11/04`;
 * selector values 4 and 6;
 * whether the card needs `11/01` before it takes writes;
 * which write of Control Center's connect silences the monitor mix
   until the knob is turned;
 * whether `24/05` acts on the right Mobile channel;
-* the monitor mix knob's value at its rightmost position;
 * what `01` and `02` measure on Mobile OUT and the loopbacks, and
   why S/PDIF OUT has no `01`.
 
