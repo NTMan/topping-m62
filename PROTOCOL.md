@@ -932,11 +932,11 @@ the analogue part has none.
 The Mobile strip's gain is `22/05` alone, and it acts on both
 channels. In `E2x2-7.pcapng`, with the tone on the right channel,
 raising `22/05` from +0 to +10 dB raised `24/04` by 10.0 dB, from
--43.2 to -33.2 dB; the push that followed wrote `22/05` = +10 dB
-and `24/05` = +0 dB, and the right channel stayed at -33.2 dB.
-Whether `24/05` acts on the right channel as well has not been
-tested: it has only ever been written +0 dB, or 0 with nothing
-playing.
+-43.2 to -33.2 dB; the push that followed wrote `22/05` = +10 dB and
+`24/05` = +0 dB, and the right channel stayed at -33.2 dB. Nor does
+`24/05` act on it: written from Linux as +10 dB, with a tone on the
+right channel at -31.1 dB, `24/05` left `24/04` where it was, and so
+did writing it back to +0 dB (**verified**, 4 October).
 
 SOLO, MUTE and ø have no properties of their own; the program
 folds all three into `05`:
@@ -991,6 +991,13 @@ appears in any capture.
 
 #### Output meters
 
+All meters, the inputs' `04` included, read like the peak of a
+16-bit sample in tenths of a decibel, cut toward zero rather than
+rounded: the low levels seen are -90.3, -84.2, -80.7, -78.2, -76.3,
+-74.7, -73.4, -72.2, that is 20 log10(n/32768) for n = 1 to 8, and
+-96.0 stands for nothing at all. A meter cannot show a level between
+-96.0 and -90.3.
+
 Output 1+2, Mobile OUT and the three loopbacks report two level
 meters each, properties `01` and `02`, in tenths of a decibel like
 the inputs' `04`; S/PDIF OUT reports only `02`. The meters of
@@ -1005,7 +1012,9 @@ microphone on IN 1 and `02` the music (`E2x2-6_1.pcapng`); with the
 knob at 15, `01` carried the music about 16 dB below `02`
 (`E2x2-7.pcapng`); with MON off, both carried the music
 (`E2x2-4.pcapng`). On Mobile OUT and the loopbacks both followed the
-source in every capture.
+source in every capture. Written from Linux, each source value of
+`35/01` put exactly its source on `02` (**verified**; see The source
+selector's values).
 
 Mobile OUT reports its right channel's `01` under the left target:
 `33/01` arrives twice per cycle, the second 2 ms after the first,
@@ -1027,8 +1036,19 @@ other six. That `0x43`..`0x48` are Playback 3..8 in order is
  5 IN 1+2        10 Playback 7/8    14 Mix D
 ```
 
-4 and 6 are not offered by the program. The input values follow
-the input targets: `0x21` is 1, `0x22` is 2, `0x23` is 3.
+4 and 6 are not offered by the program. The input values follow the
+input targets -- `0x21` is 1, `0x22` is 2, `0x23` is 3 -- but the
+pattern stops there: 4 is not `0x24`.
+
+Written from Linux to `35/01`, with Output 1+2's `02` showing the
+selected source (**verified**, 4 October): 1 puts IN 1 on both
+sides, 2 the Mobile input as it comes, 3 IN 2 on both sides, and 5
+IN 1 on the left and IN 2 on the right. 4 and 6 both put IN 1 and IN
+2 together on both sides, each at about the level it has alone: with
+IN 2 at +0 dB they showed IN 1's noise on both sides, and with IN 1
+muted and IN 2 raised by 20 dB they showed IN 2's on both sides.
+Neither carried a tone on the Mobile input's right channel that 2
+showed at -0.1 dB. What tells 4 from 6 apart was not found.
 
 Decoded from the Output 1+2 menu walked in a stated order in
 `E2x2-2.pcapng`. The push after the reconnect agrees with the
@@ -1140,10 +1160,9 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 
 * `0x36/02`, and `37/02`, `37/04`, `37/06`;
 * `11/02`, `11/03`, `11/04`;
-* selector values 4 and 6;
+* what tells selector values 4 and 6 apart;
 * whether MON off on IN 1, written from the host, also silences
   what IN 2 or the Mobile input still monitor;
-* whether `24/05` acts on the right Mobile channel;
 * what `01` and `02` measure on Mobile OUT and the loopbacks, and
   why S/PDIF OUT has no `01`.
 
