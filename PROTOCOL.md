@@ -852,7 +852,8 @@ Unasked, after power-on, the card:
 
 INST survives a power cycle: in both reconnects the card announced
 IN 1's INST as it was last set, before the program had written
-anything.
+anything. It is the card saving its state by itself; see The card
+keeps its own state.
 
 Control Center's push after the reconnect in `E2x2-2.pcapng`,
 timed from its first frame:
@@ -1101,6 +1102,23 @@ written from the host, changed or not: so far `21/01 = 1` with IN
 1's MON already on, and `23/01 = 1` switching IN 2's on. Writing the
 knob does not: `35/03 = 0`, `= 1` and `= 0` again left `01` at -96,
 and the card answered none of them.
+
+#### The card keeps its own state
+
+The card saves a change by itself once about five seconds have
+passed without another one, whether the change was written from the
+host or made on the front panel; switched off sooner, it comes back
+in the state it had saved before. Mikhail found this by hand on 4
+October with MON on IN 1 and IN 2, both ways, on Linux and with
+nothing else talking to the card. What Download to Device adds to
+this has not been captured.
+
+On Linux, a listener that opens the card's node as soon as it
+appears after power-on gets the meters from the first second, but
+none of what the card announces after power-on on the Mac: no INST,
+no monitor mix knob, no `11/03`, in 15 s (**verified**, 4 October).
+Whether the card says it before the node is open, or not at all
+here, is not known.
 
 #### Device scope and identification
 
