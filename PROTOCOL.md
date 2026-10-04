@@ -1102,8 +1102,12 @@ IN 1, its own noise through MON gave Output 1+2's `01` -72 to
 
 The card takes writes in Control Center's own format, checksum
 `0000`, and needs no `11/01` first: after the cable was moved from
-the Mac, `21/01 = 0` and `21/01 = 1` were each confirmed about
-100 ms later, and `01` went to -96 and came back.
+the Mac, `21/01 = 0` and `21/01 = 1` were each confirmed about 100
+ms later, and `01` went to -96 and came back. Signed with a valid
+checksum they are taken the same way -- `21/01 = 0` and `21/01 = 1`
+confirmed within 107 ms -- so, as on the M62, the card does not
+check what it is sent, and the driver's signed frames need nothing
+different.
 
 Replaying Control Center's push in seven groups -- `11/01`, the
 output jacks, `35/02` and `36/02`, the sources, the faders, the
