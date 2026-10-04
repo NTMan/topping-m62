@@ -20,15 +20,13 @@ comes, in which case it doubles as the ping.
   - on the E2x2 OTG: `Mic1 Digital Capture Volume`, `Mic2 Digital
     Capture Volume`, and `SPDIF ...` instead of `S/PDIF Out ...`.
 - The M62's loopbacks, owned like the E2x2 OTG's: a source and a gain
-  for each of the four. Known from `M62-loopbacks.pcapng` (see
-  PROTOCOL.md): the source goes to the first target of a pair, the
-  gain to both, in whole decibels; M Control Center has Playback 1/2,
-  Playback 3/4, BT and OTG IN, all at 0 dB, and the first bind writes
-  those. Before any code:
-  - which items the loopback source menu offers, and the top of the
-    loopback fader -- both read off M Control Center's screen;
-  - write both from Linux and look at what arrives on the loopback
-    columns.
+  for each of the four. Known (see PROTOCOL.md): the source goes to
+  the first target of a pair, the gain to both, in whole decibels
+  from -89 to +12 dB plus off; the source menu is the output
+  selector's fourteen items; M Control Center's connect writes
+  Playback 1/2, Playback 3/4, BT and OTG IN, all at 0 dB, and the
+  first bind writes the same. Before any code: write both from Linux
+  and look at what arrives on the loopback columns.
 - The E2x2 OTG as patches 3/4 (HID) and 4/4 (controls), after the
   runs the M62 had for v8: module reload cycles, suspend and resume,
   cable pulls under playback and under writes, `alsactl`, and a

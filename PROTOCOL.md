@@ -424,21 +424,31 @@ Targets `0x51`..`0x58`, a pair per loopback: Loopback 1/2 is
 `0x51/02`, `0x53/02`, `0x55/02`, `0x57/02`. The outputs are the
 other way round: their selector goes to the second target.
 
-The gain is written to both targets. M Control Center moves it in
-whole decibels down to -89 dB and then writes 0 for off; above 0 dB
-it went to +1 dB, and how far up it goes was not tried.
+The gain is written to both targets, in whole decibels from +12 dB
+down to -89 dB, and 0 for off. M Control Center's fader shows +12 at
+its top.
+
+The source menu offers the output selector's fourteen items, grouped
+as Mixer (Mix A, B, C), Input (IN 1, IN 2, IN 1+2, AUX, BT, OTG IN)
+and Playback (Playback 1/2 to 9/10). On a loopback only 6, 7 and 9
+to 13 have been seen written; the other values are taken from the
+outputs' numbering.
+
+M Control Center's connect push writes 12, 13, 10 and 11 to `0x51/02`,
+`0x53/02`, `0x55/02` and `0x57/02` -- the first target again -- and
+0 dB to all eight `03`s.
 
 The card reports neither property: no frame from the card carries
 a target in `0x51`..`0x58`.
 
-Decoded from `M62-loopbacks.pcapng` (5 October 2026, macOS; M
-Control Center was already connected when the capture started, so
-it holds no connect push). Each loopback's source was changed once
-and back -- 6 IN 1, 7 IN 2, 9 AUX and 10 BT out, 12, 13, 10 and 11
-back -- and each fader was taken to the bottom and back. Before and
-after, the program showed Loopback 1/2 on Playback 1/2, 3/4 on
-Playback 3/4, 5/6 on BT and 7/8 on OTG IN, every fader at 0 dB;
-those four sources are the values earlier captures had shown.
+Decoded from two captures on macOS, 5 October 2026.
+`M62-loopbacks.pcapng` starts with M Control Center already
+connected, so it holds no connect push; in it each loopback's source
+was changed once and back -- 6 IN 1, 7 IN 2, 9 AUX and 10 BT out,
+12, 13, 10 and 11 back -- and each fader was taken to the bottom and
+back. `M62-loopbacks-2.pcapng` starts with the connect push, then
+Loopback 1/2's fader goes to the top and back. The menu's items and
+the +12 are read off the program's screen.
 
 ### Device scope and identification
 
