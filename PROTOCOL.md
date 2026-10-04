@@ -736,8 +736,8 @@ its own.
 Everything in this section comes from captures made with Wireshark
 on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
 a card that reports hardware V1.01 and firmware V1.10: four on
-2 October 2026 (UTC) with Control Center V1.09, and a fifth on
-3 October. Nothing has been
+2 October 2026 (UTC) with Control Center V1.09, a fifth on
+3 October and two on 4 October. Nothing has been
 written to this card from Linux yet, so nothing below is
 **verified**; as in the rest of this document, anything unmarked
 is **decoded**.
@@ -769,9 +769,22 @@ is **decoded**.
   Loopback 1+2, Loopback 3+4 and Loopback 5+6 were each taken down
   to about -20 dB and back to 0 dB, one at a time and in that
   order.
+* `E2x2-6_1.pcapng`, 115.3 s, with Control Center already connected.
+  Music played from the Mac while the Output 1+2 fader and then
+  the S/PDIF OUT fader were each taken to about -20 dB and back. A
+  phone on the OTG port played a 440 Hz tone on its right channel
+  from the start, moved to its left channel 79 s in; with the tone
+  on the left, the Mobile gain was turned +0 -> +10 -> +0 dB.
+* `E2x2-7.pcapng`, 124.3 s. The phone played the tone on its right
+  channel; the Mobile gain was turned +0 -> +10 dB; Control Center
+  was quit and started again with the gain left at +10 dB,
+  reconnecting 45.7 s in; the gain was turned back to +0; then
+  music played from the Mac, and the monitor mix knob on the front
+  panel was turned away from its leftmost position three times,
+  back to it after the first two.
 
-Across the five, all 1596 frames the program wrote carry `0000`
-in the checksum field, and all 20162 non-empty frames the card sent
+Across the seven, all 2101 frames the program wrote carry `0000`
+in the checksum field, and all 44418 non-empty frames the card sent
 carry a valid CRC-16/MODBUS: the frame and the direction
 discriminator described above apply unchanged. An idle poll
 returns sixteen zeros, as on the M62.
@@ -829,7 +842,7 @@ Unasked, after power-on, the card:
   7.5 s; after that a meter is sent only while its level is above
   -96.0;
 * announces `21/03` and `23/03` (INST on IN 1 and IN 2), `11/03`
-  and `35/03`.
+  and `35/03` (the monitor mix knob).
 
 INST survives a power cycle: in both reconnects the card announced
 IN 1's INST as it was last set, before the program had written
@@ -872,9 +885,11 @@ matrix and `0x6x` the outputs:
 
 #### Inputs
 
-Targets: `0x21` IN 1, `0x22` Mobile IN, `0x23` IN 2, and `0x24`,
-which has no strip in the program (**guessed**: the second Mobile
-channel).
+Targets: `0x21` IN 1, `0x23` IN 2, and the two channels of the
+Mobile input, `0x22` left and `0x24` right; the program has one
+strip for the Mobile input, at `0x22`. In `E2x2-6_1.pcapng` a tone
+on the phone's right channel lit `24/04` alone, at -43.2 dB, and
+moved to the left channel it lit `22/04` alone, at the same level.
 
 This is not the M62's order, so the evidence. In `E2x2-1.pcapng`
 the knobs were turned in the order IN 1, IN 2, Mobile and wrote
@@ -883,7 +898,7 @@ reported noise between -90.3 and -80.7 dB, while `0x22` sent no
 level at all. After the power-on in `E2x2-2.pcapng` only `0x21`
 and `0x23` showed a transient, and only they had INST announced.
 `0x24` is written like the others in the push and by SOLO and
-MUTE, and its level stays silent.
+MUTE, and before `E2x2-6_1.pcapng` its level stayed silent.
 
 | Property | Meaning |
 | --- | --- |
@@ -904,6 +919,15 @@ specification gives 58 dB of analogue gain on the front-panel
 knob plus 20 dB of digital gain: the 20 dB is this property, and
 the analogue part has none.
 
+The Mobile strip's gain is `22/05` alone, and it acts on both
+channels. In `E2x2-7.pcapng`, with the tone on the right channel,
+raising `22/05` from +0 to +10 dB raised `24/04` by 10.0 dB, from
+-43.2 to -33.2 dB; the push that followed wrote `22/05` = +10 dB
+and `24/05` = +0 dB, and the right channel stayed at -33.2 dB.
+Whether `24/05` acts on the right channel as well has not been
+tested: it has only ever been written +0 dB, or 0 with nothing
+playing.
+
 SOLO, MUTE and ø have no properties of their own; the program
 folds all three into `05`:
 
@@ -920,7 +944,7 @@ folds all three into `05`:
 | --- | --- | --- |
 | `0x35` | `01` | Output 1+2 source |
 | `0x35` | `02` | Gain under Phone Out, the headphone amplifier's gain switch (1 = on); confirmed by the card |
-| `0x35` | `03` | announced by the card, 0; meaning unknown |
+| `0x35` | `03` | the front-panel monitor mix knob, reported by the card |
 | `0x36` | `01` | Mobile OUT source |
 | `0x36` | `02` | written 0 in the push; meaning unknown |
 | `0x5c` | `01` | S/PDIF OUT source |
@@ -959,9 +983,19 @@ appears in any capture.
 
 Output 1+2, Mobile OUT and the three loopbacks report two level
 meters each, properties `01` and `02`, in tenths of a decibel like
-the inputs' `04`; S/PDIF OUT reports only `02`. What the two
-measure is not known: in `E2x2-4.pcapng`, with music playing, both
-follow the music on Output 1+2.
+the inputs' `04`; S/PDIF OUT reports only `02`. The meters of
+Output 1+2 and S/PDIF OUT do not move with their faders: in
+`E2x2-6_1.pcapng` both faders went to -20 dB with music playing and
+the meters unchanged.
+
+On Output 1+2, `02` is the selected source and `01` the output of
+the monitor mix, both before the fader. With MON on IN 1 and the
+monitor mix knob at its leftmost position, `01` carried the
+microphone on IN 1 and `02` the music (`E2x2-6_1.pcapng`); with the
+knob at 15, `01` carried the music about 16 dB below `02`
+(`E2x2-7.pcapng`); with MON off, both carried the music
+(`E2x2-4.pcapng`). On Mobile OUT and the loopbacks both followed the
+source in every capture.
 
 Mobile OUT reports its right channel's `01` under the left target:
 `33/01` arrives twice per cycle, the second 2 ms after the first,
@@ -1005,11 +1039,31 @@ each stereo source is at unity on its own side and at zero on the
 other. For unity the program writes `0x01ffffe0` here rather than
 `2^25`.
 
+#### The monitor mix knob
+
+`35/03` is the monitor mix knob on the front panel, which sets how
+much of the inputs and of the playback reaches the headphones. The
+card reports it whenever it is turned, with nothing written, as an
+integer: in `E2x2-7.pcapng`, turned three times, it went from 0 up
+to 21 and ended at 15. At the leftmost position, where Mikhail heard
+only the inputs, it reads 0. The card also announces it after
+power-on and after `11/01`; the program never writes it.
+
+Control Center's connect silences the monitor mix until the knob
+is turned. After the push, Output 1+2's `01` drops to -96 and stays
+there -- no microphone, and no music once the music plays -- until
+the knob moves: in `E2x2-7.pcapng` from the push at 45.7 s until
+the knob moved at 102.6 s, which Mikhail also heard, and in
+`E2x2-5.pcapng` from its push at 1.0 s to the end of the capture.
+Which of the push's writes does it is not known.
+
 #### Device scope and identification
 
-`11/02 = 1`, `11/04 = 1` and `11/06 = 0` follow `11/01`;
-`11/03 = 0` is announced after power-on and repeated after the
-push. None of the four is decoded. No `11/05`, `11/20`, `11/24`,
+`11/02 = 1` and `11/04 = 1` follow `11/01`, and so does `11/06`:
+as 0 in `E2x2-2.pcapng` and `E2x2-5.pcapng`, as 1 in
+`E2x2-7.pcapng`, with a phone on the OTG port. `11/03 = 0` is
+announced after power-on and repeated after the push. None of the
+four is decoded. No `11/05`, `11/20`, `11/24`,
 `11/25` or `11/26` was ever written.
 
 Identification lives at `0x12` as two 16-bit halves rather than
@@ -1018,13 +1072,16 @@ the M62's five bytes: `12/01 = 0x00010001`, hardware V1.01;
 
 ### Still unknown on the E2x2
 
-* what `0x24` is;
-* `0x35/03`, `0x36/02`, and `37/02`, `37/04`, `37/06`;
+* `0x36/02`, and `37/02`, `37/04`, `37/06`;
 * `11/02`, `11/03`, `11/04`, `11/06`;
 * selector values 4 and 6;
 * whether the card needs `11/01` before it takes writes;
-* what output meter properties `01` and `02` measure, and why
-  S/PDIF OUT has no `01`.
+* which write of Control Center's connect silences the monitor mix
+  until the knob is turned;
+* whether `24/05` acts on the right Mobile channel;
+* the monitor mix knob's value at its rightmost position;
+* what `01` and `02` measure on Mobile OUT and the loopbacks, and
+  why S/PDIF OUT has no `01`.
 
 ### A capture with no frame proves nothing
 
