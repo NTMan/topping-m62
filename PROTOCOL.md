@@ -510,6 +510,14 @@ announce has the identification, the device flags and a DSP dump
 ending in `11/25` as well, none of which the driver's subscription
 alone brings there.
 
+`11/01` alone is enough for it, without the program's push. On Linux,
+with the driver bound, `m62-listen.py --handshake` (`11/01`, `11/24`,
+`11/26`, nothing else) got from a card in Mobile Mode the answer 1 at
+0.03 s, the jacks at 0.85 s, the identification, the device flags,
+the battery at 1.84 s, a DSP dump ending in `11/25` at 3.0 s, and a
+second wave with the jacks and the output mutes at 5.2 s. Without
+`11/01` the same card sent no wave at all.
+
 The card does not say whether it is charging. The device flags read
 the same with a charger on the card's charge port and without one:
 `11/04` = 1, `11/1a` = 1, `11/1b` = 0, `11/1c` = 1, `11/1e` = 0,
