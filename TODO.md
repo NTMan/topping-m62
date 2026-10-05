@@ -37,8 +37,13 @@ opens a session at bind and at resume as M Control Center does, with
 supply, and UPower's device with it, appear about 2 seconds after a
 card is plugged in, in either mode.
 
-Left before posting: the runs again on the five patches, and the cover
-letter brought up to five.
+The cover letter is written for the five patches. Its Tested list
+still holds the numbers of the runs on the four, under a line marked
+XXX.
+
+Left before posting: the runs again on the five patches; then, in the
+cover letter, the numbers in the Tested list checked against them and
+the XXX line removed.
 
 ## UCM, once the next posting is out
 
