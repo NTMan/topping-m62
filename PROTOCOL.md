@@ -473,8 +473,8 @@ bracket, `11/24` subscribe /
 keepalive, `11/25` end of the `11/26` dump, sent three times,
 `11/26` a DSP-block dump request and NOT a state request.
 Device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`, `11/22`
-and `11/23` come only in a session opened with `11/01` and are
-undecoded.
+and `11/23` come only in a session opened with `11/01`; of them only
+`11/1c` is decoded (see "USB-C port power" below).
 
 Identification lives at target `0x12`: property `01` = 100 =
 hardware V1.00; `02`..`06` = 135, 5, 69, 72, 39 = hex
@@ -505,6 +505,22 @@ Charge, with and without a charger on its charge port. Set so, the
 data port alone did not charge the card here: the charge went from 87
 to 86 % on it. The same `11/19` = 1 without changes is in
 `M62-loopbacks-2.pcapng`, where the charge was rising.
+
+### USB-C port power
+
+`11/1c` is the power setting of the USB-C data port, which M Control
+Center offers under Device: 1 Charge, 2 Discharge, 3 Off. The program
+writes it on its own, outside any push. The card does not answer the
+write; it reports the value in the announce of the next `11/01`
+session. Control Center restarts itself after each change, and its
+reconnect is that session.
+
+Decoded from `M62-usbc-power.pcapng` (5 October 2026, macOS):
+Charge, then Discharge, Off and Charge again, chosen in the program
+one after another, wrote `11/1c` = 2 at 38.67 s, 3 at 68.23 s and 1 at
+89.29 s, and the announces of the reconnects read 2 at 44.50 s and 3
+at 71.87 s. Every announce on Linux so far read 1, the Charge the card
+was set to.
 
 ### EQ
 
