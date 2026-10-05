@@ -18,15 +18,25 @@ only the selector: on 5 October that took the M62's headphone volume
 away from the desktop. The M62's loopback source and gain were checked
 through the controls on 5 October, recorded on the loopback columns.
 
-The runs were done on 5 October on both cards, on the build as it is
-to be posted: KASAN, lockdep and UBSAN on; fifty HID reloads, five
+The runs were done on 5 October on both cards, on the four patches:
+KASAN, lockdep and UBSAN on; fifty HID reloads, five
 audio-side rebinds per card, `alsactl restore`, suspend and resume,
 two cable pulls per card under playback and writes, and the M62's
 Loopback 1/2 recorded through the controls; nothing in the kernel log.
 Under PipeWire the M62's headphone level follows the desktop and the
 knob both ways, and the desktop moves the E2x2 OTG's `Master` (the
-card shows no level of its own). The cover letter is written; what is
-left is sending it.
+card shows no level of its own).
+
+A fifth patch offers the M62's battery level as a power supply of
+device scope, registered once the card has reported a level: UPower
+decides on first sight whether a device supply is a battery, and never
+looks again at one whose capacity it could not read. Checked on
+5 October: the supply, and UPower's device with it, appear about 2
+seconds after a card in Pro Audio Mode is plugged in and about 20 in
+Mobile Mode, when that card first reports its level.
+
+Left before posting: the runs again on the five patches, and the cover
+letter brought up to five.
 
 ## UCM, once the next posting is out
 
