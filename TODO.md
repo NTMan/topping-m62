@@ -18,15 +18,15 @@ only the selector: on 5 October that took the M62's headphone volume
 away from the desktop. The M62's loopback source and gain were checked
 through the controls on 5 October, recorded on the loopback columns.
 
-The runs were done on 5 October on both cards, with the selectors
-still named `... Route`, the only difference since: KASAN, lockdep and
-UBSAN on; fifty HID reloads, five audio-side rebinds per card,
-`alsactl restore`, suspend and resume, and two cable pulls per card
-under playback and writes; nothing in the kernel log. Under PipeWire,
-with the `... Source` names back, the M62's headphone level follows the
-desktop and the knob both ways, and the desktop moves the E2x2 OTG's
-`Master` (the card shows no level of its own). Left before posting:
-the cover letter.
+The runs were done on 5 October on both cards, on the build as it is
+to be posted: KASAN, lockdep and UBSAN on; fifty HID reloads, five
+audio-side rebinds per card, `alsactl restore`, suspend and resume,
+two cable pulls per card under playback and writes, and the M62's
+Loopback 1/2 recorded through the controls; nothing in the kernel log.
+Under PipeWire the M62's headphone level follows the desktop and the
+knob both ways, and the desktop moves the E2x2 OTG's `Master` (the
+card shows no level of its own). The cover letter is written; what is
+left is sending it.
 
 ## UCM, once the next posting is out
 
