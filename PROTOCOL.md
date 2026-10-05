@@ -598,6 +598,18 @@ and `11/1e`, the identification frames repeated many times over
 had not been told in that session. It is the only one of the nine
 announces in the Mac captures without them.
 
+Sixty more announces on Linux, asked for one after another under
+usbmon on a stream of about 265 frames a second, show what it does not
+depend on. Ten lacked one of `11/04`, `11/1c` and `11/1b`, one of them
+two: eleven of 180 frames. Before each, the two port settings were
+written, in turn changing them and writing them again unchanged; five
+incomplete announces followed each kind of write, and five each of the
+two pairs of values. The driver's renewal of the subscription fell
+inside the window of the three flags in ten rounds, one of them
+incomplete. A missing frame leaves its slot empty: where `11/1c` was
+missing, `11/04` and `11/1b` came 0.15 to 0.16 s apart instead of the
+usual 0.075 s. What makes the card skip a slot is not known.
+
 ### EQ
 
 Blocks `0x91`..`0x94` and `0xa1`..`0xaa`, with frequencies in
