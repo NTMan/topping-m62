@@ -8,30 +8,20 @@ anyone's memory. An item leaves the list when it is done.
 Sent after review of v8, or about two weeks after v8 if no review
 comes, in which case it doubles as the ping.
 
-- Control names, while they can still change -- once merged they are
-  ABI:
-  - selectors become `... Playback Route` and `... Capture Route`,
-    the form `Documentation/sound/designs/control-names.rst` gives;
-    alsa-lib's simple mixer takes an enumerated control with that
-    suffix as a playback or capture enum;
-  - `Mic-1 Analog Capture Volume` and `Mic-2 Analog Capture Volume`
-    become `Mic1 ...` and `Mic2 ...`: no control in the tree has a
-    hyphen there;
-  - on the E2x2 OTG: `Mic1 Digital Capture Volume`, `Mic2 Digital
-    Capture Volume`, and `SPDIF ...` instead of `S/PDIF Out ...`.
-- The M62's loopbacks, owned like the E2x2 OTG's: a source and a gain
-  for each of the four. Known (see PROTOCOL.md): the source goes to
-  the first target of a pair, the gain to both, in whole decibels
-  from -89 to +12 dB plus off; the source menu is the output
-  selector's fourteen items; M Control Center's connect writes
-  Playback 1/2, Playback 3/4, BT and OTG IN, all at 0 dB, and the
-  first bind writes the same. Written from Linux and checked on the
-  loopback columns (see PROTOCOL.md); the code is what is left.
+The four patches are written, on `topping-next` over e767a4ea7: the
+controls renamed -- `... Playback Route` and `... Capture Route` for
+the selectors, `Mic1` and `Mic2` without the hyphen, `SPDIF` for the
+E2x2 OTG's `S/PDIF Out` -- and the M62's loopbacks, a source and a gain
+for each of the four. On the M62 they were checked on 5 October: every
+control under its new name with the first-bind values, and the
+loopback source and gain written through the controls, recorded on
+the loopback columns. Left before posting:
+
 - The E2x2 OTG as patches 3/4 (HID) and 4/4 (controls), after the
   runs the M62 had for v8: module reload cycles, suspend and resume,
   cable pulls under playback and under writes, `alsactl`, and a
   build with KASAN and lockdep.
-- The M62 runs again on the renamed build.
+- The M62 through those runs again, on this build.
 - Undecided: a read-only `Monitor Mix` control for the E2x2 OTG's
   knob. The card reports the knob when it turns and in its answer to
   `11/01`, and `11/01` does not disturb the monitor mix.
