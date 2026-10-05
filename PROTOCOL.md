@@ -479,8 +479,8 @@ dump; inside an `11/01` session the same request also brings a
 DSP-block dump, ended by `11/25`. With `m62-listen.py`'s own `11/24`
 and `11/26` sent a few milliseconds after the driver's, the flags did
 not come; why is not known. Device flags `11/04`, `11/1a`, `11/1b`,
-`11/1c`, `11/1e`, `11/22` and `11/23`; of them only `11/1c` is
-decoded (see "USB-C port power" below).
+`11/1c`, `11/1e`, `11/22` and `11/23`; of them `11/1b` and `11/1c`
+are decoded (see "Port power" below).
 
 Identification lives at target `0x12`: property `01` = 100 =
 hardware V1.00; `02`..`06` = 135, 5, 69, 72, 39 = hex
@@ -537,10 +537,12 @@ data port alone did not charge the card here: the charge went from 87
 to 86 % on it. The same `11/19` = 1 without changes is in
 `M62-loopbacks-2.pcapng`, where the charge was rising.
 
-### USB-C port power
+### Port power
 
 `11/1c` is the power setting of the USB-C data port, which M Control
-Center offers under Device: 1 Charge, 2 Discharge, 3 Off. The program
+Center offers under Device: 1 Charge, 2 Discharge, 3 Off. `11/1b` is
+that of the OTG port, which the program offers with two values only:
+1 Discharge, 0 Off. The program
 writes it on its own, outside any push. The card does not answer the
 write; it reports the value in its next announce (see `11/26`
 above), such as the one at Control Center's reconnect -- the program
@@ -552,6 +554,12 @@ one after another, wrote `11/1c` = 2 at 38.67 s, 3 at 68.23 s and 1 at
 89.29 s, and the announces of the reconnects read 2 at 44.50 s and 3
 at 71.87 s. Every announce on Linux so far read 1, the Charge the card
 was set to.
+
+`11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
+then Off and Discharge again, chosen one after another, wrote `11/1b`
+= 0 at 6.48 s and 1 at 16.34 s; the program did not restart this time.
+Every announce on Linux before that read 0, the Off the card was set
+to then.
 
 ### EQ
 
