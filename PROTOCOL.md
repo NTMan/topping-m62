@@ -561,6 +561,17 @@ then Off and Discharge again, chosen one after another, wrote `11/1b`
 Every announce on Linux before that read 0, the Off the card was set
 to then.
 
+The announce does not always carry them. On Linux, with usbmon, which
+loses nothing, five announces were asked for in a row, each after the
+same two writes (`11/1c` = 3, `11/1b` = 0): the first had none of
+`11/04`, `11/1c` and `11/1b`, the second only `11/04`, the other three
+all of them. The rest of each announce came, and what one left out did
+not come later in the eleven seconds of its capture. From the
+announce asked for just before them the driver got `11/1b` = 0 but not
+`11/1c` = 3. The eight announces after them, all under usbmon and on
+the same stream of about 260 frames a second from the card, had all
+three. What makes the card leave them out is not known.
+
 ### EQ
 
 Blocks `0x91`..`0x94` and `0xa1`..`0xaa`, with frequencies in
