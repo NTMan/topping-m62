@@ -465,7 +465,8 @@ right.
 
 ### Device scope and identification
 
-`11/01` session handshake (host 1, device answers 3), `11/05`
+`11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
+and 1 in Mobile Mode, the digit of the bcdDevice high byte), `11/05`
 save to the card's own memory (see the two memories above),
 `11/18` battery percent and `11/19` a flag that alternates while
 the card is not charging (see "Battery" below), `11/20` bulk-push
@@ -498,6 +499,16 @@ same subscription: a read-only capture of a hotplug shows `11/19` = 1
 at 4.1 seconds and then only `0x46/09` = -800 and `0x46/0a` = 0, each
 about 16 times a second, until the first `11/18` at 28.5 seconds. A
 second hotplug put the first level at about 20 seconds.
+
+M Control Center has the level at once in both modes. It opens with
+`11/01` and asks with `11/26`, and the card announces, the battery
+among the rest, 2.4 to 3.1 seconds later -- before the program's
+first `11/24` in two of three captures: `M62-usbc-power.pcapng`, Pro
+Audio Mode, first `11/24` at 23.7 s; `M62-handshake-mobile.pcapng`,
+Mobile Mode, at 3.1 s, with the battery at 2.6 s. In Mobile Mode that
+announce has the identification, the device flags and a DSP dump
+ending in `11/25` as well, none of which the driver's subscription
+alone brings there.
 
 The card does not say whether it is charging. The device flags read
 the same with a charger on the card's charge port and without one:
