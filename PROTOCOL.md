@@ -545,8 +545,7 @@ that of the OTG port, which the program offers with two values only:
 1 Discharge, 0 Off. The program
 writes it on its own, outside any push. The card does not answer the
 write; it reports the value in its next announce (see `11/26`
-above), such as the one at Control Center's reconnect -- the program
-restarts itself after each change.
+above).
 
 Decoded from `M62-usbc-power.pcapng` (5 October 2026, macOS):
 Charge, then Discharge, Off and Charge again, chosen in the program
@@ -555,9 +554,23 @@ one after another, wrote `11/1c` = 2 at 38.67 s, 3 at 68.23 s and 1 at
 at 71.87 s. Every announce on Linux so far read 1, the Charge the card
 was set to.
 
+A switch away from Charge can take the card off the bus. Its frames
+stop and, between 0.3 and 3 seconds after the write, it is enumerated
+afresh at a new address, after which Control Center opens a new
+session with it; that is what looks like the program restarting. In
+`M62-usbc-power.pcapng` it happened at Charge to Discharge (written at
+38.67 s, enumerated again at 41.70 s) and at Discharge to Off
+(68.23 s, 69.29 s), not at Off to Charge. In
+`M62-usbc-charge-off.pcapng` (5 October 2026, macOS: Charge, Off,
+Charge, Off, Charge) it happened at the first Charge to Off (36.53 s,
+36.84 s) and at none of the three switches after it; the second
+Charge to Off came 6.6 s after Charge was chosen again. On Linux,
+behind a hub on a desktop, the card kept its USB address through seven
+switches from Charge to Off recorded with usbmon.
+
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
-= 0 at 6.48 s and 1 at 16.34 s; the program did not restart this time.
+= 0 at 6.48 s and 1 at 16.34 s; the card stayed on the bus.
 Every announce on Linux before that read 0, the Off the card was set
 to then.
 
