@@ -31,6 +31,8 @@ desktop and the knob both ways, and the desktop moves the E2x2 OTG's
   for it: at 3081.35 s, as the cable-pull step started its
   playback and writes, and at 3396.23 s, after the runs. Audio was
   streaming both times, and the kernel logged nothing before either.
+  Three hands-off repeats of that start, playback and writes together
+  for a minute each, gave no disconnect.
 - Undecided: a read-only `Monitor Mix` control for the E2x2 OTG's
   knob. The card reports the knob when it turns and in its answer to
   `11/01`, and `11/01` does not disturb the monitor mix.
