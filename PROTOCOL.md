@@ -564,9 +564,15 @@ session with it; that is what looks like the program restarting. In
 `M62-usbc-charge-off.pcapng` (5 October 2026, macOS: Charge, Off,
 Charge, Off, Charge) it happened at the first Charge to Off (36.53 s,
 36.84 s) and at none of the three switches after it; the second
-Charge to Off came 6.6 s after Charge was chosen again. On Linux,
-behind a hub on a desktop, the card kept its USB address through seven
-switches from Charge to Off recorded with usbmon.
+Charge to Off came 6.6 s after Charge was chosen again. Through a hub
+on the same Mac it did not happen: `M62-usbc-via-hub.pcapng` (two
+switches from Charge to Off, each 6.5 s after Charge) and
+`M62-usbc-via-hub-long.pcapng` (Charge to Off after two minutes
+connected) kept the card at one address. In the second the card's
+level fell from 91 to 90 and `11/19` stayed 0, so through that hub it
+may not have been charging. On Linux, behind the same hub, the card
+kept its USB address through seven switches from Charge to Off
+recorded with usbmon, while its level had been rising that day.
 
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
@@ -584,6 +590,13 @@ announce asked for just before them the driver got `11/1b` = 0 but not
 `11/1c` = 3. The eight announces after them, all under usbmon and on
 the same stream of about 260 frames a second from the card, had all
 three. What makes the card leave them out is not known.
+
+Control Center gets the same. The announce at its connect in
+`M62-usbc-via-hub-long.pcapng` came without `11/04`, `11/1c`, `11/1b`
+and `11/1e`, the identification frames repeated many times over
+(`12/05` 94 times), and the program went on showing Charge, which it
+had not been told in that session. It is the only one of the nine
+announces in the Mac captures without them.
 
 ### EQ
 
