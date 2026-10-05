@@ -22,12 +22,11 @@ The runs were done on 5 October on both cards, with the selectors
 still named `... Route`, the only difference since: KASAN, lockdep and
 UBSAN on; fifty HID reloads, five audio-side rebinds per card,
 `alsactl restore`, suspend and resume, and two cable pulls per card
-under playback and writes; nothing in the kernel log. Left before
-posting:
+under playback and writes; nothing in the kernel log. Under PipeWire,
+with the `... Source` names back, the M62's headphone level follows the
+desktop and the knob both ways, and the desktop moves the E2x2 OTG's
+`Master` (the card shows no level of its own). Left before posting:
 
-- On both cards under PipeWire, with the `... Source` names back: the
-  desktop volume moves the card, and the M62's headphone knob moves
-  the desktop.
 - The M62 left USB twice on 5 October with no cable pull confirmed
   for it: at 3081.35 s, as the cable-pull step started its
   playback and writes, and at 3396.23 s, after the runs. Audio was
