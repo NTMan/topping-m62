@@ -30,10 +30,12 @@ card shows no level of its own).
 A fifth patch offers the M62's battery level as a power supply of
 device scope, registered once the card has reported a level: UPower
 decides on first sight whether a device supply is a battery, and never
-looks again at one whose capacity it could not read. Checked on
-5 October: the supply, and UPower's device with it, appear about 2
-seconds after a card in Pro Audio Mode is plugged in and about 20 in
-Mobile Mode, when that card first reports its level.
+looks again at one whose capacity it could not read. In Mobile Mode
+the card announces nothing to a plain subscription, so the driver
+opens a session at bind and at resume as M Control Center does, with
+0x11/0x01 before 0x11/0x24 and 0x11/0x26. Checked on 5 October: the
+supply, and UPower's device with it, appear about 2 seconds after a
+card is plugged in, in either mode.
 
 Left before posting: the runs again on the five patches, and the cover
 letter brought up to five.
