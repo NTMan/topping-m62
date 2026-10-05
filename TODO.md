@@ -26,23 +26,10 @@ under playback and writes; nothing in the kernel log. Under PipeWire,
 with the `... Source` names back, the M62's headphone level follows the
 desktop and the knob both ways, and the desktop moves the E2x2 OTG's
 `Master` (the card shows no level of its own). Left before posting:
-
-- The M62 left USB twice on 5 October with no cable pull confirmed
-  for it: at 3081.35 s, as the cable-pull step started its
-  playback and writes, and at 3396.23 s, after the runs. Audio was
-  streaming both times, and the kernel logged nothing before either.
-  Three hands-off repeats of that start, playback and writes together
-  for a minute each, gave no disconnect.
-- Undecided: a read-only `Monitor Mix` control for the E2x2 OTG's
-  knob. The card reports the knob when it turns and in its answer to
-  `11/01`, and `11/01` does not disturb the monitor mix.
+the cover letter.
 
 ## UCM, once the next posting is out
 
-- #826: the two renamed controls it checks, `Mic1 Analog Capture
-  Volume` and `Mic2 Analog Capture Volume` -- a local commit on
-  `topping-next` in alsa-ucm-conf, folded into the PR's one commit when
-  the series is posted.
 - A profile for the E2x2 OTG in the manner of #826: a stereo device
   per bus, conditions on the driver's controls, the output's source
   following the device, the loopbacks as capture devices, `Master`
