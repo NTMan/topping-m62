@@ -11,6 +11,8 @@ Run it, THEN plug the card in, or unplug it and plug it back:
     sudo m62-listen.py            # wait for the card, then listen 30 s
     sudo m62-listen.py 60         # ... for 60 s
     sudo m62-listen.py --now      # do not wait, use the card already there
+    sudo m62-listen.py --handshake  # open with 11/01 first, as M Control
+                                    # Center does
 
 Every frame is printed decoded. A frame from the host has a bad
 checksum (the vendor application does not sign its writes) and a frame
@@ -129,9 +131,12 @@ def describe(f):
 def main():
     seconds = 30
     wait = True
+    handshake = False
     for arg in sys.argv[1:]:
         if arg == "--now":
             wait = False
+        elif arg == "--handshake":
+            handshake = True
         else:
             seconds = int(arg)
 
@@ -162,6 +167,8 @@ def main():
 
     print("listening on %s" % node)
     born = time.time()
+    if handshake:
+        os.write(fd, frame(0x11, 0x01, 1))  # session handshake
     os.write(fd, frame(0x11, 0x24, 1))      # subscribe
     os.write(fd, frame(0x11, 0x26, 1))      # announce your state
     print("subscribed %.0f ms after the node opened\n"
