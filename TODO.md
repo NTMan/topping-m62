@@ -9,28 +9,39 @@ Sent after review of v8, or about two weeks after v8 if no review
 comes, in which case it doubles as the ping.
 
 The four patches are written, on `topping-next` over e767a4ea7: the
-controls renamed -- `... Playback Route` and `... Capture Route` for
-the selectors, `Mic1` and `Mic2` without the hyphen, `SPDIF` for the
-E2x2 OTG's `S/PDIF Out` -- and the M62's loopbacks, a source and a gain
-for each of the four. On the M62 they were checked on 5 October: every
-control under its new name with the first-bind values, and the
-loopback source and gain written through the controls, recorded on
-the loopback columns. Left before posting:
+controls renamed -- `Mic1` and `Mic2` without the hyphen, `SPDIF` for
+the E2x2 OTG's `S/PDIF Out` -- and the M62's loopbacks, a source and a
+gain for each of the four. The selectors keep `... Source`. Named
+`... Route`, a selector joins the volume of the same name in alsa-lib's
+simple mixer (`src/mixer/simple_none.c`), which then reads and writes
+only the selector: on 5 October that took the M62's headphone volume
+away from the desktop. The M62's loopback source and gain were checked
+through the controls on 5 October, recorded on the loopback columns.
 
-- The E2x2 OTG as patches 3/4 (HID) and 4/4 (controls), after the
-  runs the M62 had for v8: module reload cycles, suspend and resume,
-  cable pulls under playback and under writes, `alsactl`, and a
-  build with KASAN and lockdep.
-- The M62 through those runs again, on this build.
+The runs were done on 5 October on both cards, with the selectors
+still named `... Route`, the only difference since: KASAN, lockdep and
+UBSAN on; fifty HID reloads, five audio-side rebinds per card,
+`alsactl restore`, suspend and resume, and two cable pulls per card
+under playback and writes; nothing in the kernel log. Left before
+posting:
+
+- On both cards under PipeWire, with the `... Source` names back: the
+  desktop volume moves the card, and the M62's headphone knob moves
+  the desktop.
+- The M62 left USB twice on 5 October with no cable pull confirmed
+  for it: at 3081.35 s, as the cable-pull step started its
+  playback and writes, and at 3396.23 s, after the runs. Audio was
+  streaming both times, and the kernel logged nothing before either.
 - Undecided: a read-only `Monitor Mix` control for the E2x2 OTG's
   knob. The card reports the knob when it turns and in its answer to
   `11/01`, and `11/01` does not disturb the monitor mix.
 
 ## UCM, once the next posting is out
 
-- #826: the three renamed controls it checks -- `Headphone Playback
-  Route`, `Mic1 Analog Capture Volume`, `Mic2 Analog Capture
-  Volume`.
+- #826: the two renamed controls it checks, `Mic1 Analog Capture
+  Volume` and `Mic2 Analog Capture Volume` -- a local commit on
+  `topping-next` in alsa-ucm-conf, folded into the PR's one commit when
+  the series is posted.
 - A profile for the E2x2 OTG in the manner of #826: a stereo device
   per bus, conditions on the driver's controls, the output's source
   following the device, the loopbacks as capture devices, `Master`
