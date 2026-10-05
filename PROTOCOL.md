@@ -580,8 +580,8 @@ then Off and Discharge again, chosen one after another, wrote `11/1b`
 Every announce on Linux before that read 0, the Off the card was set
 to then.
 
-The announce does not always carry them. On Linux, with usbmon, which
-loses nothing, five announces were asked for in a row, each after the
+The announce does not always carry them. On Linux, with usbmon, five
+announces were asked for in a row, each after the
 same two writes (`11/1c` = 3, `11/1b` = 0): the first had none of
 `11/04`, `11/1c` and `11/1b`, the second only `11/04`, the other three
 all of them. The rest of each announce came, and what one left out did
@@ -617,6 +617,19 @@ were missing 11 times in 120; the other device frames once in 320
 (`11/23`); the jacks 3 times in 240 and the output mutes once in 80;
 the 146 kinds of the DSP dump 8 times in 5840. The identification and
 the gain of IN 1 (`21/04`, in the second wave) came every time.
+
+The usbmon captures behind those figures were not checked for losses
+of their own: usbmon's text reader drops events when it falls behind
+and counts them in the bus's statistics file (`text_lost`, 254 in the
+boot those captures were made in). Forty more announces were checked,
+the count read before and after each, and none of the forty lost an
+event. Before each, the two port settings were written, in turn
+Off/Off and Charge/Discharge, just before the request. Thirty-seven
+announces carried both settings with the values just written, 1.3 to
+1.6 s after the request, and the driver's controls followed. Two
+carried neither and one only `11/1c`, and the controls kept their old
+values. So the card applies such a write before its announce, and
+sometimes leaves a setting out of it.
 
 ### EQ
 
