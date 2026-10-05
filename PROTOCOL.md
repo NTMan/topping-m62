@@ -493,6 +493,12 @@ subscribe -- 1.9 seconds after a hotplug, in a read-only capture of
 the driver's own subscription -- then at every change, and now and
 then again unchanged.
 
+In Mobile Mode (bcdDevice 1.45) the card announces nothing after the
+same subscription: a read-only capture of a hotplug shows `11/19` = 1
+at 4.1 seconds and then only `0x46/09` = -800 and `0x46/0a` = 0, each
+about 16 times a second, until the first `11/18` at 28.5 seconds. A
+second hotplug put the first level at about 20 seconds.
+
 The card does not say whether it is charging. The device flags read
 the same with a charger on the card's charge port and without one:
 `11/04` = 1, `11/1a` = 1, `11/1b` = 0, `11/1c` = 1, `11/1e` = 0,
