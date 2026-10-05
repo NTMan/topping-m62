@@ -6,7 +6,7 @@ and only to whoever has already subscribed. A hand-typed command is
 seconds late and misses it; this waits for the hidraw node to appear,
 opens it and writes the subscribe and the state request immediately.
 
-Run it, THEN plug the card in:
+Run it, THEN plug the card in, or unplug it and plug it back:
 
     sudo m62-listen.py            # wait for the card, then listen 30 s
     sudo m62-listen.py 60         # ... for 60 s
@@ -138,12 +138,14 @@ def main():
     node = find_node()
     if wait:
         print("waiting for the M62 -- plug it in now (Ctrl-C to stop)")
-        while True:
-            fresh = find_node()
-            if fresh and fresh != node:
-                node = fresh
-                break
+        # A card that is unplugged and plugged back usually gets the same
+        # hidraw number, so wait for it to go and then to come back.
+        while node:
             time.sleep(0.01)
+            node = find_node()
+        while not node:
+            time.sleep(0.01)
+            node = find_node()
     elif not node:
         sys.exit("the M62 is not here, and --now was asked for")
 
