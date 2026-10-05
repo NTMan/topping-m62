@@ -467,17 +467,44 @@ right.
 
 `11/01` session handshake (host 1, device answers 3), `11/05`
 save to the card's own memory (see the two memories above),
-`11/18` battery percent, `11/19` a periodic blink flag that is
-not ours, `11/20` bulk-push bracket, `11/24` subscribe /
+`11/18` battery percent and `11/19` a flag that alternates while
+the card is not charging (see "Battery" below), `11/20` bulk-push
+bracket, `11/24` subscribe /
 keepalive, `11/25` end of the `11/26` dump, sent three times,
 `11/26` a DSP-block dump request and NOT a state request.
-Device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e` appear
-in an announce and are undecoded.
+Device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`, `11/22`
+and `11/23` come only in a session opened with `11/01` and are
+undecoded.
 
 Identification lives at target `0x12`: property `01` = 100 =
 hardware V1.00; `02`..`06` = 135, 5, 69, 72, 39 = hex
 `87 05 45 48 27` = firmware V87.05.45.48.27. A quirk can
 therefore be gated on a real firmware revision.
+
+### Battery
+
+`11/18` is the charge in percent. After a subscribe it comes within
+8 to 10 seconds, then at every change, and now and then again
+unchanged.
+
+The card does not say whether it is charging. The device flags read
+the same with a charger on the card's charge port and without one:
+`11/04` = 1, `11/1a` = 1, `11/1b` = 0, `11/1c` = 1, `11/1e` = 0,
+`11/22` = 0, `11/23` = 1. Only `11/19` differs. On the charger it is
+1 and stays there, and without an `11/01` session it is not sent at
+all. Without the charger it alternates, 1 for 15 to 19 seconds and 0
+for about 6, in a plain subscription as well. The vendor's manual
+(M62-EN V1.1) has the charge indicators flash when the card is
+neither charging nor discharging, which fits a flag that follows a
+flashing light. A driver cannot read a charge state from it before
+the next change comes or fails to come, so it is not used for one.
+
+Measured on 5 October 2026 on Linux with `m62-listen.py`, plain and
+with `--handshake`, the card's USB-C data port on the host and set to
+Charge, with and without a charger on its charge port. Set so, the
+data port alone did not charge the card here: the charge went from 87
+to 86 % on it. The same `11/19` = 1 without changes is in
+`M62-loopbacks-2.pcapng`, where the charge was rising.
 
 ### EQ
 
