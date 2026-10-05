@@ -610,6 +610,14 @@ incomplete. A missing frame leaves its slot empty: where `11/1c` was
 missing, `11/04` and `11/1b` came 0.15 to 0.16 s apart instead of the
 usual 0.075 s. What makes the card skip a slot is not known.
 
+The losses are not spread evenly over the announce. Forty announces
+asked for with nothing written before them, under usbmon, with a
+coupler on IN 1, held 172 kinds of frame. `11/04`, `11/1c` and `11/1e`
+were missing 11 times in 120; the other device frames once in 320
+(`11/23`); the jacks 3 times in 240 and the output mutes once in 80;
+the 146 kinds of the DSP dump 8 times in 5840. The identification and
+the gain of IN 1 (`21/04`, in the second wave) came every time.
+
 ### EQ
 
 Blocks `0x91`..`0x94` and `0xa1`..`0xaa`, with frequencies in
