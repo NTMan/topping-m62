@@ -471,10 +471,15 @@ save to the card's own memory (see the two memories above),
 the card is not charging (see "Battery" below), `11/20` bulk-push
 bracket, `11/24` subscribe /
 keepalive, `11/25` end of the `11/26` dump, sent three times,
-`11/26` a DSP-block dump request and NOT a state request.
-Device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`, `11/22`
-and `11/23` come only in a session opened with `11/01`; of them only
-`11/1c` is decoded (see "USB-C port power" below).
+`11/26` a request to announce. After the driver's subscription and
+`11/26` alone, a hotplugged card answered within 2 seconds with its
+identification (`0x12`), the device flags and the battery, and no
+dump; inside an `11/01` session the same request also brings a
+DSP-block dump, ended by `11/25`. With `m62-listen.py`'s own `11/24`
+and `11/26` sent a few milliseconds after the driver's, the flags did
+not come; why is not known. Device flags `11/04`, `11/1a`, `11/1b`,
+`11/1c`, `11/1e`, `11/22` and `11/23`; of them only `11/1c` is
+decoded (see "USB-C port power" below).
 
 Identification lives at target `0x12`: property `01` = 100 =
 hardware V1.00; `02`..`06` = 135, 5, 69, 72, 39 = hex
@@ -483,9 +488,10 @@ therefore be gated on a real firmware revision.
 
 ### Battery
 
-`11/18` is the charge in percent. After a subscribe it comes within
-8 to 10 seconds, then at every change, and now and then again
-unchanged.
+`11/18` is the charge in percent. It comes in the announce after a
+subscribe -- 1.9 seconds after a hotplug, in a read-only capture of
+the driver's own subscription -- then at every change, and now and
+then again unchanged.
 
 The card does not say whether it is charging. The device flags read
 the same with a charger on the card's charge port and without one:
@@ -511,9 +517,9 @@ to 86 % on it. The same `11/19` = 1 without changes is in
 `11/1c` is the power setting of the USB-C data port, which M Control
 Center offers under Device: 1 Charge, 2 Discharge, 3 Off. The program
 writes it on its own, outside any push. The card does not answer the
-write; it reports the value in the announce of the next `11/01`
-session. Control Center restarts itself after each change, and its
-reconnect is that session.
+write; it reports the value in its next announce (see `11/26`
+above), such as the one at Control Center's reconnect -- the program
+restarts itself after each change.
 
 Decoded from `M62-usbc-power.pcapng` (5 October 2026, macOS):
 Charge, then Discharge, Off and Charge again, chosen in the program
