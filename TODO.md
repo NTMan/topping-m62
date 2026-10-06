@@ -37,13 +37,29 @@ opens a session at bind and at resume as M Control Center does, with
 supply, and UPower's device with it, appear about 2 seconds after a
 card is plugged in, in either mode.
 
-The cover letter is written for the five patches. Its Tested list
-still holds the numbers of the runs on the four, under a line marked
-XXX.
+A sixth patch offers the power settings of the M62's two USB ports as
+enumerated controls, `USB-C Port Power` (Charge, Discharge, Off) and
+`OTG Port Power` (Discharge, Off): without it a card set elsewhere not
+to charge runs its battery down, with nothing on Linux to set it back.
+The controls take the card's values from its announce and write only
+when changed, as M Control Center does; a setting the card leaves out
+of an announce keeps the control's last value. As ALSA controls they
+are restored by `alsactl` when a card appears, from a state saved up
+to five minutes late, so a switch that takes the card off the bus
+would be undone; that has been seen only under macOS, not on Linux
+(behind a hub, in a desktop's USB-C port, or in a Mac's own port under
+Asahi Linux). Checked on 6 October: written through the controls the
+settings reach the card, the controls follow the card's announce, and
+change events reach alsamixer.
 
-Left before posting: the runs again on the five patches; then, in the
-cover letter, the numbers in the Tested list checked against them and
-the XXX line removed.
+The cover letter is written for the six patches. Its Tested list still
+holds the numbers of the runs on the four, under a line marked XXX.
+
+Left before posting: the runs again on the six patches, with checks of
+the sixth added -- the controls showing the card's values after a bind,
+a write reaching the card, and the battery falling on Off and rising
+on Charge over a set time; then, in the cover letter, the numbers in
+the Tested list checked against them and the XXX line removed.
 
 ## UCM, once the next posting is out
 
