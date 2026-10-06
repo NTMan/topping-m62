@@ -594,6 +594,12 @@ first enumerated and came back at a new address, though nothing had been
 written to it but `11/01` and `11/26`; the program then opened a new
 session and the second announce read the same.
 
+On Linux the card did not leave the bus in the desktop's own USB-C port
+either: plugged straight into a root port, of which the kernel listed
+no Type-C port in `/sys/class/typec`, it kept its address through
+Charge for a minute, then Off, Charge, Discharge for 30 s and Charge,
+set through the driver's control, and the control read back each value.
+
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
 = 0 at 6.48 s and 1 at 16.34 s; the card stayed on the bus.
