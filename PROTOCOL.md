@@ -639,6 +639,22 @@ carried neither and one only `11/1c`, and the controls kept their old
 values. So the card applies such a write before its announce, and
 sometimes leaves a setting out of it.
 
+What decides it is how the announce is sent. It goes out item by item,
+about 75 ms apart: `12/02` to `12/06`, `11/04`, `11/1c`, `11/1b`,
+`11/1a`, `12/01`, `11/1e`, `11/18`, `11/19`, `11/22`, `11/23`, and
+`11/25` after the dump. Some items the card sends over and over -- the
+identification frames, `11/1a` and `12/01`, from once to 75 times each
+-- and the others once (`11/18` twice, `11/25` three times). In 120
+announces under usbmon, with nothing lost, the repeated items were
+never missing and the single ones went missing 3 to 11 times each:
+`11/04` 11, `11/1c` 10, `11/1e` 7, `11/1b` 6, `11/22` 5, `11/23` 3.
+About half of those losses came in announces where the card repeated
+the items before them dozens of times, going back and forth between
+them (`12/03`, `12/04`, `12/03`, ...), past the time of the next items,
+which were then not sent; `11/1e` went missing only after `12/01` had
+been repeated 9 times or more. The other half came in announces with
+nothing unusual around them.
+
 ### EQ
 
 Blocks `0x91`..`0x94` and `0xa1`..`0xaa`, with frequencies in
