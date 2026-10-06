@@ -63,10 +63,26 @@ the Tested list checked against them and the XXX line removed.
 
 ## UCM, once the next posting is out
 
-- A profile for the E2x2 OTG in the manner of #826: a stereo device
-  per bus, conditions on the driver's controls, the output's source
-  following the device, the loopbacks as capture devices, `Master`
-  as the volume.
+- The E2x2 OTG's profile is written, one commit on alsa-ucm-conf
+  master over #826, in the manner of #826: the four playback buses
+  and IN 1, IN 2, Mobile IN and the three loopback returns as devices
+  split out of the two PCMs. With the driver the buses conflict and
+  each points `Output 1+2 Playback Source` at itself, with `Master` as
+  the volume; the inputs and the loopback returns take the card's own
+  gains and faders, and the USB trims are set to 0 dB. Checked on
+  6 October under PipeWire with the driver: the source follows each of
+  the four profiles; the sink volume moves `Master` and a source's
+  volume the card's gain or fader behind it; a tone on Playback 3/4,
+  5/6 and 7/8 reached only the loopback listening to it. Left: the
+  branch without the driver, on a kernel without it; Playback 1/2 and
+  the inputs with a real signal; the pull request, once the next
+  posting is out.
+- In both profiles a source's volume is the card's own gain, not a USB
+  trim: the driver exists so that PerDeviceEQ moves the card's gain
+  stages. A source PipeWire sees for the first time starts at 100%,
+  which is the top of that gain -- +88 dB on the M62's IN 1 and IN 2,
+  +9 dB on its AUX, +20 dB on the E2x2 OTG's inputs -- until a level
+  is set; that is accepted.
 - #803 (the plain E2x2, `152a:8752`): the comment drafted on
   4 October. The 8752 goes into the driver only with its channel
   names and a test by someone who has one.
