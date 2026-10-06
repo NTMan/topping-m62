@@ -574,6 +574,14 @@ may not have been charging. On Linux, behind the same hub, the card
 kept its USB address through seven switches from Charge to Off
 recorded with usbmon, while its level had been rising that day.
 
+Off does stop the card taking power from the computer. Set to Off on
+Linux with nothing playing, the card stayed on for the 30 minutes it
+was watched and through the night after, its level falling from 90%
+to 14%. It did not turn itself off on battery. Once, though, during a
+run that switched the USB-C setting between Charge and Off every 6.3 s
+for eleven minutes, the card turned off at one of the switches from
+Charge to Off, at 90%; what made it do so is not known.
+
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
 = 0 at 6.48 s and 1 at 16.34 s; the card stayed on the bus.
