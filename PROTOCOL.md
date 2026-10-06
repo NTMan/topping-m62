@@ -600,6 +600,14 @@ no Type-C port in `/sys/class/typec`, it kept its address through
 Charge for a minute, then Off, Charge, Discharge for 30 s and Charge,
 set through the driver's control, and the control read back each value.
 
+Nor in the Mac's own port under Linux. On the same MacBook Pro (16-inch,
+M1 Max, 2021) running Asahi Linux (kernel 7.1.13), with the card
+straight in a port the kernel showed as Type-C in USB Power Delivery
+mode, the Mac the power source and host, the card kept its address
+through Off, Charge, Discharge for 30 s and Charge, written through
+hidraw, and the port's roles did not change. So far the card has left
+the bus only under macOS.
+
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
 = 0 at 6.48 s and 1 at 16.34 s; the card stayed on the bus.
