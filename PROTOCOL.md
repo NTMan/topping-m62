@@ -582,6 +582,18 @@ run that switched the USB-C setting between Charge and Off every 6.3 s
 for eleven minutes, the card turned off at one of the switches from
 Charge to Off, at 90%; what made it do so is not known.
 
+Control Center takes the two settings from the announce. Set on Linux
+to Charge and Off, the card showed Charge and Off in the program on the
+Mac, against Off and Discharge, the values the program had written last
+itself (`M62-connecting.pcapng`); set to Discharge and Discharge, it
+showed Discharge and Discharge (`M62-connecting-2.pcapng`). In both the
+announce carried `11/1c` and `11/1b` with those values, and the program
+wrote neither. In the second, with the card in the Mac's own port and
+its USB-C set to Discharge, the card left the bus 6.5 s after it was
+first enumerated and came back at a new address, though nothing had been
+written to it but `11/01` and `11/26`; the program then opened a new
+session and the second announce read the same.
+
 `11/1b` from `M62-otg-power.pcapng` (5 October 2026, macOS): Discharge,
 then Off and Discharge again, chosen one after another, wrote `11/1b`
 = 0 at 6.48 s and 1 at 16.34 s; the card stayed on the bus.
