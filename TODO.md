@@ -61,6 +61,19 @@ a write reaching the card, and the battery falling on Off and rising
 on Charge over a set time; then, in the cover letter, the numbers in
 the Tested list checked against them and the XXX line removed.
 
+## #826, the M62's profile
+
+Jaroslav Kysela's review of 9 October asks for three things: the mode
+check moved out of `USB-Audio.conf` into `Topping/M62.conf`, an
+`Error` that explains a mode the profile does not know, and a profile
+for Mobile Mode, so that PipeWire does not fall back to probing the
+card. Written on 9 October and run through the parser of alsa-lib's
+master: `USB-Audio.conf` gets one line, `M62.conf` picks the verb file
+by bcdDevice, and Mobile Mode gets Playback 1/2 on the headphone stage
+and the Recording as one stereo capture device on the capture trim.
+Left: a check under PipeWire in Pro Audio Mode and in Mobile Mode, the
+push, and the answer to the review.
+
 ## UCM, once the next posting is out
 
 - The E2x2 OTG's profile is written, one commit on alsa-ucm-conf
