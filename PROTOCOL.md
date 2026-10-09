@@ -721,6 +721,11 @@ IN 2. A 1 kHz tone played to the card reached neither column in any
 state tried, including after M Control Center's push, while the card's
 meters showed it at the outputs (below).
 
+The other inputs land in the same mix (**verified** by ear, 9 October
+2026): with a microphone on IN 1, a phone on Bluetooth and a source on
+AUX, all three were in the recording at once, and DUCKING lowered the
+other two while the microphone had sound.
+
 M Control Center's connect push in Mobile Mode
 (`M62-handshake-mobile.pcapng`), read against its screen:
 
