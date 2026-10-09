@@ -409,6 +409,16 @@ BT and OTG feeding the mixes.
 Setting a stereo fader writes the diagonal and ZEROES the
 off-diagonal.
 
+M Control Center shows the matrix as its Mixer section, a tab per
+mix; Mix A's has strips for Playback 1/2 to 9/10, each with a fader,
+ø, SOLO and MUTE. A strip acts on its mix alone, and so only on an
+output or a loopback whose selector names that mix: one that names a
+playback takes it straight from USB, with no level of the matrix
+between. The program's screen shows it (10 October 2026): with Mix
+A's Playback 1/2 muted, HP and OTG OUT, both on Playback 1/2, still
+had signal on their meters. The strips' MUTE, SOLO and ø have not
+been captured.
+
 ### Loopback sources
 
 Targets `0x51`..`0x58`, a pair per loopback: Loopback 1/2 is
@@ -736,7 +746,10 @@ Playback 1/2 is not a strip of the Recording, although it sits among
 the inputs' strips. The headphones carry the playback and every input
 together, the playback at that knob's level, and the Recording carries
 the inputs alone (**verified** by ear, 9 October 2026; a tone played to
-the card on Linux never reached the capture either, see below).
+the card on Linux never reached the capture either, see below). Where
+Pro Audio Mode's outputs can take a playback with no level between
+(see "The mixer matrix"), Mobile Mode has no output selector, so the
+knob is always in the playback's path to the headphones.
 
 **The capture is the Recording, one mix of the inputs** (**verified**
 on Linux, 9 October 2026, `m62-mobile2.txt`, with IN 1 the only input
