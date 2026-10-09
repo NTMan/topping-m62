@@ -268,7 +268,7 @@ Targets: `0x61` and `0x62` are OTG OUT; `0x63` and `0x64` are HP.
 | --- | --- |
 | `02` | source select |
 | `03` | volume |
-| `04` | mute |
+| `04` | mute (1 = muted) |
 | `06` | jack present |
 
 **Outputs come in PAIRS and the device announces only the second
@@ -420,6 +420,10 @@ Targets `0x51`..`0x58`, a pair per loopback: Loopback 1/2 is
 | `02` | source select, numbered as in "The source selector's values" |
 | `03` | gain, Q25, 0 dB = 2^25 |
 
+The MUTE on each return's strip has no property of its own: pressed,
+it writes 0, off, to `03` of both targets, and released, the fader's
+gain again, 0 dB in the capture (see "The MUTEs").
+
 **The source is written to the FIRST target of the pair only** --
 `0x51/02`, `0x53/02`, `0x55/02`, `0x57/02`. The outputs are the
 other way round: their selector goes to the second target.
@@ -462,6 +466,23 @@ and `0x52/03` moved both columns by -20.00 and +12.00 dB. In each of
 the three gain changes AUX8 moved 70 to 90 ms before AUX9, the gap
 between the two writes: `0x51` sets the left column and `0x52` the
 right.
+
+### The MUTEs
+
+Every MUTE beside a level on M Control Center's Pro Audio screen was
+pressed on and off in turn in `M62 - Pro - Mutes.pcapng` (10 October
+2026, macOS): those of the four loopback returns, HP, OTG OUT, IN 1,
+IN 2, AUX, BT and OTG IN. The inputs wrote 1 and then 0 to their
+`05`; HP and OTG OUT wrote them to `04` of both targets of their pair,
+first target first; the loopback returns wrote 0 to `03` of both
+targets and then 2^25, the 0 dB each fader stood at.
+
+M Control Center's connect push writes every input's `05` and every
+output's `04` as 0, in both modes; the push that opens this capture
+did. On the Mobile Mode screen the outputs' MUTEs were pressed too
+and write the same as here (see "The controls of the Mobile Mode
+screen"); the inputs' were not, and that they are `05` in that mode
+as well rests on the push alone.
 
 ### Device scope and identification
 
@@ -935,8 +956,9 @@ them, so the last host to write one is right by definition.
 * input property `0a`;
 * device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`;
 * the EQ blocks;
-* in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
-  `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
+* in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, the inputs'
+  MUTEs (see "The MUTEs"), and `46/03` .. `46/05`, `46/07` and `46/08`,
+  which the Compressor's MORE would show;
 * noise reduction and reverb, which were never captured. Both
   must be OFF for any measurement, alongside AUTO gain and EQ.
 
