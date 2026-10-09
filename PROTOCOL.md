@@ -751,6 +751,12 @@ Pro Audio Mode's outputs can take a playback with no level between
 (see "The mixer matrix"), Mobile Mode has no output selector, so the
 knob is always in the playback's path to the headphones.
 
+The Mobile Mode screen has no MON: the headphones monitor every
+input, as the E2x2 OTG's do with MON on (see "The monitor mix knob"),
+and no knob crossfades the inputs with the playback there. The
+playback's share is set by the Playback 1/2 knob alone, and an input's
+by its gain, which sets it in the Recording as well.
+
 **The capture is the Recording, one mix of the inputs** (**verified**
 on Linux, 9 October 2026, `m62-mobile2.txt`, with IN 1 the only input
 the card reported as plugged in). Both capture columns carried the same
