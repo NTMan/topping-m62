@@ -741,8 +741,13 @@ M Control Center's connect push in Mobile Mode
 | `63/03`, `64/03` | 21 | HP OUT -50 dB |
 | `61/03`, `62/03` | 99 | OTG OUT 0 dB |
 | `51/03`, `52/03` | 0 | Recording 0 dB |
-| `51/04` .. `54/04`, `61/04` .. `64/04` | 0 | **guessed**: the MUTEs |
-| `43/01` .. `43/07` | -30, 200, 16, 1000, 0, 255, 255 | not identified |
+| `51/04` .. `54/04`, `61/04` .. `64/04` | 0 | the outputs' and Playback 1/2's MUTE off |
+| `43/07` | 0 | IN 1's DUCKING off |
+| `43/01` .. `43/06` | -30, 200, 16, 1000, 255, 255 | **guessed**: the ducking's settings |
+
+The push writes the program's settings as they stand: a later one
+(`M62 - Mobile.pcapng`, 9 October 2026) wrote 57 for IN 1 and for the
+headphone output and 1 to `43/07`.
 
 The gains and the output volumes are on the scales of Pro Audio Mode
 (see "Value encodings"). Property 03 of `0x51`..`0x54` is not: it is
@@ -771,13 +776,44 @@ a level:
   gain reduction;
 * `61/01` .. `64/01`, the outputs, at the tone's level once IN 1's
   gain was down;
-* in an announce inside a session, `44/06` = 15, `44/07` = 0,
-  `44/08` = 25, `44/09` = 4, `44/0a` = 11, `44/0b` = 1, `44/0f` = 70,
-  **guessed** to be the effects -- the screen's Noise Reduction level 15
-  and Reverb mix 25 would be `44/06` and `44/08`; and in M Control
-  Center's session (`M62-handshake-mobile.pcapng`) `46/01` .. `46/08` =
-  1, -30, 40, 5, 200, 14, 1, 100, **guessed** to be the compressor's
-  settings.
+* in an announce inside a session, the effects' settings (see the
+  table below): `44/06` = 15, `44/07` = 0, `44/08` = 25, `44/09` = 4,
+  `44/0a` = 11, `44/0b` = 1, `44/0f` = 70, and in M Control Center's
+  sessions `46/01` .. `46/08` = 1, -30, 40, 5, 200, 14, 1, 100.
+
+### The controls of the Mobile Mode screen
+
+Decoded from `M62 - Mobile.pcapng` (9 October 2026, macOS), in which
+each control was moved in turn. A pair of targets is written alike,
+first one, then the other.
+
+| On the screen | Frames | Values |
+| --- | --- | --- |
+| Recording fader | `51/03`, `52/03` | -90 at the bottom to 0 at the top, whole dB |
+| Playback 1/2 knob | `53/03`, `54/03` | -90 to +12, whole dB |
+| MUTE of Recording, Playback 1/2, HP OUT, OTG OUT | `51/04` .. `54/04`, `63/04` .. `64/04`, `61/04` .. `62/04` | 1 on, 0 off |
+| IN 1's DUCKING | `43/07` | 1 on, 0 off |
+| Noise Reduction BYPASS, NC1, NC2 | `44/07` | 0, 15, 30 |
+| Noise Reduction Level | `44/06` | 1 to 70 |
+| Compressor BYPASS | `46/01` | 1 on, 0 off |
+| Compressor Threshold | `46/02` | -36 to 0 |
+| Compressor Gain | `46/06` | 0 to 36 |
+| Reverb BYPASS, STUDIO, LIVE, HALL | `44/0b` | 1, 2, 3, 4 |
+| Reverb Dry/Wet | `44/08` | 0 to 100 |
+| Room Size | `44/09` | 1 to 6 |
+| Decay | `44/0a` | 0 to 18 |
+| Width | `44/0f` | 0 to 100 in steps of 5 |
+
+Taking Noise Reduction's BYPASS off wrote `44/07` = 15 and lit NC1, and
+after it and after NC2 the card reported `44/06` with the same number,
+15 and 30. Each step of the Compressor's Threshold also wrote `46/06`
+with the Gain's value, and the first step of the Gain wrote `46/07` =
+0. Taking the Reverb's BYPASS off wrote STUDIO, and the first move of
+one of its knobs after that wrote all four of `44/08`, `44/09`, `44/0a`
+and `44/0f`. After each preset the card reported those four (HALL
+without `44/0f`): STUDIO the positions last set by hand, LIVE and HALL
+25, 4, 11 and 70. The program shows no numbers for the Compressor's and
+the Reverb's knobs other than Dry/Wet.
 
 ## Value encodings
 
@@ -893,7 +929,8 @@ them, so the last host to write one is right by definition.
 * input property `0a`;
 * device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`;
 * the EQ blocks;
-* in Mobile Mode, `0x43` and the blocks `0x44` and `0x46`;
+* in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
+  `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
 * noise reduction and reverb, which were never captured. Both
   must be OFF for any measurement, alongside AUTO gain and EQ.
 
