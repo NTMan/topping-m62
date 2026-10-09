@@ -742,6 +742,10 @@ loopback. On USB the card is two channels each way: the playback
 terminal names its channels Playback 1 and 2, the capture terminal,
 of type Microphone, Analogue 1 and 2.
 
+The gains of the five inputs on that screen are also on the card
+itself: its panel buttons set the same ones (checked by Mikhail, 10
+October 2026).
+
 Playback 1/2 is not a strip of the Recording, although it sits among
 the inputs' strips. The headphones carry the playback and every input
 together, the playback at that knob's level, and the Recording carries
