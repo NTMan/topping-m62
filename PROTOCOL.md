@@ -691,6 +691,89 @@ decoded further.**
 sentinel during muting, so it is IN 1 at another point in the
 chain; the strip's MUTE lands there.
 
+## Mobile Mode
+
+The card has three operating modes, chosen on its own panel, and tells
+which in the high byte of bcdDevice: 01xx Mobile, 02xx Live Streaming,
+03xx Pro Audio (the answer to `11/01` is the same digit). It comes up
+with other USB descriptors in each. The rest of this document is Pro
+Audio Mode unless it says otherwise. Mobile Mode keeps the frame, the
+session and the device scope, but part of the address map means
+something else in it.
+
+M Control Center's Mobile Mode screen (9 October 2026) has input
+strips IN 1, IN 2, AUX, BT, OTG IN and Playback 1/2, each with a gain
+and a MUTE, IN 1 with its source (Mic1, Mic-3.5, Mic-HP), IN 1 and IN 2
+with 48V, AUTO, EQ and DUCKING; effects Noise Reduction, Compressor
+and Reverb, each with a BYPASS; and outputs HP OUT, OTG OUT and
+Recording, each a fader with a MUTE. It has no output selector and no
+loopback. On USB the card is two channels each way: the playback
+terminal names its channels Playback 1 and 2, the capture terminal,
+of type Microphone, Analogue 1 and 2.
+
+**The capture is the Recording, one mix of the inputs** (**verified**
+on Linux, 9 October 2026, `m62-mobile2.txt`, with IN 1 the only input
+the card reported as plugged in). Both capture columns carried the same
+signal throughout, and it followed IN 1's gain: IN 1 from 26 to 73 dB
+took them from -78.4 to -36.0 dBFS RMS, and from 40 to 20 dB down by
+about 15 dB, while IN 2 from 40 to 20 dB did not lower them. So the names Analogue 1 and 2 do not mean IN 1 and
+IN 2. A 1 kHz tone played to the card reached neither column in any
+state tried, including after M Control Center's push, while the card's
+meters showed it at the outputs (below).
+
+M Control Center's connect push in Mobile Mode
+(`M62-handshake-mobile.pcapng`), read against its screen:
+
+| Frames | Value | On the screen |
+| --- | --- | --- |
+| `21/02` | 1 | IN 1 source Mic1 |
+| `21/03`, `22/03` | 0 | input power off |
+| `21/04`, `22/04` | 26 | IN 1, IN 2 +26 dB |
+| `23/04` | 81 | AUX 0.0 dB |
+| `25/04`, `27/04` | 87 | BT, OTG IN -6.0 dB |
+| `21/05`, `22/05`, `23/05`, `25/05`, `27/05` | 0 | the inputs' MUTE off |
+| `53/03`, `54/03` | -6 | Playback 1/2 -6 dB |
+| `63/03`, `64/03` | 21 | HP OUT -50 dB |
+| `61/03`, `62/03` | 99 | OTG OUT 0 dB |
+| `51/03`, `52/03` | 0 | Recording 0 dB |
+| `51/04` .. `54/04`, `61/04` .. `64/04` | 0 | **guessed**: the MUTEs |
+| `43/01` .. `43/07` | -30, 200, 16, 1000, 0, 255, 255 | not identified |
+
+The gains and the output volumes are on the scales of Pro Audio Mode
+(see "Value encodings"). Property 03 of `0x51`..`0x54` is not: it is
+whole decibels, where Pro Audio Mode takes Q25 (see "Loopback
+sources"), and `0x51`/`0x52` is the Recording's own level. **Verified**
+in one direction: with 0 there, writing the Q25 that a driver writes
+for Loopback 1/2 Capture Volume, step 89 and then step 90 (2^25),
+raised the capture by 9.2 dB, from -87.7 to -78.5 dBFS RMS of input
+noise, with nothing else changed; the same written to `0x53`/`0x54`
+changed nothing in the capture. What the card makes of 2^25 was not
+measured. Of the selectors the program writes only IN 1's source in
+Mobile Mode, so a host should write neither Pro Audio Mode's output
+and loopback selectors nor its loopback gains there.
+
+What the card sends in Mobile Mode, in tenths of a decibel where it is
+a level:
+
+* `21/01`, IN 1's meter;
+* `39/01` and `39/02`, at -43.4 and -44.5 while the tone played, about
+  its level;
+* `39/03`, `39/04`, `46/0c` and `46/0d`, which followed IN 1 as the
+  capture did, but not the 9.2 dB from `0x51`/`0x52`;
+* `46/09`, about 16 times a second, never below -800, and `46/0a`, 0
+  except in the two runs where IN 1's gain jumped by 47 dB, where it
+  reached 127 and 145: **guessed** to be a compressor's input level and
+  gain reduction;
+* `61/01` .. `64/01`, the outputs, at the tone's level once IN 1's
+  gain was down;
+* in an announce inside a session, `44/06` = 15, `44/07` = 0,
+  `44/08` = 25, `44/09` = 4, `44/0a` = 11, `44/0b` = 1, `44/0f` = 70,
+  **guessed** to be the effects -- the screen's Noise Reduction level 15
+  and Reverb mix 25 would be `44/06` and `44/08`; and in M Control
+  Center's session (`M62-handshake-mobile.pcapng`) `46/01` .. `46/08` =
+  1, -30, 40, 5, 200, 14, 1, 100, **guessed** to be the compressor's
+  settings.
+
 ## Value encodings
 
 ### Meters
@@ -805,6 +888,7 @@ them, so the last host to write one is right by definition.
 * input property `0a`;
 * device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`;
 * the EQ blocks;
+* in Mobile Mode, `0x43` and the blocks `0x44` and `0x46`;
 * noise reduction and reverb, which were never captured. Both
   must be OFF for any measurement, alongside AUTO gain and EQ.
 
