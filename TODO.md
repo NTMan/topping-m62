@@ -70,7 +70,9 @@ All are written with the sound on at the first bind, as M Control
 Center does at every connect. A capture of every MUTE in Pro Audio Mode
 on 10 October confirmed them there, and showed that a loopback return's
 MUTE has no property: it writes the gain to off, the bottom step of the
-return's volume control, so the returns get no switch.
+return's volume control, so the returns get no switch. In Mobile Mode
+the inputs' MUTEs were never pressed in a capture; that they are 05
+there too rests on the application writing 0 to it at every connect.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
@@ -80,8 +82,9 @@ eight, with checks of the sixth added -- the controls showing the
 card's values after a bind, a write reaching the card, and the battery
 falling on Off and rising on Charge over a set time -- and a card in
 Mobile Mode: its twenty controls after a bind, the two levels at 0 dB
-and every MUTE off; then, in the cover letter, the numbers in the
-Tested list checked against them and the XXX line removed.
+and every MUTE off, and each input's switch, turned off, taking that
+input out of the recording; then, in the cover letter, the numbers in
+the Tested list checked against them and the XXX line removed.
 
 ## #826, the M62's profile
 
