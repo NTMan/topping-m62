@@ -711,6 +711,12 @@ loopback. On USB the card is two channels each way: the playback
 terminal names its channels Playback 1 and 2, the capture terminal,
 of type Microphone, Analogue 1 and 2.
 
+Playback 1/2 is not a strip of the Recording, although it sits among
+the inputs' strips. The headphones carry the playback and every input
+together, the playback at that knob's level, and the Recording carries
+the inputs alone (**verified** by ear, 9 October 2026; a tone played to
+the card on Linux never reached the capture either, see below).
+
 **The capture is the Recording, one mix of the inputs** (**verified**
 on Linux, 9 October 2026, `m62-mobile2.txt`, with IN 1 the only input
 the card reported as plugged in). Both capture columns carried the same
@@ -790,7 +796,7 @@ first one, then the other.
 | On the screen | Frames | Values |
 | --- | --- | --- |
 | Recording fader | `51/03`, `52/03` | -90 at the bottom to 0 at the top, whole dB |
-| Playback 1/2 knob | `53/03`, `54/03` | -90 to +12, whole dB |
+| Playback 1/2 knob | `53/03`, `54/03` | -90 to +12, whole dB: the playback's level in the headphones |
 | MUTE of Recording, Playback 1/2, HP OUT, OTG OUT | `51/04` .. `54/04`, `63/04` .. `64/04`, `61/04` .. `62/04` | 1 on, 0 off |
 | IN 1's DUCKING | `43/07` | 1 on, 0 off |
 | Noise Reduction BYPASS, NC1, NC2 | `44/07` | 0, 15, 30 |
