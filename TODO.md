@@ -97,11 +97,17 @@ master: `USB-Audio.conf` gets one line, `M62.conf` picks the verb file
 by bcdDevice, and Mobile Mode gets Playback 1/2 on the headphone stage
 and the Recording as one stereo capture device on the Recording fader,
 the USB trims held at 0 dB and the Playback 1/2 knob at 0 dB and on
-where the kernel publishes them. Left: a check under PipeWire in Pro
-Audio Mode and in Mobile Mode on a kernel with the eight patches, the
-push, and the answer to the review; and once the posting is out, the
-link in the commit message pointed at it, since the Mobile Mode levels
-first appear there.
+where the kernel publishes them. Decided on 10 October: the four
+loopback returns take the card's own gain where the kernel publishes
+it, as the inputs do, and not the USB trim of their columns, which sits
+after that gain and can only lower what it let through. A return that
+PipeWire meets for the first time then starts at the top of that
+gain, +12 dB, with the control to bring it down. Left: that change,
+and the comment in `M62-HiFi.conf` that still calls the gain invisible
+to ALSA; a check under PipeWire in Pro Audio Mode and in Mobile Mode on
+a kernel with the eight patches, the push, and the answer to the
+review; and once the posting is out, the link in the commit message
+pointed at it, since the Mobile Mode levels first appear there.
 
 ## UCM, once the next posting is out
 
