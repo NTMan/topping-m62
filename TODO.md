@@ -52,14 +52,35 @@ Asahi Linux). Checked on 6 October: written through the controls the
 settings reach the card, the controls follow the card's announce, and
 change events reach alsamixer.
 
+A seventh patch gives the M62's Mobile Mode its own controls, found on
+9 October: in that mode the card's capture is one mix of its inputs and
+part of the address map means something else, and the six patches
+wrote Pro Audio Mode's values into it -- the first bind's Q25 for
+Loopback 1/2 raised the recording by 9 dB. The rows that only one mode
+has are tagged, and the mode is taken from bcdDevice. Mobile Mode keeps
+the gains, the two output volumes and the port power settings, and
+gets `PCM Playback Volume` (the Playback 1/2 knob, the playback's level
+in the headphones) and `Recording Capture Volume` (the Recording
+fader), both written at 0 dB at the first bind.
+
+An eighth patch, asked for on 10 October, adds the MUTE beside each
+level as a switch of the same name: the inputs' at property 05, the
+outputs' at 04, and in Mobile Mode the knob's and the fader's at 04.
+All are written with the sound on at the first bind, as M Control
+Center does at every connect. The MUTEs of Pro Audio Mode's loopback
+returns are left out until a capture shows what they write.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
-Left before posting: the runs again on the six patches, with checks of
-the sixth added -- the controls showing the card's values after a bind,
-a write reaching the card, and the battery falling on Off and rising
-on Charge over a set time; then, in the cover letter, the numbers in
-the Tested list checked against them and the XXX line removed.
+Left before posting: a capture of the loopback returns' MUTEs in Pro
+Audio Mode; the cover letter for eight patches; the runs again on the
+eight, with checks of the sixth added -- the controls showing the
+card's values after a bind, a write reaching the card, and the battery
+falling on Off and rising on Charge over a set time -- and a card in
+Mobile Mode: its twenty controls after a bind, the two levels at 0 dB
+and every MUTE off; then, in the cover letter, the numbers in the
+Tested list checked against them and the XXX line removed.
 
 ## #826, the M62's profile
 
@@ -70,9 +91,13 @@ for Mobile Mode, so that PipeWire does not fall back to probing the
 card. Written on 9 October and run through the parser of alsa-lib's
 master: `USB-Audio.conf` gets one line, `M62.conf` picks the verb file
 by bcdDevice, and Mobile Mode gets Playback 1/2 on the headphone stage
-and the Recording as one stereo capture device on the capture trim.
-Left: a check under PipeWire in Pro Audio Mode and in Mobile Mode, the
-push, and the answer to the review.
+and the Recording as one stereo capture device on the Recording fader,
+the USB trims held at 0 dB and the Playback 1/2 knob at 0 dB and on
+where the kernel publishes them. Left: a check under PipeWire in Pro
+Audio Mode and in Mobile Mode on a kernel with the eight patches, the
+push, and the answer to the review; and once the posting is out, the
+link in the commit message pointed at it, since the Mobile Mode levels
+first appear there.
 
 ## UCM, once the next posting is out
 
