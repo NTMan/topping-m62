@@ -67,14 +67,15 @@ An eighth patch, asked for on 10 October, adds the MUTE beside each
 level as a switch of the same name: the inputs' at property 05, the
 outputs' at 04, and in Mobile Mode the knob's and the fader's at 04.
 All are written with the sound on at the first bind, as M Control
-Center does at every connect. The MUTEs of Pro Audio Mode's loopback
-returns are left out until a capture shows what they write.
+Center does at every connect. A capture of every MUTE in Pro Audio Mode
+on 10 October confirmed them there, and showed that a loopback return's
+MUTE has no property: it writes the gain to off, the bottom step of the
+return's volume control, so the returns get no switch.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
-Left before posting: a capture of the loopback returns' MUTEs in Pro
-Audio Mode; the cover letter for eight patches; the runs again on the
+Left before posting: the cover letter for eight patches; the runs again on the
 eight, with checks of the sixth added -- the controls showing the
 card's values after a bind, a write reaching the card, and the battery
 falling on Off and rising on Charge over a set time -- and a card in
