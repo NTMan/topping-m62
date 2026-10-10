@@ -118,9 +118,9 @@ panel-knob changes still arrive ten minutes after boot).
 first arrives about 0.9 s in and carries the jack state of every
 input and output. The second follows about 4.3 s later -- roughly
 5.2 s after the subscribe -- and repeats the jacks, adds the output
-mutes, and adds **the gain of each input whose jack is present**
-(**verified**, with every state restorer on the host disabled: a
-gain set by hand to 50 on the front panel came back as
+mutes, and adds **the gain of each analogue input whose jack is
+present** (**verified**, with every state restorer on the host
+disabled: a gain set by hand to 50 on the front panel came back as
 `0x21/04 = 50`, and twenty-two outgoing frames in the whole run,
 all of them `11/24` or `11/26`).
 
@@ -353,16 +353,18 @@ back.
 ### What a program can and cannot know
 
                         at connect                  later
-  five input gains      yes, if the jack is         at every turn
-                        present, ~5.2 s in          of the knob
+  three analogue gains  yes, if the jack is         at every turn
+  (IN 1, IN 2, AUX)     present, ~5.2 s in          of the knob
+  BT and OTG IN gains   no                          not checked
   two output volumes    no                          at every turn
   two selectors         no                          never
 
-BT does not follow the first row: in the announces of three of M
-Control Center's sessions, in `M62 - Pro - Mutes.pcapng`, `M62 -
-Mobile.pcapng` and `M62 - Mobile all faders with mute.pcapng`, `25/06`
-came as 1 and `25/04` did not come, while `21/04` came each time
-`21/06` was 1. None of those announces carried `27/06`.
+With every port in use (`M62 - Mobile all ports connected.pcapng`, 10
+October 2026) the announce brought `21/04`, `22/04` and `23/04` with
+`21/06`, `22/06` and `23/06` all 1, and BT's and the OTG port's jacks
+as `25/06` and `62/06` = 1, but neither BT's gain nor OTG IN's. In Pro
+Audio Mode (`M62 - Pro - Mutes.pcapng`) `25/06` came as 1 without
+`25/04` as well. No announce has carried `27/06`.
 
 The two output volumes are knowable but not immediately: nothing
 reports them until a hand moves the knob. A program that shows one
@@ -374,15 +376,18 @@ defaults to zero tells the user the headphone output is silent
 when it may be at maximum.
 
 **Writing a "sensible default" at connect is the wrong answer for
-the gains**, because the card is about to report them: a write at
-90 ms destroys a value that would have arrived at 5.2 s. Anything
-that wants the truth has to not publish, or not accept writes,
-until the second wave lands.
+the analogue gains**, because the card is about to report them: a
+write at 90 ms destroys a value that would have arrived at 5.2 s.
+Anything that wants the truth has to not publish, or not accept
+writes, until the second wave lands.
 
-For the other two rows nothing will arrive, so there the default is
+For the last two rows nothing will arrive, so there the default is
 the right answer, and since v8 the driver gives it: at its first
 bind it writes both selectors and both output volumes, which makes
-what it shows what the card holds.
+what it shows what the card holds. BT's and OTG IN's gains get no
+default: the driver writes no gain at its first bind, and leaves
+them, like the others, to what userspace restores when the card
+appears.
 
 ### A device arriving from another host
 
