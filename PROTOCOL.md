@@ -562,19 +562,23 @@ each level its MUTE was written 1, the level alone was moved by about
 the level moved once more, two seconds apart, as frames on the card's
 HID node, signed and each pair in the driver's order. A 1 kHz tone
 with a -40 dBFS peak played on Playback 1/2, which HP and OTG OUT were
-set to. IN 2, AUX, BT and OTG IN kept their MUTE: their capture
-columns, and Loopback 1/2 set to each in turn, stayed digital zero
-through both level writes and their meters at -140.0, until the MUTE
-was written 0; the level moved after that took them down by 12 to 14
-dB, so the writes reached the card. HP did not keep its MUTE: the
+set to. BT and OTG IN were fed; IN 1, IN 2 and AUX had cables in them
+with the far ends free, so what IN 2 and AUX carried was what those
+cables picked up. IN 2, AUX, BT and OTG IN kept their MUTE: their
+capture columns, and Loopback 1/2 set to each in turn, stayed digital
+zero through both level writes and their meters at -140.0, until the
+MUTE was written 0; the level moved after that took them down by 12 to
+14 dB, so the writes reached the card. HP did not keep its MUTE: the
 level written alone released it, and the card sent `64/04` = 0 then,
 as in M Control Center's runs. HP's meters `63/01` and `64/01` stayed
 at -39.9, the tone's peak, through every step, following neither its
 volume nor its MUTE; `ab/0b` and `ab/0c` went to -140.0 with the MUTE
 on, to -80.7 with the level written alone, as with the same level
 written once the MUTE was off, and back to -59.8 with the level back.
-IN 1 carried no signal, and for OTG OUT the card sent no frame and no
-meter moved, so neither showed anything.
+IN 1's column, and Loopback 1/2 set to it, were digital zero in every
+step, the MUTE off included: IN 1's source was Mic-3.5, and its cable
+was in the 6.3 mm jack, Mic1's. For OTG OUT the card sent no frame and
+no meter moved. So neither showed anything.
 
 ### Device scope and identification
 
