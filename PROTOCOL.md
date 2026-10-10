@@ -787,22 +787,23 @@ report before each turn and left it 3 to 75 ms after the turn's first
 before that `21/04`, three times 50 ms before it. For the other five,
 pressed at 11.4, 15.9, 20.8, 35.7 and 50.1 s, it sent no `21/05`,
 though the meters left -140.0 as after the rest, 22 to 59 ms after the
-`21/04`. After the first four of those Control Center's next write was
-the MUTE as 0. After the fifth Mikhail saw the MUTE still on and went
-on turning the knob without pressing it again, 65 more steps over 18
-s: no `21/05` came, and from the first turn to the end of the capture,
-24 s after the press, the meters read -140.0 only in one report of
-each at 63.8 s and one of `9b/0b` at 65.5 s, each beside a step of the
-knob. So the knob released IN 1's MUTE on all 44 turns, by its meters,
-and the card left five of the releases unreported; a host that takes
-IN 1's MUTE from `21/05` alone shows it on after those five. The card
-sent each new gain one to four times within a few milliseconds, and
-each `21/05` = 0 once; in the HP capture before, each `64/03` and each
-`64/04` = 0 came once. No step of either knob is missing from the
-values the card sent, each new value differing from the last by one.
-Each of the 139 frames missing from the card's 84 ms cycle of meters
-in this capture fell within 4 ms of a `21/04` or `21/05` it sent, or,
-once, of its `11/18`.
+`21/04`. Control Center wrote nothing on the knob's reports. After the
+first four of those five its next write was the MUTE as 0. After the
+fifth Mikhail saw the MUTE still lit in it and went on turning the
+knob without pressing it again, 65 more steps over 18 s: no `21/05`
+came and the MUTE stayed lit, while from the first turn to the end of
+the capture, 24 s after the press, the meters read -140.0 only in one
+report of each at 63.8 s and one of `9b/0b` at 65.5 s, each beside a
+step of the knob. So the knob released IN 1's MUTE on all 44 turns, by
+its meters, and the card left five of the releases unreported. Control
+Center takes the MUTE from `21/05` alone, not from a reported gain,
+and so showed it on while IN 1 was not muted. The card sent each new
+gain one to four times within a few milliseconds, and each `21/05` = 0
+once; in the HP capture before, each `64/03` and each `64/04` = 0 came
+once. No step of either knob is missing from the values the card sent,
+each new value differing from the last by one. Each of the 139 frames
+missing from the card's 84 ms cycle of meters in this capture fell
+within 4 ms of a `21/04` or `21/05` it sent, or, once, of its `11/18`.
 
 ### Device scope and identification
 
