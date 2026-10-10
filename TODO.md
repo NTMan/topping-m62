@@ -83,11 +83,11 @@ at `64/04`, which the switch follows. In the second run HP's MUTE
 written right after its volume, as the bind, the resume and alsactl
 write them, did not hold: the card released it later and reported the
 release, so a mute those write back after HP's volume would not stay.
-How the eighth patch is to treat HP's switch is to be decided. Still
-to be run before that: whether a MUTE written after the card's release
-holds, and whether a volume written with the value it already has
-releases; and OTG OUT, recorded on the phone on the OTG port, and
-Mobile Mode.
+How the eighth patch is to treat HP's switch is to be decided. A third
+run found OTG OUT keeping its MUTE, so HP's is the only one released
+in Pro Audio Mode, and HP's volume written with the value it has not
+releasing it; whether a MUTE written after the card's release holds is
+still open, and Mobile Mode is still to be run.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
