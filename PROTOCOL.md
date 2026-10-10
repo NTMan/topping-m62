@@ -706,7 +706,8 @@ failing to start its Mic1 source, which the script had suspended, the
 card being busy, and WirePlumber a second later failing to create the
 card's ten nodes again; by the probes' durations that was at the start
 of the second to last probe, the one that read low. Nothing else from
-PipeWire is in the journal for that run.
+PipeWire is in the journal for that run, and nothing at all for the
+second.
 
 ### Device scope and identification
 
