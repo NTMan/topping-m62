@@ -834,8 +834,8 @@ the card reported for that second step stood two steps from the one it
 had reported before, three once. IN 2 did the same in 13 of its 19
 releases, its reported gain two steps on in 12 of them and back where
 it had been in the other; in the other six the card reported the gain
-2 ms after `22/05` = 0, as on IN 1. So the step that released the MUTE
-had moved the gain too, by Mikhail's account of one step a turn. On IN
+2 ms after `22/05` = 0, as on IN 1. So the card had counted the step
+that released the MUTE, by Mikhail's account of one step a turn. On IN
 2's 11th turn the card reported the step, 87 to 88, and IN 2 stayed
 digital zero for the 2 s after it, `22/01` at -140.0, with no `22/05`.
 Wherever the card reported a release, the port sounded again within 11
@@ -855,6 +855,44 @@ unreported, as in Control Center's capture, and the gain of the
 releasing step unreported in 33 of IN 2's and AUX's 39. Whether that
 goes with IN 2 and AUX or with the tops of their ranges, where IN 1
 and HP did not stand, this run cannot tell.
+
+A second run the same night (`m62-knobcheck.txt`, from 03:30) repeated
+the first with the levels as they were, IN 1 at 29 and 30, IN 2 at 87
+and 88, AUX at 98 and 99 and HP at 51 and 52, the script changed to
+take the first sign of the step, the card's report of the gain or of
+the MUTE released, or, if neither came, 0.2 s of the port's sound, and
+to read each port's level in the 0.5 s before its MUTE, so that one
+step a turn sufficed and the next turn showed whether a step had
+changed the level. By Mikhail's account none of his steps went the
+wrong way, and the reports and the levels agree. The first step
+released the MUTE in 79 turns of 80; on IN 1's 11th the card reported
+the step, 29 to 30, IN 1's level rose by 1 dB, and IN 1 stayed digital
+zero for the 2 s after it, with no `21/05`. Every release brought at
+least one of the two reports: the MUTE's came for 14 of IN 1's 19
+releases, 17 of IN 2's 20 and all of AUX's and HP's, the gain for 19
+of IN 1's turns, 8 of IN 2's, none of AUX's and 18 of HP's, and each
+port sounded again from 11 ms before the first report to 1 ms after
+it.
+
+The levels show that a step whose gain the card left unreported was
+sometimes applied and sometimes not. AUX read -20.3 dB at 99 and -20.8
+dB a step down, and moved by those 0.5 dB after each of the 19 steps
+it was read after, none of them reported. IN 2 read -36.0 to -36.2 dB
+at 88 and -37.0 dB after its first step, reported, down to 87; after
+each of its nine other steps down, none reported, it read 88's level
+again, the step not applied, and its steps up met the top of its
+range. On IN 1's 9th turn and HP's 16th the step went unreported and
+the level stayed, -75.1 dB, IN 1's level at 29 against -73.7 to -74.0
+at 30, and -20.3 dB, HP's at 51 against -19.3 at 52; yet the next
+step, back the other way, came reported as 29 and 51, which the card
+gives only if it had counted the step before. So the card counted
+those two steps without applying them, and after the next step its
+count and the level agreed again. HP's first step, unreported as well,
+was applied and counted, the next step up being reported as 52.
+
+In both runs IN 2's and AUX's levels stood at the tops of their
+ranges; whether the gains left unreported go with those ports or with
+the tops of the ranges is still to be seen with the levels swapped.
 
 ### Device scope and identification
 
@@ -1438,12 +1476,13 @@ them, so the last host to write one is right by definition.
   channels, as it seemed to through the cable from HP to AUX (see "The
   MUTEs");
 * why the card leaves some releases of IN 1's MUTE by its knob
-  unreported, five of 44 in Control Center's capture and three of 20 on
-  Linux, and the gain of the step that released IN 2's and AUX's MUTE in
-  33 of 39, and whether the latter goes with those ports or with the
-  tops of their ranges, where they stood; why one step of IN 2's knob did
-  not release its MUTE; and whether turning OTG OUT's volume on the card
-  releases its MUTE (see "The MUTEs");
+  unreported, five of 44 in Control Center's capture and eight of 39 on
+  Linux, and the gain of the step that released a MUTE in most of IN 2's
+  and AUX's turns and a few of IN 1's and HP's, and whether that goes
+  with the ports or with the tops of the ranges IN 2 and AUX stood at;
+  why the card counted some of those steps without applying them; why
+  two steps did not release the MUTE; and whether turning OTG OUT's
+  volume on the card releases its MUTE (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
