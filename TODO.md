@@ -135,6 +135,18 @@ cover it. Left: the decision on HP's switch; and every knob checked by
 its port's sound on Linux, IN 1's included, which Control Center's
 captures could not do (`m62-knobcheck.sh`).
 
+The check ran the same night in Live Streaming Mode on IN 1, IN 2, AUX
+and HP, twenty turns each. By sound the first step of 79 turns in 80
+released the MUTE; the card reported every release of HP, IN 2 and AUX
+and 17 of IN 1's 20, and on IN 2 and AUX it left the gain of the
+releasing step unreported in 33 turns of 39, so the gain controls,
+which follow the card's reports, would show the gain before that step
+until the next one. IN 2 and AUX stood at the tops of their ranges, IN
+1 and HP did not. Left: the decision on HP's switch; and the check
+again with those levels swapped, and on OTG OUT with the phone on the
+OTG port, the script now taking a report of the MUTE released, or the
+port's sound, for the step as well.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
