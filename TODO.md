@@ -77,13 +77,17 @@ every MUTE in Mobile Mode the same day found the inputs' at 05 there
 as well.
 
 A test on Linux the same day wrote each level of Pro Audio Mode alone
-while its MUTE was on: the inputs that carried a signal kept their
-MUTE, but HP's volume released HP's, and the card reported that at
-`64/04`, which the switch follows. Still to be run: OTG OUT, IN 1 and
-Mobile Mode, and what the card reports when HP's MUTE is written right
-after its volume, as the bind and the resume write them. How the
-switch is to behave when HP's volume is written under it is to be
-decided then.
+while its MUTE was on: the inputs, IN 1 included in a second run, kept
+their MUTE, but HP's volume released HP's, and the card reported that
+at `64/04`, which the switch follows. In the second run HP's MUTE
+written right after its volume, as the bind, the resume and alsactl
+write them, did not hold: the card released it later and reported the
+release, so a mute those write back after HP's volume would not stay.
+How the eighth patch is to treat HP's switch is to be decided. Still
+to be run before that: whether a MUTE written after the card's release
+holds, and whether a volume written with the value it already has
+releases; and OTG OUT, recorded on the phone on the OTG port, and
+Mobile Mode.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
