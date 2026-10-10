@@ -894,6 +894,46 @@ In both runs IN 2's and AUX's levels stood at the tops of their
 ranges; whether the gains left unreported go with those ports or with
 the tops of the ranges is still to be seen with the levels swapped.
 
+Between the two runs IN 2, AUX and HP had gone back to 88, 99 and 51,
+their levels before the first run, though no hand had been on the card
+since and the driver's controls had held 85, 96 and 52 at its end.
+PipeWire put them back. With its card for the M62 set to profile off,
+HP, Mic2 and AUX were set to 45, 80 and 90 through `amixer`, and
+within 2 s of the card being set back to its HiFi profile they read
+51, 88 and 99 again. The M62's UCM configuration (alsa-ucm-conf #826)
+gives PipeWire `Headphone`, `Mic2 Analog` and `Aux` as the volumes of
+its Line1, Mic2 and Line6; through the first run the profile was off,
+and the levels PipeWire had held before it were written back when the
+profile returned.
+
+A third run (`m62-knobcheck.txt`, from 03:53) swapped the levels,
+which the script now set through the driver's controls once PipeWire's
+profile was off: IN 1 stood at 84 and 85 and HP at 94 and 95, near the
+tops of their ranges, IN 2 at 27 and 28, AUX and OTG OUT at 66 to 70,
+and the phone was on the OTG port. IN 1 and HP reported the gain of
+every step, all forty. IN 2 left nine of its twenty unreported, AUX
+all twenty, the one gain it reported being that of a second step on
+one turn, 1.8 s after the release, and OTG OUT all twenty. So the
+gains left unreported go with IN 2, AUX and OTG OUT, not with the tops
+of the ranges. The card reported 17 of IN 1's 19 releases, 15 of IN
+2's 20 and all of AUX's, HP's and OTG OUT's, and here too every
+release brought at least one of the two reports. IN 1's 7th turn was
+the third whose step did not release the MUTE: the card reported the
+gain, 85 to 84, and IN 1 stayed digital zero for the 2 s after it,
+`21/01` at -140.0, with no `21/05`. OTG OUT sounded again 127 to 152
+ms after `62/04` = 0, through the phone; the other ports within 10 ms
+of their first report.
+
+IN 2 read -84.1 to -84.2 dB at 27 and -83.1 to -83.2 dB at 28, and at
+every turn its level was that of the gain the card had last reported:
+it stayed where a step went unreported, and where a single unreported
+step was followed by a reported step back, after its 10th and 14th
+turns, the report showed that the card had counted it. AUX's level
+moved by 0.5 dB a step and OTG OUT's by 1 dB, reported or not. So on
+IN 2 a releasing step the card does not report is counted and not
+applied, and IN 2 sounds at the gain last reported; on AUX and OTG OUT
+the step is applied, and the gain last reported falls behind.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1475,14 +1515,13 @@ them, so the last host to write one is right by definition.
   it, and whether that level written to `0x64` alone sets both of HP's
   channels, as it seemed to through the cable from HP to AUX (see "The
   MUTEs");
-* why the card leaves some releases of IN 1's MUTE by its knob
-  unreported, five of 44 in Control Center's capture and eight of 39 on
-  Linux, and the gain of the step that released a MUTE in most of IN 2's
-  and AUX's turns and a few of IN 1's and HP's, and whether that goes
-  with the ports or with the tops of the ranges IN 2 and AUX stood at;
-  why the card counted some of those steps without applying them; why
-  two steps did not release the MUTE; and whether turning OTG OUT's
-  volume on the card releases its MUTE (see "The MUTEs");
+* why the card leaves some releases of a MUTE by the knob unreported,
+  IN 1's ten times in 58 and IN 2's eight in 59 on Linux and IN 1's five
+  in 44 in Control Center's capture; why it leaves the gain of the
+  releasing step unreported, on IN 2 34 times in 59, counting the step
+  without applying it, on AUX and OTG OUT every time, applying it, and on
+  IN 1 and HP a few times; and why three steps in 260 did not release the
+  MUTE (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
