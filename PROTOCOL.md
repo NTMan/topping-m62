@@ -758,7 +758,7 @@ not once. Where the level written to `0x64` alone was released, both
 of AUX's columns read -32.3 dB, as with both targets written; whether
 the cable carried HP's two channels apart was not checked. In the last
 four probes the sound appears about 0.11 s early against the writes,
-as if the capture had lost that much, and their base and held states
+though arecord reported no overrun, and their base and held states
 read mixed; their verdicts, by the last second's level and by `64/04`,
 agree with each other.
 
