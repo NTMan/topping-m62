@@ -550,9 +550,31 @@ mute.pcapng` above, `M62 - Live all faders with mute.pcapng` and
 `M62 - Mobile all faders with mute.pcapng`, the card sent `64/04` = 0
 once, 62 to 92 ms after HP's MUTE was released by its turned level,
 and nothing for any other MUTE. In `M62 - Pro - Mutes.pcapng`, where
-HP's MUTE was pressed off with its button, it sent nothing. Whether a
-level written alone releases its MUTE on the card is not known: M
-Control Center always writes the MUTE as 0 after the level.
+HP's MUTE was pressed off with its button, it sent nothing. M Control
+Center always writes the MUTE as 0 after the level, so its captures
+cannot tell whether a level written alone releases the MUTE on the
+card.
+
+A test on Linux answers it for Pro Audio Mode (`m62-lvlmute.txt`, 10
+October 2026, primary-ws, a kernel without the MUTE switches). For
+each level its MUTE was written 1, the level alone was moved by about
+12 dB and back with no MUTE written, then the MUTE was written 0 and
+the level moved once more, two seconds apart, as frames on the card's
+HID node, signed and each pair in the driver's order. A 1 kHz tone
+with a -40 dBFS peak played on Playback 1/2, which HP and OTG OUT were
+set to. IN 2, AUX, BT and OTG IN kept their MUTE: their capture
+columns, and Loopback 1/2 set to each in turn, stayed digital zero
+through both level writes and their meters at -140.0, until the MUTE
+was written 0; the level moved after that took them down by 12 to 14
+dB, so the writes reached the card. HP did not keep its MUTE: the
+level written alone released it, and the card sent `64/04` = 0 then,
+as in M Control Center's runs. HP's meters `63/01` and `64/01` stayed
+at -39.9, the tone's peak, through every step, following neither its
+volume nor its MUTE; `ab/0b` and `ab/0c` went to -140.0 with the MUTE
+on, to -80.7 with the level written alone, as with the same level
+written once the MUTE was off, and back to -59.8 with the level back.
+IN 1 carried no signal, and for OTG OUT the card sent no frame and no
+meter moved, so neither showed anything.
 
 ### Device scope and identification
 
@@ -779,8 +801,10 @@ plain hertz (632, 7000 were seen) among the values. **Not
 decoded further.**
 
 `0x9b` tracks IN 1 to the tenth of a decibel including the -140
-sentinel during muting, so it is IN 1 at another point in the
-chain; the strip's MUTE lands there.
+sentinel during muting, so it is IN 1 at another point in the chain;
+the strip's MUTE lands there. In `m62-lvlmute.txt` `9b/0c` tracked IN
+2's `22/01` the same way, and `ab/0b` and `ab/0c` followed HP's MUTE
+and volume (see "The MUTEs").
 
 ## Mobile Mode
 
@@ -1125,8 +1149,10 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases its MUTE on the card (see
-  "The MUTEs");
+* whether a level written alone releases the MUTE of OTG OUT, of IN 1
+  or of a level of Mobile Mode, and what the card sends at `64/04`
+  when HP's MUTE is written 1 right after its level (see "The
+  MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
