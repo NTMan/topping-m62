@@ -580,6 +580,30 @@ step, the MUTE off included: IN 1's source was Mic-3.5, and its cable
 was in the 6.3 mm jack, Mic1's. For OTG OUT the card sent no frame and
 no meter moved. So neither showed anything.
 
+A second run the same evening (`m62-lvlmute.txt`, from 21:22) had IN
+1's source on Mic1, the jack with the cable in it, and IN 1 kept its
+MUTE as the other inputs had: its column and Loopback 1/2 read -75.8
+dBFS RMS with the MUTE off and digital zero through both level writes,
+and `21/01` and `9b/0b` -73.3 with the MUTE off and -140.0 with it on.
+Its gain moved down from 28 to 16 then read -69.6, against -75.7 and
+-74.9 at 28 on either side, so the write reached the card, though the
+level rose by 6 dB rather than fell by 12. OTG IN was digital zero in
+that run with its MUTE off, and the card sent no `27/01` or `28/01`.
+
+HP was run twice in it. The first time gave the first run's result
+again: `64/04` = 0 101 ms after the level written alone, and `ab/0b`
+and `ab/0c` at -140.0 with the MUTE on, -80.7 after the level and
+-59.8 with the level back. The second time HP's MUTE was written 1 two
+milliseconds after each level, as a driver writing its cache back
+writes them, and it did not hold: after the level moved down and after
+it moved back, each followed by the MUTE written 1, `ab/0b` and
+`ab/0c` read -80.7 and -59.8, and the card sent `64/04` = 0 39 and 53
+ms after the level. The MUTE written 1 on its own held, at -140.0. So
+the card releases HP's MUTE after a level write, later than a MUTE
+written 2 ms after it, and then reports the release truthfully: each
+`64/04` = 0 it sent, 11 to 101 ms after the level, came with HP
+playing.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1153,10 +1177,10 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases the MUTE of OTG OUT, of IN 1
-  or of a level of Mobile Mode, and what the card sends at `64/04`
-  when HP's MUTE is written 1 right after its level (see "The
-  MUTEs");
+* whether a level written alone releases the MUTE of OTG OUT or of a
+  level of Mobile Mode, whether HP's MUTE written 1 after the card has
+  released it holds, and whether HP's level written with the value it
+  already has releases its MUTE (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
