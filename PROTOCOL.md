@@ -654,21 +654,54 @@ column was digital zero for 30 and 40 ms, from 69 and 79 ms after IN
 to see it; IN 2's column showed no such drop.
 
 HP was to be heard in AUX's columns through a cable from HP to AUX,
-but those read the same with HP's MUTE off and on, -64.8 and -64.1 dB,
-about what AUX's had read with the far end of its cable free in
-`m62-lvlmute.txt`, -65.0, so HP's sound showed nothing; its meter
-`ab/0b` and the card's `64/04` did. Under a MUTE written 1.5 s before
-it, the level released the MUTE in four probes of five, `64/04` = 0
-coming 15 to 79 ms after the level, and under one written 6 s before,
-in both, at 39 and 111 ms; after the level had first been written with
-the value it had, in neither of two, and after a second MUTE, in one
-of two, at 105 ms. In the probe where the MUTE was written again as
-soon as `64/04` came, at +79 ms, `ab/0b` stayed off and no `64/04`
-followed. With the MUTE written 7, 307 or 1007 ms after a level
-written while HP sounded, `ab/0b` went off 40 to 72 ms after the MUTE
-all six times and stayed off to the end of the probe, and no `64/04`
-came. `ab/0b` went on only where `64/04` = 0 had come, 6 to 66 ms
-after it.
+but the cable was not in place, and those read the same with HP's MUTE
+off and on, -64.8 and -64.1 dB, about what AUX's had read with the far
+end of its cable free in `m62-lvlmute.txt`, -65.0, so HP's sound
+showed nothing; its meter `ab/0b` and the card's `64/04` did. Under a
+MUTE written 1.5 s before it, the level released the MUTE in four
+probes of five, `64/04` = 0 coming 15 to 79 ms after the level, and
+under one written 6 s before, in both, at 39 and 111 ms; after the
+level had first been written with the value it had, in neither of two,
+and after a second MUTE, in one of two, at 105 ms. In the probe where
+the MUTE was written again as soon as `64/04` came, at +79 ms, `ab/0b`
+stayed off and no `64/04` followed. With the MUTE written 7, 307 or
+1007 ms after a level written while HP sounded, `ab/0b` went off 40 to
+72 ms after the MUTE all six times and stayed off to the end of the
+probe, and no `64/04` came. `ab/0b` went on only where `64/04` = 0 had
+come, 6 to 66 ms after it.
+
+With the cable from HP to AUX in place, the script took HP alone twice
+the same evening (`m62-mutecheck.txt`, from 23:17 and from 23:22),
+twenty-six probes each, in rounds, among them the level and the MUTE
+written back to back as the driver writes them, to HP sounding and to
+HP muted 1.5 s before. The card's announce, asked for at the start of
+each, gave `23/06` and `64/06` as 1. AUX's columns read -19.3 dB with
+HP's MUTE off at 52, -31.3 dB at 40 and -66.8 dB with the MUTE on. A
+MUTE written after a level written while HP sounded, 7, 307 or 1007 ms
+after it or back to back with it, held all eighteen times: HP's sound
+stopped within 20 ms of the MUTE and did not come back, and no `64/04`
+came. With no level written, no MUTE was released, through 1.5 s or 6
+s. Under a MUTE written 1.5 s or more before, a level write released
+it in eighteen writes of thirty-six. The level written 1.5 s after the
+MUTE released it in nine probes of eighteen, one of six, four of six
+and four of six in the three kinds of probe that wrote it so, the
+third with the MUTE written again back to back behind the level, which
+did not keep HP muted where the release came. The level written with
+the value HP had, 52, released it in four probes of six, though in the
+runs before it had not, three times, and in the other two the level 40
+written 1.5 s later did not either; the level after a second MUTE
+released it in three of six, and the level after 6 s of MUTE in two of
+four.
+
+The card sent `64/04` = 0 14 to 107 ms after the write that released
+the MUTE, and HP's sound never came on without it; where a probe shows
+the moment, the sound came on within the 10 ms in which `64/04` = 0
+came. A MUTE written as soon as `64/04` came held all four times, HP
+sounding for 20 ms once before it. `ab/0b` went on and off 4 to 72 ms
+after HP's sound did, and missed those 20 ms. The first of the two
+runs ended with the PipeWire nodes the script had suspended no longer
+there, and in one of its probes AUX's columns read -20.3 dB at the
+base, 1 dB below the rest; what did either is not known.
 
 ### Device scope and identification
 
@@ -1243,10 +1276,9 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases the MUTE of a level of
-  Mobile Mode, what decides whether a level written under HP's MUTE
-  releases it, whether a MUTE written after that release holds, and
-  whether HP's own sound follows `ab/0b` (see "The MUTEs");
+* whether a level written alone releases a MUTE in Live Streaming or
+  Mobile Mode, and what decides whether a level written under HP's
+  MUTE releases it (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
