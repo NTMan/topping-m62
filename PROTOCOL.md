@@ -358,6 +358,12 @@ back.
   two output volumes    no                          at every turn
   two selectors         no                          never
 
+BT does not follow the first row: in the announces of three of M
+Control Center's sessions, in `M62 - Pro - Mutes.pcapng`, `M62 -
+Mobile.pcapng` and `M62 - Mobile all faders with mute.pcapng`, `25/06`
+came as 1 and `25/04` did not come, while `21/04` came each time
+`21/06` was 1. None of those announces carried `27/06`.
+
 The two output volumes are knowable but not immediately: nothing
 reports them until a hand moves the knob. A program that shows one
 before then is showing a guess.
