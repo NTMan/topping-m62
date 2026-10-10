@@ -99,6 +99,18 @@ under the MUTE, and the MUTE written after the card's release and 300
 ms and 1 s after the level. Mobile Mode, where a cable from HP to AUX
 would feed back, comes after that.
 
+The check ran in Pro Audio Mode the same evening. The inputs and OTG
+OUT kept their MUTE in every probe, OTG OUT in the phone's own
+recording as well. HP's sound did not reach AUX's columns, so for HP
+there are only its meter and the card's reports: a level written under
+HP's MUTE released it in seven probes of eleven, and a MUTE written 7
+ms or more after a level written with HP sounding took the meter off
+and kept it off all six times. HP is to be run again (`PORTS=hp`) once
+the cable carries its sound, with its probes in rounds, the level and
+the MUTE written back to back as the driver writes them, to HP
+sounding and to HP muted, and the card's jacks read first from its
+announce; then every port in Live Streaming Mode.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
