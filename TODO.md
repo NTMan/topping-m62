@@ -76,6 +76,15 @@ return's volume control, so the returns get no switch. A capture of
 every MUTE in Mobile Mode the same day found the inputs' at 05 there
 as well.
 
+A test on Linux the same day wrote each level of Pro Audio Mode alone
+while its MUTE was on: the inputs that carried a signal kept their
+MUTE, but HP's volume released HP's, and the card reported that at
+`64/04`, which the switch follows. Still to be run: OTG OUT, IN 1 and
+Mobile Mode, and what the card reports when HP's MUTE is written right
+after its volume, as the bind and the resume write them. How the
+switch is to behave when HP's volume is written under it is to be
+decided then.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
