@@ -292,11 +292,26 @@ selectors alike:
  8 IN 1+2
 ```
 
-**4 and 5 are a gap.** Any enumerated control needs an
-index-to-value table rather than a cast. Decoded one to one from
-a capture of the whole dropdown walked in a stated order, and the
-mechanism is **verified**: pointing HP away from the bus being
+**4 and 5 are a gap** in Pro Audio Mode. Any enumerated control
+needs an index-to-value table rather than a cast. Decoded one to one
+from a capture of the whole dropdown walked in a stated order, and
+the mechanism is **verified**: pointing HP away from the bus being
 played silences it, pointing it back restores the sound.
+
+Live Streaming Mode fills the gap and adds one more:
+
+```
+ 4 Mix D         5 Mix E          17 FX
+```
+
+There every item, these three included, was written to a loopback
+selector in turn, Loopback 1/2, 3/4, 5/6 and 7/8 taking 1 to 4, then
+5 to 8 and so on up to 17, each change one frame to the first target
+of the pair (`M62 - Live all loopback and selectors.pcapng`, 10
+October 2026, macOS), and the program's screen, photographed after
+each round, showed the same items on the same loopbacks. The
+outputs' menu in that mode offers Effect, with FX, as well; what it
+writes there was not captured.
 
 ### The selectors cannot be read, and that is permanent
 
@@ -463,9 +478,9 @@ its top.
 
 The source menu offers the output selector's fourteen items, grouped
 as Mixer (Mix A, B, C), Input (IN 1, IN 2, IN 1+2, AUX, BT, OTG IN)
-and Playback (Playback 1/2 to 9/10). On a loopback only 6, 7 and 9
-to 13 have been seen written; the other values are taken from the
-outputs' numbering.
+and Playback (Playback 1/2 to 9/10). Every one of them was written
+to a loopback in Live Streaming Mode, at the values of "The source
+selector's values".
 
 M Control Center's connect push writes 12, 13, 10 and 11 to `0x51/02`,
 `0x53/02`, `0x55/02` and `0x57/02` -- the first target again -- and
@@ -909,7 +924,9 @@ the two outputs of Pro Audio Mode, and adds:
 * an effects section, FX: faders of its own from IN1, IN2, AUX, BT and
   OTG feed Noise Reduction, a Compressor and a Reverb, with FX IN and
   FX OUT meters and a MUTE FX;
-* Effect, with FX under it, in the outputs' source menu;
+* Mix D, Mix E and, under Effect, FX in the loopback returns' source
+  menus, written as 4, 5 and 17 (see "The source selector's values"),
+  and Effect in the outputs';
 * two scenes, Chat and Vocal.
 
 Its connect push (`M62 - Live all faders with mute.pcapng`, 10 October
