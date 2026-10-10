@@ -709,6 +709,36 @@ of the second to last probe, the one that read low. Nothing else from
 PipeWire is in the journal for that run, and nothing at all for the
 second.
 
+In Live Streaming Mode, just after midnight (`m62-mutecheck.txt`, 11
+October 2026, from 00:09, bcdDevice 0248, the same kernel), with the
+cable from HP to AUX and the phone on the OTG port, and PipeWire's
+card for the M62 set to profile off for the run, the script found what
+it had found in Pro Audio Mode. IN 1, IN 2, AUX, BT and OTG IN, and
+OTG OUT through the phone, kept their MUTE in all seven probes each.
+The phone's recording (`OTG_IN_live_mode.wav`) is digital zero for
+4.00 s from each MUTE written before the level, with the 10 ms block
+at -32 dBFS that the next probe's MUTE 0 let through after all three,
+and in the other probes holds the tone 12 dB down from the level to
+the MUTE and digital zero from the MUTE on. IN 1's column was digital
+zero for 30 and 40 ms, from 29 and 109 ms after IN 1's gain was
+written, and IN 2's again showed no such drop.
+
+HP, at 51 before the run and moved to 39, read -20.3, -32.3 and -66.8
+dB in AUX's columns. A MUTE written after a level written while HP
+sounded held all nine times. A level written under the MUTE released
+it in eleven writes of eighteen: the level written 1.5 s after the
+MUTE in eight probes of nine, among them all three with the MUTE
+written again back to back behind the level, which then did not keep
+HP muted; the value HP had in two of three, the level after a second
+MUTE in one of three, and the level after 6 s of MUTE in neither of
+two. `64/04` = 0 came 15 to 89 ms after the write, and where a probe
+shows the moment, within the 10 ms in which HP's sound came on; HP
+never sounded without it, and with no level written no MUTE was
+released. A MUTE written as soon as `64/04` came held both times. The
+card sent no `ab/0b` in this run. From the first probe to the last
+nothing changed the card's controls, and no PipeWire sink, source or
+card came or went.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -937,7 +967,8 @@ decoded further.**
 sentinel during muting, so it is IN 1 at another point in the chain;
 the strip's MUTE lands there. In `m62-lvlmute.txt` `9b/0c` tracked IN
 2's `22/01` the same way, and `ab/0b` and `ab/0c` followed HP's MUTE
-and volume (see "The MUTEs").
+and volume (see "The MUTEs"); in Live Streaming Mode the card sent no
+`ab/0b` through a whole run.
 
 ## Mobile Mode
 
@@ -1139,7 +1170,9 @@ four MUTEs lit over faders at -6, so the returns were left at off on
 the card.
 
 So whatever a host writes to the inputs, the returns and the outputs
-means the same in Live Streaming as in Pro Audio Mode.
+means the same in Live Streaming as in Pro Audio Mode. Checked by
+their sound from Linux, the MUTEs are kept and released as in Pro
+Audio Mode too (see "The MUTEs").
 
 The effects section's own faders, IN1, IN2, AUX, BT and OTG from left
 to right on the screen, are `44/01` to `44/05`, in whole decibels from
@@ -1282,9 +1315,9 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases a MUTE in Live Streaming or
-  Mobile Mode, and what decides whether a level written under HP's
-  MUTE releases it (see "The MUTEs");
+* whether a level written alone releases a MUTE in Mobile Mode, and
+  what decides whether a level written under HP's MUTE releases it
+  (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
