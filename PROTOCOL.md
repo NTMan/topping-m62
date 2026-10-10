@@ -497,10 +497,9 @@ targets and then 2^25, the 0 dB each fader stood at.
 
 M Control Center's connect push writes every input's `05` and every
 output's `04` as 0, in both modes; the push that opens this capture
-did. On the Mobile Mode screen the outputs' MUTEs were pressed too
-and write the same as here (see "The controls of the Mobile Mode
-screen"); the inputs' were not, and that they are `05` in that mode
-as well rests on the push alone.
+did. On the Mobile Mode screen every MUTE beside a level was pressed
+as well, and writes the same as here (see "The controls of the Mobile
+Mode screen").
 
 ### Device scope and identification
 
@@ -842,14 +841,16 @@ a level:
 ### The controls of the Mobile Mode screen
 
 Decoded from `M62 - Mobile.pcapng` (9 October 2026, macOS), in which
-each control was moved in turn. A pair of targets is written alike,
-first one, then the other.
+each control was moved in turn, and the inputs' MUTEs from `M62 -
+Mobile all faders with mute.pcapng` (10 October 2026, macOS). A pair
+of targets is written alike, first one, then the other.
 
 | On the screen | Frames | Values |
 | --- | --- | --- |
 | Recording fader | `51/03`, `52/03` | -90 at the bottom to 0 at the top, whole dB |
 | Playback 1/2 knob | `53/03`, `54/03` | -90 to +12, whole dB: the playback's level in the headphones |
 | MUTE of Recording, Playback 1/2, HP OUT, OTG OUT | `51/04` .. `54/04`, `63/04` .. `64/04`, `61/04` .. `62/04` | 1 on, 0 off |
+| MUTE of IN 1, IN 2, AUX, BT, OTG IN | `21/05`, `22/05`, `23/05`, `25/05`, `27/05` | 1 on, 0 off |
 | IN 1's DUCKING | `43/07` | 1 on, 0 off |
 | Noise Reduction BYPASS, NC1, NC2 | `44/07` | 0, 15, 30 |
 | Noise Reduction Level | `44/06` | 1 to 70 |
@@ -872,6 +873,18 @@ and `44/0f`. After each preset the card reported those four (HALL
 without `44/0f`): STUDIO the positions last set by hand, LIVE and HALL
 25, 4, 11 and 70. The program shows no numbers for the Compressor's and
 the Reverb's knobs other than Dry/Wet.
+
+In `M62 - Mobile all faders with mute.pcapng` each level but the
+effects' was taken in turn: its MUTE pressed, the level turned to the
+bottom and then to the top, and left where the screen read +26 for
+IN 1 and IN 2 and -6 for the rest. Turning a muted level releases its
+MUTE: the first step wrote the level and, 2 ms later, the MUTE as 0,
+both targets of a pair alike. The levels ran IN 1 and IN 2 from 0 to
+88, AUX, BT and OTG IN from 0 to 99, Playback 1/2 from -90 to +12, HP
+OUT and OTG OUT from 0 to 99 and the Recording from -90 to 0. The -6
+came out as 69 on AUX and HP OUT and as 87 on BT, OTG IN and OTG OUT,
+-6.0 dB on the two tapers of Pro Audio Mode (see "The two volume
+tapers"), and as -6 on Playback 1/2 and the Recording.
 
 ## Value encodings
 
@@ -987,9 +1000,8 @@ them, so the last host to write one is right by definition.
 * input property `0a`;
 * device flags `11/04`, `11/1a`, `11/1b`, `11/1c`, `11/1e`;
 * the EQ blocks;
-* in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, the inputs'
-  MUTEs (see "The MUTEs"), and `46/03` .. `46/05`, `46/07` and `46/08`,
-  which the Compressor's MORE would show;
+* in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
+  `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
 * noise reduction and reverb, which were never captured. Both
   must be OFF for any measurement, alongside AUTO gain and EQ.
 
