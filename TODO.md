@@ -89,6 +89,16 @@ in Pro Audio Mode, and HP's volume written with the value it has not
 releasing it; whether a MUTE written after the card's release holds is
 still open, and Mobile Mode is still to be run.
 
+Decided the same evening: before anything is decided for HP's switch,
+every port is checked by its own sound, not by a meter, in Pro Audio
+and in Live Streaming Mode, with repeats (`m62-mutecheck.sh`): the
+inputs in their columns, HP through a cable from HP to AUX, OTG OUT
+through the phone on the OTG port sending it back on OTG IN. On HP
+that includes the level written as it is, a repeated MUTE, a long wait
+under the MUTE, and the MUTE written after the card's release and 300
+ms and 1 s after the level. Mobile Mode, where a cable from HP to AUX
+would feed back, comes after that.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
