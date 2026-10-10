@@ -111,7 +111,10 @@ with no level written HP's MUTE was never released. On 11 October,
 just after midnight, Live Streaming Mode gave the same: the inputs and
 OTG OUT kept their MUTE, and a level written under HP's MUTE released
 it in eleven writes of eighteen; with the MUTE written back to back
-behind the volume HP was left sounding all three times. Left: the
+behind the volume HP was left sounding all three times. A run after it
+found that neither the order in which Control Center writes a pair,
+0x63 first, nor its checksum 00 00 decides the release: a level write
+to 0x64 brings it, and one to 0x63 alone did not once. Left: the
 decision on HP's switch.
 
 The cover letter is written for the six patches. Its Tested list still
