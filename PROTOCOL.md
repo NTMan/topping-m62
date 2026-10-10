@@ -628,6 +628,48 @@ HP case's tone at -40.0. So OTG OUT keeps its MUTE when its level is
 written alone, as the inputs do; of the levels tried in Pro Audio
 Mode, HP's is the only one whose MUTE the card releases.
 
+`m62-mutecheck.sh` then checked every port by its own sound
+(`m62-mutecheck.txt`, 10 October 2026, from 22:33, Pro Audio Mode, the
+same kernel), the frames written as in the runs before, and a 1 kHz
+tone with a -20 dBFS peak playing on Playback 1/2, which HP and OTG
+OUT were set to. Each probe started from the port at its level with
+its MUTE off, moved the level down by 12 dB and ended 2.5 s after its
+last write. IN 1, IN 2, AUX, BT and OTG IN, each in its capture
+columns, which its MUTE takes to digital zero, and OTG OUT, in OTG
+IN's through the phone on the OTG port, kept their MUTE in every
+probe: the MUTE written 1.5 s before the level, three times, 3 to 7 ms
+after it, twice, and 303 to 307 ms after it, twice. The phone's own
+recording of OTG OUT (`Track_1__4_.wav`) is digital zero for 4.00 s
+from each MUTE written before the level, up to the next probe; in the
+other probes it holds the tone 12 dB down, at a -32 dBFS peak against
+-20, from the level to the MUTE, and digital zero from the MUTE on.
+After two of the three probes with the MUTE before the level, the next
+probe's MUTE 0, written before its level back at 99, left a 10 ms
+block in the phone's recording peaking at -32.0 and -30.4 dBFS, so the
+level written under the MUTE had reached the card. OTG IN's columns
+fell silent 162 ms after OTG OUT's MUTE in the four probes with the
+MUTE after the level, the delay of the loop through the phone. IN 1's
+column was digital zero for 30 and 40 ms, from 69 and 79 ms after IN
+1's gain was written with the MUTE off, in both probes that left time
+to see it; IN 2's column showed no such drop.
+
+HP was to be heard in AUX's columns through a cable from HP to AUX,
+but those read the same with HP's MUTE off and on, -64.8 and -64.1 dB,
+about what AUX's had read with the far end of its cable free in
+`m62-lvlmute.txt`, -65.0, so HP's sound showed nothing; its meter
+`ab/0b` and the card's `64/04` did. Under a MUTE written 1.5 s before
+it, the level released the MUTE in four probes of five, `64/04` = 0
+coming 15 to 79 ms after the level, and under one written 6 s before,
+in both, at 39 and 111 ms; after the level had first been written with
+the value it had, in neither of two, and after a second MUTE, in one
+of two, at 105 ms. In the probe where the MUTE was written again as
+soon as `64/04` came, at +79 ms, `ab/0b` stayed off and no `64/04`
+followed. With the MUTE written 7, 307 or 1007 ms after a level
+written while HP sounded, `ab/0b` went off 40 to 72 ms after the MUTE
+all six times and stayed off to the end of the probe, and no `64/04`
+came. `ab/0b` went on only where `64/04` = 0 had come, 6 to 66 ms
+after it.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1202,9 +1244,9 @@ them, so the last host to write one is right by definition.
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
 * whether a level written alone releases the MUTE of a level of
-  Mobile Mode, which level writes release HP's MUTE and when, and
-  whether HP's MUTE written 1 after the card has released it holds
-  (see "The MUTEs");
+  Mobile Mode, what decides whether a level written under HP's MUTE
+  releases it, whether a MUTE written after that release holds, and
+  whether HP's own sound follows `ab/0b` (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
