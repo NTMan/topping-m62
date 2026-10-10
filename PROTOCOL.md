@@ -604,6 +604,25 @@ written 2 ms after it, and then reports the release truthfully: each
 `64/04` = 0 it sent, 11 to 101 ms after the level, came with HP
 playing.
 
+A third run (`m62-lvlmute.txt`, from 21:43) took HP and OTG OUT alone.
+HP's level written with the value it already had, 52, did not release
+its MUTE: `ab/0b` and `ab/0c` stayed at -140.0, and no `64/04` came.
+Nor did the level written next, 28, after a second MUTE 1: no `64/04`
+came within 500 ms, unlike after each level written under a MUTE
+before, and HP was muted once the MUTE had been written 1 again at
++509 ms. For the level written back with the MUTE 200 ms after it the
+card sent no `ab/0b` or `ab/0c` at all, so that step showed nothing.
+
+OTG OUT carried a louder signal there, -20 dBFS changing pitch every
+250 ms, with HP muted, and a phone on the OTG port recorded it. What
+the phone sent back on OTG IN followed every step: OTG IN's `27/01`
+and `28/01` read -45.9 with OTG OUT's MUTE off, -140.0 with it on and
+through both levels written alone, and -59.8 with the level moved down
+from 99 to 75 once the MUTE was off, 13.9 dB less where family B
+has 14. So OTG OUT keeps its MUTE when its level is written alone, as
+the inputs do; of the levels tried in Pro Audio Mode, HP's is the only
+one whose MUTE the card releases.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1177,10 +1196,10 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases the MUTE of OTG OUT or of a
-  level of Mobile Mode, whether HP's MUTE written 1 after the card has
-  released it holds, and whether HP's level written with the value it
-  already has releases its MUTE (see "The MUTEs");
+* whether a level written alone releases the MUTE of a level of
+  Mobile Mode, which level writes release HP's MUTE and when, and
+  whether HP's MUTE written 1 after the card has released it holds
+  (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
