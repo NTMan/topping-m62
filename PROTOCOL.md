@@ -619,9 +619,14 @@ the phone sent back on OTG IN followed every step: OTG IN's `27/01`
 and `28/01` read -45.9 with OTG OUT's MUTE off, -140.0 with it on and
 through both levels written alone, and -59.8 with the level moved down
 from 99 to 75 once the MUTE was off, 13.9 dB less where family B
-has 14. So OTG OUT keeps its MUTE when its level is written alone, as
-the inputs do; of the levels tried in Pro Audio Mode, HP's is the only
-one whose MUTE the card releases.
+has 14. The phone's own recording (`Track_1_5.wav`, Cubasis 3, 48 kHz,
+24 bits), which opens with music played on Playback 1/2 before the
+run, holds the same: the signal at a -20.0 dBFS peak in A, digital
+zero for 9.0 s through B, C and D, the signal again for 3.0 s in E, a
+-34.0 dBFS peak for 3.0 s in F and -20.0 in G, and before the case the
+HP case's tone at -40.0. So OTG OUT keeps its MUTE when its level is
+written alone, as the inputs do; of the levels tried in Pro Audio
+Mode, HP's is the only one whose MUTE the card releases.
 
 ### Device scope and identification
 
