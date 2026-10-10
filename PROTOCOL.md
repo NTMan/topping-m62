@@ -775,6 +775,35 @@ new volume, where a level written from the host under the MUTE
 releases it about half the time, its `64/04` = 0 coming 13 to 111 ms
 after the write.
 
+IN 1's gain knob releases IN 1's MUTE every time too, but the card
+does not always report the release. In `M62 - Live - how interface
+unmute_IN1.pcapng` (11 October 2026, macOS, Live Streaming Mode) M
+Control Center's MUTE of IN 1 was pressed 44 times, writing `21/05` =
+1, and after each IN 1's gain knob on the card was turned. IN 1's
+meters `21/01` and `9b/0b`, which read -140.0 with its MUTE on and its
+column at digital zero in `m62-lvlmute.txt`, read -140.0 at their last
+report before each turn and left it 3 to 75 ms after the turn's first
+`21/04`. For 39 of the turns the card sent `21/05` = 0, 2 to 4 ms
+before that `21/04`, three times 50 ms before it. For the other five,
+pressed at 11.4, 15.9, 20.8, 35.7 and 50.1 s, it sent no `21/05`,
+though the meters left -140.0 as after the rest, 22 to 59 ms after the
+`21/04`. After the first four of those Control Center's next write was
+the MUTE as 0. After the fifth Mikhail saw the MUTE still on and went
+on turning the knob without pressing it again, 65 more steps over 18
+s: no `21/05` came, and from the first turn to the end of the capture,
+24 s after the press, the meters read -140.0 only in one report of
+each at 63.8 s and one of `9b/0b` at 65.5 s, each beside a step of the
+knob. So the knob released IN 1's MUTE on all 44 turns, by its meters,
+and the card left five of the releases unreported; a host that takes
+IN 1's MUTE from `21/05` alone shows it on after those five. The card
+sent each new gain one to four times within a few milliseconds, and
+each `21/05` = 0 once; in the HP capture before, each `64/03` and each
+`64/04` = 0 came once. No step of either knob is missing from the
+values the card sent, each new value differing from the last by one.
+Each of the 139 frames missing from the card's 84 ms cycle of meters
+in this capture fell within 4 ms of a `21/04` or `21/05` it sent, or,
+once, of its `11/18`.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1356,6 +1385,10 @@ them, so the last host to write one is right by definition.
   it, and whether that level written to `0x64` alone sets both of HP's
   channels, as it seemed to through the cable from HP to AUX (see "The
   MUTEs");
+* why the card sent no `21/05` = 0 for five of the 44 releases of IN
+  1's MUTE by its gain knob, and whether turning IN 2's or AUX's gain or
+  OTG OUT's volume on the card releases their MUTE as turning IN 1's
+  gain and HP's volume does (see "The MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
