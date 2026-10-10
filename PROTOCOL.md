@@ -739,6 +739,29 @@ card sent no `ab/0b` in this run. From the first probe to the last
 nothing changed the card's controls, and no PipeWire sink, source or
 card came or went.
 
+M Control Center writes a pair's level and MUTE first target first,
+`0x63` and then `0x64`, 2 ms apart, with the checksum 00 00: on HP's
+turned level in `M62 - Pro all faders with mute.pcapng`, `63/03` and
+`64/03` = 41, then `63/04` and `64/04` = 0. The driver writes `0x64`
+and then `0x63`, signed. A run in Live Streaming Mode with the cable
+from HP to AUX (`m62-mutecheck.txt`, 11 October 2026, from 01:07,
+`PROBES=order`) wrote the level under HP's MUTE in six ways, eight
+probes of each, one of each in turn. In the driver's order it released
+the MUTE five times, in Control Center's order four times, and in
+Control Center's order with its checksum 00 00 five times; written to
+`0x64` alone it released it seven times, and written to `0x63` alone
+not once. Control Center's whole sequence, its MUTE 0 included,
+brought `64/04` = 0 six times in eight. So neither the order nor the
+checksum decides the release: a write to `0x64` brings it, about half
+the time when `0x63` is written too, and a write to `0x63` alone did
+not once. Where the level written to `0x64` alone was released, both
+of AUX's columns read -32.3 dB, as with both targets written; whether
+the cable carried HP's two channels apart was not checked. In the last
+four probes the sound appears about 0.11 s early against the writes,
+as if the capture had lost that much, and their base and held states
+read mixed; their verdicts, by the last second's level and by `64/04`,
+agree with each other.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
@@ -1315,9 +1338,11 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
-* whether a level written alone releases a MUTE in Mobile Mode, and
-  what decides whether a level written under HP's MUTE releases it
-  (see "The MUTEs");
+* whether a level written alone releases a MUTE in Mobile Mode, what
+  decides whether a level written to `0x64` under HP's MUTE releases
+  it, and whether that level written to `0x64` alone sets both of HP's
+  channels, as it seemed to through the cable from HP to AUX (see "The
+  MUTEs");
 * in Live Streaming Mode, the effects section but for its faders:
   its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
   were captured on the Mobile Mode screen only (see "The controls of
