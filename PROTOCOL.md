@@ -433,6 +433,14 @@ Targets `0x51`..`0x58`, a pair per loopback: Loopback 1/2 is
 The MUTE on each return's strip has no property of its own: pressed,
 it writes 0, off, to `03` of both targets, and released, the fader's
 gain again, 0 dB in the capture (see "The MUTEs").
+Nor does the card take one that the program leaves unused, at least
+not at `04` or `05`, where the outputs and the inputs have theirs
+(**verified** on Linux, 10 October 2026, `m62-lbmute.txt`): with a
+1 kHz tone on Playback 1/2 and Loopback 1/2 listening to it at 0 dB,
+1 written to `04` of `0x51` and `0x52`, and then to `05`, left both
+columns at -23.0 dBFS RMS, and the card sent nothing for either
+target. The gain at off made both digital zero, and 0 dB brought
+the tone back.
 
 **The source is written to the FIRST target of the pair only** --
 `0x51/02`, `0x53/02`, `0x55/02`, `0x57/02`. The outputs are the
