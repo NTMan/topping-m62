@@ -127,6 +127,14 @@ of both knobs. Left: the decision on HP's switch, and whether a switch
 is to be turned on when the card reports its port's level turned by
 hand.
 
+Decided the same night: no. A switch follows the card's report of its
+MUTE alone, as Control Center's MUTE does, which stayed lit through
+the knob's reports where the card left a release unreported. A release
+the card does not report is the card's fault, and the driver does not
+cover it. Left: the decision on HP's switch; and every knob checked by
+its port's sound on Linux, IN 1's included, which Control Center's
+captures could not do (`m62-knobcheck.sh`).
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
