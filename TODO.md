@@ -85,9 +85,7 @@ write them, did not hold: the card released it later and reported the
 release, so a mute those write back after HP's volume would not stay.
 How the eighth patch is to treat HP's switch is to be decided. A third
 run found OTG OUT keeping its MUTE, so HP's is the only one released
-in Pro Audio Mode, and HP's volume written with the value it has not
-releasing it; whether a MUTE written after the card's release holds is
-still open, and Mobile Mode is still to be run.
+in Pro Audio Mode; Mobile Mode is still to be run.
 
 Decided the same evening: before anything is decided for HP's switch,
 every port is checked by its own sound, not by a meter, in Pro Audio
@@ -101,15 +99,16 @@ would feed back, comes after that.
 
 The check ran in Pro Audio Mode the same evening. The inputs and OTG
 OUT kept their MUTE in every probe, OTG OUT in the phone's own
-recording as well. HP's sound did not reach AUX's columns, so for HP
-there are only its meter and the card's reports: a level written under
-HP's MUTE released it in seven probes of eleven, and a MUTE written 7
-ms or more after a level written with HP sounding took the meter off
-and kept it off all six times. HP is to be run again (`PORTS=hp`) once
-the cable carries its sound, with its probes in rounds, the level and
-the MUTE written back to back as the driver writes them, to HP
-sounding and to HP muted, and the card's jacks read first from its
-announce; then every port in Live Streaming Mode.
+recording as well. HP's sound did not reach AUX's columns that time,
+the cable from HP to AUX not being in place, and HP was run twice more
+with it. By HP's sound, a MUTE written after a level written with HP
+sounding held all eighteen times, back to back as the driver writes
+them included; a level written under HP's MUTE released it in eighteen
+writes of thirty-six, the value HP had included; with the MUTE written
+back to back behind the volume, as the bind, the resume and alsactl
+write a mute back, HP was left sounding in four probes of six; and
+with no level written HP's MUTE was never released. Left: every port
+in Live Streaming Mode, then the decision on HP's switch.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
