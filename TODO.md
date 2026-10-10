@@ -147,6 +147,19 @@ again with those levels swapped, and on OTG OUT with the phone on the
 OTG port, the script now taking a report of the MUTE released, or the
 port's sound, for the step as well.
 
+It ran again the same night with those levels swapped and the phone on
+the OTG port. The gains left unreported go with IN 2, AUX and OTG OUT,
+not with the tops of the ranges: IN 1 and HP, near their tops,
+reported all forty. OTG OUT's knob released its MUTE all twenty times,
+and the card reported each release. The gain controls follow the
+card's reports, so after a release by the knob they fall behind AUX's
+and OTG OUT's levels until a step is reported, and match IN 2's, which
+stays at the gain last reported. Between the first two runs PipeWire
+had written back the levels the knob had turned while its profile was
+off, so the script now sets a run's levels itself. Left: the decision
+on HP's switch; and whether PipeWire follows a level turned on the
+panel while its profile is on.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
