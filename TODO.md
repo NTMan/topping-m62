@@ -114,8 +114,18 @@ it in eleven writes of eighteen; with the MUTE written back to back
 behind the volume HP was left sounding all three times. A run after it
 found that neither the order in which Control Center writes a pair,
 0x63 first, nor its checksum 00 00 decides the release: a level write
-to 0x64 brings it, and one to 0x63 alone did not once. Left: the
-decision on HP's switch.
+to 0x64 brings it, and one to 0x63 alone did not once.
+
+Two captures from M Control Center later that night had a MUTE pressed
+and then its level turned on the card. The card reported HP's MUTE
+released by HP's knob all 22 times. IN 1's gain knob released IN 1's
+MUTE all 44 times by IN 1's meters, but the card reported 39 of the
+releases, and its announce carries the outputs' MUTEs, not the
+inputs', so a switch that follows `21/05` would have stayed off after
+the other five while IN 1 was not muted. The card reported every step
+of both knobs. Left: the decision on HP's switch, and whether a switch
+is to be turned on when the card reports its port's level turned by
+hand.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
