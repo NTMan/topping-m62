@@ -960,26 +960,30 @@ the card.
 So whatever a host writes to the inputs, the returns and the outputs
 means the same in Live Streaming as in Pro Audio Mode.
 
-The effects section's own faders are at `0x44`, in whole decibels, -90
-at the bottom. The card's announce at the start of `M62 - Live all
-faders with mute.pcapng` gave `44/01` and `44/02` as 0 and `44/03`,
-`44/04` and `44/05` as -90, and the screen showed IN1's and IN2's
-faders at 0 and AUX's, BT's and OTG's at -inf (photographed during
+The effects section's own faders, IN1, IN2, AUX, BT and OTG from left
+to right on the screen, are `44/01` to `44/05`, in whole decibels from
+-90, shown as -inf, to +12. In `M62 - Live only FX faders.pcapng` (10
+October 2026, macOS) each was set in turn, from left to right, to
+-inf, to +12, the top, and to 0, and wrote -90, then rising values to
+12, then falling values to 0, to `44/01`, then to `44/02`, `44/03`,
+`44/04` and `44/05`. The card's announce at the start of `M62 - Live
+all faders with mute.pcapng` had given `44/01` and `44/02` as 0 and
+the other three as -90, as the screen showed them (photographed during
 `M62 - Live all loopback and selectors.pcapng`; neither capture writes
-to `0x44`). In `M62 - Live enumerate all sources in HP.pcapng`, with
-HP left on FX, the three at the bottom were raised to 0. That wrote
--89 and up to `44/04`, then to `44/03`, then to `44/05`, each ending
-at 0 (`44/05` touched +1 before it settled); how far above 0 they go
-was not tried. With the first, the meters `44/0d`, `44/0e`, `46/0c`
-and `46/0d` and HP's `63/01` and `64/01` rose from -72.1 to medians
-between -9.9 and -12.2, and stayed in that range through the other
-two. BT was by far the loudest input: its own meters `25/01` and
-`26/01` read about -16, OTG IN's `27/01` and `28/01` about -39, AUX's
-`23/01` and `24/01` about -70, and IN 1's and IN 2's below -76. So
-`44/04` is BT's fader, the fourth on the screen, and HP on 17 plays
-FX. That `44/03` is AUX's and `44/05` OTG's, and `44/01` IN1's and
-`44/02` IN2's, is **guessed** from the faders' order on the screen,
-IN1, IN2, AUX, BT, OTG.
+to `0x44`).
+
+In `M62 - Live enumerate all sources in HP.pcapng`, with HP left on FX
+and IN1's and IN2's faders at 0, the other three were raised from the
+bottom to 0, `44/04` first, then `44/03` and `44/05`. BT was by far
+the loudest input there: its own meters `25/01` and `26/01` read about
+-16, OTG IN's `27/01` and `28/01` about -39, AUX's `23/01` and `24/01`
+about -70, and IN 1's and IN 2's below -76. With `44/04` the meters
+`44/0d`, `44/0e`, `46/0c` and `46/0d` and HP's `63/01` and `64/01`
+rose from -72.1 to medians between -9.9 and -12.2, and stayed in that
+range through the other two; so HP on 17 plays FX. In `M62 - Live only
+FX faders.pcapng` the medians of the four FX meters were -35.8 to
+-36.5 with `44/04` at -inf, 0.0 with it at +12 and -9.9 to -11.4 at 0,
+and those of BT's own meters -13.0 to -17.6.
 
 ## Value encodings
 
