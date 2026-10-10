@@ -701,7 +701,12 @@ sounding for 20 ms once before it. `ab/0b` went on and off 4 to 72 ms
 after HP's sound did, and missed those 20 ms. The first of the two
 runs ended with the PipeWire nodes the script had suspended no longer
 there, and in one of its probes AUX's columns read -20.3 dB at the
-base, 1 dB below the rest; what did either is not known.
+base, 1 dB below the rest. The journal has PipeWire at 23:19:46
+failing to start its Mic1 source, which the script had suspended, the
+card being busy, and WirePlumber a second later failing to create the
+card's ten nodes again; by the probes' durations that was at the start
+of the second to last probe, the one that read low. Nothing else from
+PipeWire is in the journal for that run.
 
 ### Device scope and identification
 
