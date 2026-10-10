@@ -1127,8 +1127,13 @@ them, so the last host to write one is right by definition.
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
 * whether a level written alone releases its MUTE on the card (see
   "The MUTEs");
-* noise reduction and reverb, which were never captured. Both
-  must be OFF for any measurement, alongside AUTO gain and EQ.
+* in Live Streaming Mode, the effects section but for its faders:
+  its MUTE FX, and its Noise Reduction, Compressor and Reverb, which
+  were captured on the Mobile Mode screen only (see "The controls of
+  the Mobile Mode screen").
+
+Noise reduction and reverb must be OFF for any measurement,
+alongside AUTO gain and EQ.
 
 The AUTO button sends nothing at all: the auto-gain is entirely
 in firmware.
