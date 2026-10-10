@@ -52,16 +52,18 @@ Asahi Linux). Checked on 6 October: written through the controls the
 settings reach the card, the controls follow the card's announce, and
 change events reach alsamixer.
 
-A seventh patch gives the M62's Mobile Mode its own controls, found on
-9 October: in that mode the card's capture is one mix of its inputs and
-part of the address map means something else, and the six patches
-wrote Pro Audio Mode's values into it -- the first bind's Q25 for
-Loopback 1/2 raised the recording by 9 dB. The rows that only one mode
-has are tagged, and the mode is taken from bcdDevice. Mobile Mode keeps
-the gains, the two output volumes and the port power settings, and
-gets `PCM Playback Volume` (the Playback 1/2 knob, the playback's level
-in the headphones) and `Recording Capture Volume` (the Recording
-fader), both written at 0 dB at the first bind.
+A seventh patch gives the M62's Mobile Mode its own controls, found on 9
+October: in that mode the card's capture is one mix of its inputs and
+part of the address map means something else, and the six patches wrote
+Pro Audio Mode's values into it -- the first bind's Q25 for Loopback 1/2
+raised the recording by 9 dB. The rows that only one mode has are
+tagged, and the mode is taken from bcdDevice; Live Streaming goes with
+Pro Audio, since its connect push, captured on 10 October, writes the
+inputs, the loopback returns and the outputs at the same targets and on
+the same scales. Mobile Mode keeps the gains, the two output volumes and
+the port power settings, and gets `PCM Playback Volume` (the Playback
+1/2 knob, the playback's level in the headphones) and `Recording Capture
+Volume` (the Recording fader), both written at 0 dB at the first bind.
 
 An eighth patch, asked for on 10 October, adds the MUTE beside each
 level as a switch of the same name: the inputs' at property 05, the
