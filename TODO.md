@@ -70,9 +70,9 @@ All are written with the sound on at the first bind, as M Control
 Center does at every connect. A capture of every MUTE in Pro Audio Mode
 on 10 October confirmed them there, and showed that a loopback return's
 MUTE has no property: it writes the gain to off, the bottom step of the
-return's volume control, so the returns get no switch. In Mobile Mode
-the inputs' MUTEs were never pressed in a capture; that they are 05
-there too rests on the application writing 0 to it at every connect.
+return's volume control, so the returns get no switch. A capture of
+every MUTE in Mobile Mode the same day found the inputs' at 05 there
+as well.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
