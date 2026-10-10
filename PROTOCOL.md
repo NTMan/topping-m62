@@ -525,10 +525,34 @@ first target first; the loopback returns wrote 0 to `03` of both
 targets and then 2^25, the 0 dB each fader stood at.
 
 M Control Center's connect push writes every input's `05` and every
-output's `04` as 0, in both modes; the push that opens this capture
-did. On the Mobile Mode screen every MUTE beside a level was pressed
+output's `04` as 0, in all three modes: the push that opens this
+capture did, and so did those of the three runs over every level
+below. On the Mobile Mode screen every MUTE beside a level was pressed
 as well, and writes the same as here (see "The controls of the Mobile
 Mode screen").
+
+In `M62 - Pro all faders with mute.pcapng` (10 October 2026, macOS)
+each level of the input strips, the returns and the outputs was taken
+in turn, as in the other two modes: its MUTE pressed, the level turned
+to the bottom and to the top, and left where the screen read +26 for
+IN 1 and IN 2 and -6 for the rest. No mix was touched. Turning a muted
+input or output released its MUTE with the first step: the level, and
+2 ms later the MUTE as 0, both targets of a pair alike. IN 1 and IN 2
+ran from 0 to 88, AUX, BT, HP and OTG OUT from 0 to 99, and OTG IN, at
+0 from the connect push, up to 99; the -6 came out as 69 on AUX and HP
+and as 87 on BT, OTG IN and OTG OUT. Once a return's MUTE had written
+0 to `03`, its fader wrote nothing, and the screen after the capture
+showed the four MUTEs still lit over faders at -6. So the MUTEs are
+written, and released by a turned level, alike in all three modes.
+
+In each of the three runs over every level, `M62 - Pro all faders with
+mute.pcapng` above, `M62 - Live all faders with mute.pcapng` and
+`M62 - Mobile all faders with mute.pcapng`, the card sent `64/04` = 0
+once, 62 to 92 ms after HP's MUTE was released by its turned level,
+and nothing for any other MUTE. In `M62 - Pro - Mutes.pcapng`, where
+HP's MUTE was pressed off with its button, it sent nothing. Whether a
+level written alone releases its MUTE on the card is not known: M
+Control Center always writes the MUTE as 0 after the level.
 
 ### Device scope and identification
 
@@ -1101,6 +1125,8 @@ them, so the last host to write one is right by definition.
 * the EQ blocks;
 * in Mobile Mode, `43/01` .. `43/06`, IN 2's DUCKING, and `46/03` ..
   `46/05`, `46/07` and `46/08`, which the Compressor's MORE would show;
+* whether a level written alone releases its MUTE on the card (see
+  "The MUTEs");
 * noise reduction and reverb, which were never captured. Both
   must be OFF for any measurement, alongside AUTO gain and EQ.
 
