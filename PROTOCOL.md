@@ -309,9 +309,12 @@ selector in turn, Loopback 1/2, 3/4, 5/6 and 7/8 taking 1 to 4, then
 5 to 8 and so on up to 17, each change one frame to the first target
 of the pair (`M62 - Live all loopback and selectors.pcapng`, 10
 October 2026, macOS), and the program's screen, photographed after
-each round, showed the same items on the same loopbacks. The
-outputs' menu in that mode offers Effect, with FX, as well; what it
-writes there was not captured.
+each round, showed the same items on the same loopbacks. HP's menu,
+walked item by item, wrote the same 1 to 17 in turn, one frame each
+to `0x64/02`, the second target as for every output (`M62 - Live
+enumerate all sources in HP.pcapng`, 10 October 2026, macOS), and HP
+was left on FX at 17, as the screen showed. So in Live Streaming Mode
+the outputs take the loopbacks' numbering.
 
 ### The selectors cannot be read, and that is permanent
 
@@ -924,9 +927,9 @@ the two outputs of Pro Audio Mode, and adds:
 * an effects section, FX: faders of its own from IN1, IN2, AUX, BT and
   OTG feed Noise Reduction, a Compressor and a Reverb, with FX IN and
   FX OUT meters and a MUTE FX;
-* Mix D, Mix E and, under Effect, FX in the loopback returns' source
-  menus, written as 4, 5 and 17 (see "The source selector's values"),
-  and Effect in the outputs';
+* Mix D, Mix E and, under Effect, FX in the source menus, written as
+  4, 5 and 17 on the loopback returns and on HP (see "The source
+  selector's values");
 * two scenes, Chat and Vocal.
 
 Its connect push (`M62 - Live all faders with mute.pcapng`, 10 October
@@ -956,6 +959,27 @@ the card.
 
 So whatever a host writes to the inputs, the returns and the outputs
 means the same in Live Streaming as in Pro Audio Mode.
+
+The effects section's own faders are at `0x44`, in whole decibels, -90
+at the bottom. The card's announce at the start of `M62 - Live all
+faders with mute.pcapng` gave `44/01` and `44/02` as 0 and `44/03`,
+`44/04` and `44/05` as -90, and the screen showed IN1's and IN2's
+faders at 0 and AUX's, BT's and OTG's at -inf (photographed during
+`M62 - Live all loopback and selectors.pcapng`; neither capture writes
+to `0x44`). In `M62 - Live enumerate all sources in HP.pcapng`, with
+HP left on FX, the three at the bottom were raised to 0. That wrote
+-89 and up to `44/04`, then to `44/03`, then to `44/05`, each ending
+at 0 (`44/05` touched +1 before it settled); how far above 0 they go
+was not tried. With the first, the meters `44/0d`, `44/0e`, `46/0c`
+and `46/0d` and HP's `63/01` and `64/01` rose from -72.1 to medians
+between -9.9 and -12.2, and stayed in that range through the other
+two. BT was by far the loudest input: its own meters `25/01` and
+`26/01` read about -16, OTG IN's `27/01` and `28/01` about -39, AUX's
+`23/01` and `24/01` about -70, and IN 1's and IN 2's below -76. So
+`44/04` is BT's fader, the fourth on the screen, and HP on 17 plays
+FX. That `44/03` is AUX's and `44/05` OTG's, and `44/01` IN1's and
+`44/02` IN2's, is **guessed** from the faders' order on the screen,
+IN1, IN2, AUX, BT, OTG.
 
 ## Value encodings
 
