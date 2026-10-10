@@ -897,6 +897,49 @@ came out as 69 on AUX and HP OUT and as 87 on BT, OTG IN and OTG OUT,
 -6.0 dB on the two tapers of Pro Audio Mode (see "The two volume
 tapers"), and as -6 on Playback 1/2 and the Recording.
 
+## Live Streaming Mode
+
+bcdDevice 02xx. M Control Center's Live Streaming screen (seen on 10
+October 2026) keeps the input strips, the four loopback returns and
+the two outputs of Pro Audio Mode, and adds:
+
+* on IN 1 and IN 2, a DUCKING and a slider marked C;
+* five mixes, Mix A to Mix E, Mix A's with strips for IN, AUX, BT, OTG
+  IN, FX and the playbacks;
+* an effects section, FX: faders of its own from IN1, IN2, AUX, BT and
+  OTG feed Noise Reduction, a Compressor and a Reverb, with FX IN and
+  FX OUT meters and a MUTE FX;
+* Effect, with FX under it, in the outputs' source menu;
+* two scenes, Chat and Vocal.
+
+Its connect push (`M62 - Live all faders with mute.pcapng`, 10 October
+2026, macOS) writes the inputs, the loopback returns and the outputs at
+the targets of Pro Audio Mode and on its scales. The same workspace's
+screen read +26 dB for IN 1 and IN 2, 0.0 for AUX and OTG IN, -6.0 for
+BT, -36 for HP and 0 for OTG OUT and the four returns, and the push
+wrote 26, 26, 81, 99, 87, 35, 99 and 2^25. Besides, it writes `43/01`
+.. `43/07`, as Mobile Mode's push does, and the mixer matrix for five
+mixes, `0x31` .. `0x38` and `0x3b`/`0x3c`, each with one source pair
+more than in Pro Audio Mode, `13`/`14` (**guessed**: `0x37`/`0x38` and
+`0x3b`/`0x3c` are Mix D and Mix E, and `13`/`14` is FX). It writes no
+input property `0a`, which Pro Audio Mode's push writes 0 to.
+
+The same capture then took each level of the input strips, the
+returns and the outputs in turn: its MUTE pressed, the level turned to
+the bottom and to the top, and left where the screen read +26 for IN 1
+and IN 2 and -6 for the rest. No mix and no effect was touched. The
+inputs' MUTEs write `05` and the outputs' `04`, 1 for muted, and
+turning a muted input or output released its MUTE with the first step,
+as in Mobile Mode; the -6 came out as 69 on AUX and HP and as 87 on BT,
+OTG IN and OTG OUT, as there. A return's MUTE wrote `03` = 0 to both of
+its targets, as in Pro Audio Mode; turning its fader then wrote
+nothing, and the program's screen after the capture still showed the
+four MUTEs lit over faders at -6, so the returns were left at off on
+the card.
+
+So whatever a host writes to the inputs, the returns and the outputs
+means the same in Live Streaming as in Pro Audio Mode.
+
 ## Value encodings
 
 ### Meters
