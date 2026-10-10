@@ -105,11 +105,17 @@ PipeWire meets for the first time then starts at the top of that
 gain, +12 dB, with the control to bring it down. Written the same day
 and run through the parser for a kernel with the gains, one without
 them and one without the driver; the comments on BT and OTG IN no
-longer call their gain a preamp. Left: a check under PipeWire in Pro
-Audio Mode and in Mobile Mode on a kernel with the eight patches, the
-push, and the answer to the review; and once the posting is out, the
-link in the commit message pointed at it, since the Mobile Mode levels
-first appear there.
+longer call their gain a preamp. The same day the card's USB playback
+switches read on for channels 1 and 2 and off for 3 to 10, set so by
+nobody known. With the kernel the playback devices take the headphone
+stage and nothing would turn those switches back on, so the verb now
+turns a trim's switch on wherever it pins the trim open, and Direct
+unmutes the ten playback channels as it does the sixteen capture
+columns. Left: a check under PipeWire in Pro Audio Mode, with sound
+from each of the five playback devices, and in Mobile Mode, on a
+kernel with the eight patches; the push, and the answer to the
+review; and once the posting is out, the link in the commit message
+pointed at it, since the Mobile Mode levels first appear there.
 
 ## UCM, once the next posting is out
 
