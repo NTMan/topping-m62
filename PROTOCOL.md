@@ -762,6 +762,19 @@ though arecord reported no overrun, and their base and held states
 read mixed; their verdicts, by the last second's level and by `64/04`,
 agree with each other.
 
+HP's own knob releases its MUTE every time. In `M62 - Live - how
+interface unmute.pcapng` (11 October 2026, macOS, Live Streaming Mode)
+M Control Center's MUTE was pressed 22 times, writing `63/04` and
+`64/04` = 1, and after each the HP knob on the card was turned one
+step. Each time the card sent `64/04` = 0 and then, 2 to 4 ms later,
+`64/03` with the knob's new value, once with no `64/03` after it; the
+program wrote nothing between the press and the next one. Six turns of
+the knob with HP sounding brought `64/03` alone. So the card releases
+HP's MUTE on every turn of its knob, reporting the release before the
+new volume, where a level written from the host under the MUTE
+releases it about half the time, its `64/04` = 0 coming 13 to 111 ms
+after the write.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
