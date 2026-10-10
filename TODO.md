@@ -160,6 +160,16 @@ off, so the script now sets a run's levels itself. Left: the decision
 on HP's switch; and whether PipeWire follows a level turned on the
 panel while its profile is on.
 
+Decided on 11 October: HP's switch follows the card's report at
+`64/04`, and HP's volume is written as it is. Where the card releases
+HP's MUTE after a write of the volume, the bind's and a resume's
+included, the switch shows it, as it shows a release by a knob; the
+driver neither holds the volume back nor writes the MUTE again. The
+eighth patch's comment and message now say that the card releases
+MUTEs by itself and that the switches follow its reports. Left of the
+MUTE work: whether PipeWire follows a level turned on the panel while
+its profile is on.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
