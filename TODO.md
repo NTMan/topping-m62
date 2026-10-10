@@ -107,8 +107,12 @@ them included; a level written under HP's MUTE released it in eighteen
 writes of thirty-six, the value HP had included; with the MUTE written
 back to back behind the volume, as the bind, the resume and alsactl
 write a mute back, HP was left sounding in four probes of six; and
-with no level written HP's MUTE was never released. Left: every port
-in Live Streaming Mode, then the decision on HP's switch.
+with no level written HP's MUTE was never released. On 11 October,
+just after midnight, Live Streaming Mode gave the same: the inputs and
+OTG OUT kept their MUTE, and a level written under HP's MUTE released
+it in eleven writes of eighteen; with the MUTE written back to back
+behind the volume HP was left sounding all three times. Left: the
+decision on HP's switch.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
