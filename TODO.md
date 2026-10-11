@@ -52,20 +52,31 @@ Asahi Linux). Checked on 6 October: written through the controls the
 settings reach the card, the controls follow the card's announce, and
 change events reach alsamixer.
 
-A seventh patch gives the M62's Mobile Mode its own controls, found on 9
-October: in that mode the card's capture is one mix of its inputs and
-part of the address map means something else, and the six patches wrote
-Pro Audio Mode's values into it -- the first bind's Q25 for Loopback 1/2
-raised the recording by 9 dB. The rows that only one mode has are
-tagged, and the mode is taken from bcdDevice; Live Streaming goes with
-Pro Audio, since its connect push, captured on 10 October, writes the
-inputs, the loopback returns and the outputs at the same targets and on
-the same scales. Mobile Mode keeps the gains, the two output volumes and
-the port power settings, and gets `PCM Playback Volume` (the Playback
-1/2 knob, the playback's level in the headphones) and `Recording Capture
+The M62's Mobile Mode, found on 9 October, gets its own controls: in
+that mode the card's capture is one mix of its inputs and part of the
+address map means something else, and the six patches wrote Pro Audio
+Mode's values into it -- the first bind's Q25 for Loopback 1/2 raised
+the recording by 9 dB. The rows that only one mode has are tagged, and
+the mode is taken from bcdDevice; Live Streaming goes with Pro Audio,
+since its connect push, captured on 10 October, writes the inputs, the
+loopback returns and the outputs at the same targets and on the same
+scales. Mobile Mode keeps the gains, the two output volumes and the
+port power settings, and gets `PCM Playback Volume` (the Playback 1/2
+knob, the playback's level in the headphones) and `Recording Capture
 Volume` (the Recording fader), both written at 0 dB at the first bind.
+Written first as a seventh patch, it was folded on 11 October into the
+second, so that Mobile Mode gets its controls in the patch that gives
+Pro Audio and Live Streaming Mode theirs; the series has been seven
+patches since, the MUTEs the seventh. Each of the seven compiles with
+W=1 and sparse without a warning in the files it touches, and the last
+one's tree is the eight patches' but for two comments:
+topping_index_of()'s is back above it, and the header's first
+paragraph is rewrapped, which the sixth patch had left with
+a 91-column line. The sixth patch's message now says that both port
+power settings are in every mode, the card announcing them in Mobile
+Mode as well.
 
-An eighth patch, asked for on 10 October, adds the MUTE beside each
+A seventh patch, asked for on 10 October, adds the MUTE beside each
 level as a switch of the same name: the inputs' at property 05, the
 outputs' at 04, and in Mobile Mode the knob's and the fader's at 04.
 All are written with the sound on at the first bind, as M Control
@@ -83,9 +94,9 @@ at `64/04`, which the switch follows. In the second run HP's MUTE
 written right after its volume, as the bind, the resume and alsactl
 write them, did not hold: the card released it later and reported the
 release, so a mute those write back after HP's volume would not stay.
-How the eighth patch is to treat HP's switch is to be decided. A third
-run found OTG OUT keeping its MUTE, so HP's is the only one released
-in Pro Audio Mode; Mobile Mode is still to be run.
+How the seventh patch is to treat HP's switch is to be decided. A
+third run found OTG OUT keeping its MUTE, so HP's is the only one
+released in Pro Audio Mode; Mobile Mode is still to be run.
 
 Decided the same evening: before anything is decided for HP's switch,
 every port is checked by its own sound, not by a meter, in Pro Audio
@@ -165,7 +176,7 @@ Decided on 11 October: HP's switch follows the card's report at
 HP's MUTE after a write of the volume, the bind's and a resume's
 included, the switch shows it, as it shows a release by a knob; the
 driver neither holds the volume back nor writes the MUTE again. The
-eighth patch's comment and message now say that the card releases
+seventh patch's comment and message now say that the card releases
 MUTEs by itself and that the switches follow its reports. Left of the
 MUTE work: whether PipeWire follows a level turned on the panel while
 its profile is on.
@@ -173,14 +184,15 @@ its profile is on.
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
-Left before posting: the cover letter for eight patches; the runs again on the
-eight, with checks of the sixth added -- the controls showing the
-card's values after a bind, a write reaching the card, and the battery
-falling on Off and rising on Charge over a set time -- and a card in
-Mobile Mode: its twenty controls after a bind, the two levels at 0 dB
-and every MUTE off, and each input's switch, turned off, taking that
-input out of the recording; then, in the cover letter, the numbers in
-the Tested list checked against them and the XXX line removed.
+Left before posting: the cover letter for seven patches; the runs
+again on the seven, with checks of the sixth added -- the controls
+showing the card's values after a bind, a write reaching the card, and
+the battery falling on Off and rising on Charge over a set time -- and
+a card in Mobile Mode: its twenty controls after a bind, the two
+levels at 0 dB and every MUTE off, and each input's switch, turned
+off, taking that input out of the recording; then, in the cover
+letter, the numbers in the Tested list checked against them and the
+XXX line removed.
 
 ## #826, the M62's profile
 
@@ -209,9 +221,9 @@ turns a trim's switch on wherever it pins the trim open, and Direct
 unmutes the ten playback channels as it does the sixteen capture
 columns. Left: a check under PipeWire in Pro Audio Mode, with sound
 from each of the five playback devices, and in Mobile Mode, on a
-kernel with the eight patches; the push, and the answer to the
-review; and once the posting is out, the link in the commit message
-pointed at it, since the Mobile Mode levels first appear there.
+kernel with the seven patches; the push, and the answer to the review;
+and once the posting is out, the link in the commit message pointed at
+it, since the Mobile Mode levels first appear there.
 
 ## UCM, once the next posting is out
 
