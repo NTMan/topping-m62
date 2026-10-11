@@ -186,12 +186,16 @@ A capture the same day (`E2x2 OTG - Mutes and Faders.pcapng`, see
 PROTOCOL.md) found no MUTE of its own on that card: the program writes
 the level to 0, an input's gain or a fader's pair, and writes 0 again
 at every step of that level while the MUTE is lit. Output 1+2 has no
-MUTE, only its three output buttons, which the driver has. The first
-bind writes every level of the E2x2 OTG, so a MUTE another host left
-does not outlive it, and a fader's bottom step is already off, which
-is what the program writes for its MUTE; an input's gain has no off
-step. Left: whether the E2x2's input gains get one, and a sentence in
-the seventh patch's message on why the E2x2 OTG gets no switches.
+MUTE, only its three output buttons, which the driver has. A second
+capture, every MUTE released in the same order, found the release
+writing the level the program had kept, and nothing else, and each
+input coming on within 62 ms: the card holds no MUTE of its own, only
+the level. The first bind writes every level of the E2x2 OTG, so a
+MUTE another host left does not outlive it, and a fader's bottom step
+is already off, which is what the program writes for its MUTE; an
+input's gain has no off step. Left: whether the E2x2's input gains get
+one, and a sentence in the seventh patch's message on why the E2x2 OTG
+gets no switches.
 
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
