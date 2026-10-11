@@ -258,11 +258,25 @@ nobody known. With the kernel the playback devices take the headphone
 stage and nothing would turn those switches back on, so the verb now
 turns a trim's switch on wherever it pins the trim open, and Direct
 unmutes the ten playback channels as it does the sixteen capture
-columns. Left: a check under PipeWire in Pro Audio Mode, with sound
-from each of the five playback devices, and in Mobile Mode, on a
-kernel with the eight patches; the push, and the answer to the review;
-and once the posting is out, the link in the commit message pointed at
-it, since the Mobile Mode levels first appear there.
+columns.
+
+Decided on 12 October: the profile needs no change for the eight
+patches. The MUTEs they add are switches named after the levels the
+devices already take -- Headphone, Mic1 Analog, Mic2 Analog, Aux,
+Bluetooth, OTG, Recording -- so alsa-lib's simple mixer joins each
+switch to its level's element and PipeWire mutes through it; the
+Playback 1/2 knob's switch is the one the Mobile Mode verb already
+turns on. The commit message is rewrapped where earlier edits had left
+short lines, with no word changed. Exported with the E2x2 OTG's
+profile, an installer and a check: the check plays a tone through each
+playback device in turn, printing the output selector, and moves each
+sink's and source's volume and mute, printing the control behind it.
+Left: that check in Pro Audio Mode and in Mobile Mode on a kernel with
+the eight patches, and its results in the Tested paragraph, whose
+Mobile Mode part still reads XXX; the push, and the answer to the
+review; and once the posting is out, the link in the commit message
+pointed at it, since the Mobile Mode levels and the mutes first appear
+there.
 
 ## UCM, once the next posting is out
 
@@ -276,10 +290,16 @@ it, since the Mobile Mode levels first appear there.
   6 October under PipeWire with the driver: the source follows each of
   the four profiles; the sink volume moves `Master` and a source's
   volume the card's gain or fader behind it; a tone on Playback 3/4,
-  5/6 and 7/8 reached only the loopback listening to it. Left: the
-  branch without the driver, on a kernel without it; Playback 1/2 and
-  the inputs with a real signal; the pull request, once the next
-  posting is out.
+  5/6 and 7/8 reached only the loopback listening to it. Moved on
+  12 October onto the reworked #826: a Macro line beside the M62's in
+  `USB-Audio.conf`, without the comment on its bcdDevice, since that
+  file no longer reads any; and, as in #826, the verb turns the trims'
+  switches on where it pins the trims open. The eighth patch's input
+  MUTEs join the gains' elements with no line in the profile. Left:
+  the branch without the driver, on a kernel without it; Playback 1/2
+  and the inputs with a real signal; the check exported with #826, on
+  the eight patches; the pull request, once the next posting is out,
+  with the link to it in the commit message.
 - In both profiles a source's volume is the card's own gain, not a USB
   trim: the driver exists so that PerDeviceEQ moves the card's gain
   stages. A source PipeWire sees for the first time starts at 100%,
