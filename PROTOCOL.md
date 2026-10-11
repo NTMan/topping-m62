@@ -1709,7 +1709,7 @@ Everything in this section comes from captures made with Wireshark
 on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
 a card that reports hardware V1.01 and firmware V1.10: four on
 2 October 2026 (UTC) with Control Center V1.09, a fifth on
-3 October, three on 4 October and one on 11 October. Writing to the
+3 October, three on 4 October and two on 11 October. Writing to the
 card from Linux began on 4 October, with `tools/e2x2.py`; what those
 writes showed is marked **verified** (see Writing from Linux below),
 and as in the rest of this document anything unmarked is **decoded**.
@@ -1771,13 +1771,21 @@ and as in the rest of this document anything unmarked is **decoded**.
   headphone, TRS and AUX buttons switched off in that order, after the
   loopbacks, and its fader then taken from 0 dB to -inf, back to 0 dB
   and to -6 dB.
+* `E2x2 OTG - unmute all faders.pcapng`, 157.5 s, 11 October, after
+  the one above, with Control Center connected throughout: no push and
+  no announce in it. The same strips in the same order had their MUTE
+  released and their level then taken to its bottom, up to its top and
+  back to +11 dB on the inputs and -6 dB on the others; Output 1+2 had
+  its headphone, TRS and AUX buttons switched on, left to right,
+  before its fader was moved the same way.
 
 Across the first eight, all 2240 frames the program wrote carry `0000`
 in the checksum field, and all 50920 non-empty frames the card sent
 carry a valid CRC-16/MODBUS: the frame and the direction discriminator
-described above apply unchanged. In the ninth the 1809 frames the
-program wrote carry `0000` and the 5701 the card sent a valid
-checksum. An idle poll returns sixteen zeros, as on the M62.
+described above apply unchanged. In the ninth and the tenth the 1809
+and 2151 frames the program wrote carry `0000`, and the 5701 and 7716
+the card sent a valid checksum. An idle poll returns sixteen zeros, as
+on the M62.
 
 ### The USB side
 
@@ -1952,6 +1960,16 @@ each, and their meters, at -96.0 until then, showed -84.2
 and -71.2 dB 30 ms later. A meter that falls to -96.0 goes on being
 sent at -96.0 for about 7.4 s, 110 reports, and then stops.
 
+Releasing the MUTE writes the gain the program kept under it, and
+nothing else. In `E2x2 OTG - unmute all faders.pcapng`, with the gains
+left at +11 dB under their MUTEs by the capture above, each release
+wrote +11 dB once to `21/05`, `23/05` and `22/05`, and every step of
+the knob after it wrote its gain. No input's meter reported before its
+release; each came on 46 to 62 ms after it (**verified**). So the card
+holds no MUTE of its own: Control Center keeps the MUTE and the gain,
+and the card has only what it is written, 0 under a MUTE and the gain
+otherwise.
+
 #### Outputs and selectors
 
 | Target | Property | Meaning |
@@ -1976,7 +1994,7 @@ output being switched off.
 
 **No selector is ever reported**, and neither is an input gain:
 nothing on these selector properties or on `0x21`..`0x24/05` came
-from the card in any of the nine captures.
+from the card in any of the ten captures.
 
 Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
 `0x33`/`0x34` and `0x5a`/`0x5b` and of `0x51`..`0x56`; 0 is -inf.
@@ -2001,6 +2019,13 @@ taken from bottom to top and on to -6 dB, Loopback 1+2, 3+4 and 5+6,
 Mobile OUT and S/PDIF OUT got 59, 113, 98, 119 and 120 writes on each
 target, every one 0. Output 1+2 has no MUTE; with its three output
 buttons off, its fader went on writing its levels.
+
+Releasing one of those MUTEs writes the fader's level that the program
+kept, to both targets, and nothing else: in `E2x2 OTG - unmute all
+faders.pcapng` each release wrote -6 dB, set under the MUTE in the
+capture before, and the fader's steps after it their levels. Switched
+back on there, Output 1+2's three buttons wrote all three and the
+fader pair at -6 dB with every press, as in `E2x2-4.pcapng`.
 
 #### Output meters
 
