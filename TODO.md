@@ -296,6 +296,21 @@ released it is not known. Left: what released HP's MUTE there; the
 push, and the answer to the review; and once the posting is out, the
 link in the commit message pointed at it.
 
+The same night: the run on HP's MUTE concerns the driver and the card,
+not the profile, so #826 does not depend on it. Its commit message
+linked v8, whose controls the profile would not find: v8 names IN 1's
+and IN 2's gains Mic-1 and Mic-2 and has no loopback gains, Mobile
+Mode levels or switches. The paragraph now says that the names are
+those of the series' next version, to be linked once it is posted, and
+keeps v8's link; the Tested paragraph says the runs were on that next
+version. `m62-hpmute.sh` repeats the check's step that did not hold,
+the sink's volume put back and the sink muted at once, twenty times in
+Pro Audio Mode, with usbmon recording every vendor frame to and from
+the card, so that each cycle shows whether the host wrote HP's level
+after the MUTE and whether the card reported a release. Left: that
+run; the push, and the answer to the review; and once the posting is
+out, the link.
+
 ## UCM, once the next posting is out
 
 - The E2x2 OTG's profile is written, one commit on alsa-ucm-conf
