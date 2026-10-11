@@ -205,18 +205,33 @@ switch the USB side has on each capture channel, so an off step for
 the E2x2's input gains would change that paragraph as well. Left:
 whether they get one.
 
+Decided the same evening: the E2x2 OTG's inputs get MUTE switches
+after all, in an eighth patch, and the paragraph on that card moves
+there from the seventh. An off step at the bottom of each gain was
+rejected: the step above it is +0 dB, so the input would go from
+silence to its full level in one step, and a sound server following
+the scale in decibels would find nothing between the two. The card
+keeps the MUTE as its gain's 0, which the gain never takes by itself,
+so each switch shares that property with its gain: 0 while the switch
+is off, the gain otherwise, and a gain set while it is off only kept,
+as Control Center keeps it. The faders get no switch: their bottom
+step is that 0 already, and the steps above it start at -80 dB. Each
+of the eight patches compiles with W=1 and sparse without a warning in
+the files it touches.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
-Left before posting: the cover letter for seven patches; the runs
-again on the seven, with checks of the sixth added -- the controls
+Left before posting: the cover letter for eight patches; the runs
+again on the eight, with checks of the sixth added -- the controls
 showing the card's values after a bind, a write reaching the card, and
 the battery falling on Off and rising on Charge over a set time -- and
 a card in Mobile Mode: its twenty controls after a bind, the two
 levels at 0 dB and every MUTE off, and each input's switch, turned
-off, taking that input out of the recording; then, in the cover
-letter, the numbers in the Tested list checked against them and the
-XXX line removed.
+off, taking that input out of the recording; and the E2x2 OTG's input
+switches, off silencing the input's meter, a gain set while off kept,
+and on bringing that gain back; then, in the cover letter, the numbers
+in the Tested list checked against them and the XXX line removed.
 
 ## #826, the M62's profile
 
@@ -245,7 +260,7 @@ turns a trim's switch on wherever it pins the trim open, and Direct
 unmutes the ten playback channels as it does the sixteen capture
 columns. Left: a check under PipeWire in Pro Audio Mode, with sound
 from each of the five playback devices, and in Mobile Mode, on a
-kernel with the seven patches; the push, and the answer to the review;
+kernel with the eight patches; the push, and the answer to the review;
 and once the posting is out, the link in the commit message pointed at
 it, since the Mobile Mode levels first appear there.
 
