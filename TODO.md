@@ -197,6 +197,14 @@ input's gain has no off step. Left: whether the E2x2's input gains get
 one, and a sentence in the seventh patch's message on why the E2x2 OTG
 gets no switches.
 
+Decided the same day: the seventh patch's message says why the E2x2
+OTG gets no switches, since without that the card's controls look
+unlike the M62's for no stated reason. It also says that an input's
+gain starts at +0 dB and that an input's recording is muted with the
+switch the USB side has on each capture channel, so an off step for
+the E2x2's input gains would change that paragraph as well. Left:
+whether they get one.
+
 The cover letter is written for the six patches. Its Tested list still
 holds the numbers of the runs on the four, under a line marked XXX.
 
