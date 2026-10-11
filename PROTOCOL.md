@@ -1762,13 +1762,15 @@ and as in the rest of this document anything unmarked is **decoded**.
   was touched once more.
 * `E2x2 OTG - Mutes and Faders.pcapng`, 172.0 s, 11 October, from the
   card's power-on announce 0.4 s in and Control Center's connect 0.7 s
-  in. One strip at a time -- IN 1, IN 2, Mobile IN, Loopback 1+2, 3+4
-  and 5+6, Mobile OUT and S/PDIF OUT -- MUTE was pressed and the
-  strip's level then taken from its bottom to its top and on to +11 dB
-  on the inputs and -6 dB on the others; no MUTE was released once
-  pressed. Output 1+2, which has no MUTE, had its headphone, TRS and
-  AUX buttons switched off in that order, after the loopbacks, and
-  its fader then taken from 0 dB to -inf, back to 0 dB and to -6 dB.
+  in. IN 2's and IN 1's MUTEs, left on from before, were released
+  first; then, one strip at a time -- IN 1, IN 2, Mobile IN,
+  Loopback 1+2, 3+4 and 5+6, Mobile OUT and S/PDIF OUT -- MUTE was
+  pressed and the strip's level then taken from its bottom to its top
+  and on to +11 dB on the inputs and -6 dB on the others; no MUTE was
+  released once pressed. Output 1+2, which has no MUTE, had its
+  headphone, TRS and AUX buttons switched off in that order, after the
+  loopbacks, and its fader then taken from 0 dB to -inf, back to 0 dB
+  and to -6 dB.
 
 Across the first eight, all 2240 frames the program wrote carry `0000`
 in the checksum field, and all 50920 non-empty frames the card sent
@@ -1943,11 +1945,12 @@ The card acts on the 0 at once, and on a gain written after it
 meter, at -69.4 to -73.4 dB, read -96.0 from 82 ms after its MUTE;
 IN 2's, at -80.7 to -84.2 dB, from 40 ms after; the Mobile input's
 two, at -12.3 to -18.8 dB with a signal on both channels, from 74
-and 76 ms after. Before that, the push had written 0 to `21/05` and
-`23/05`, and their meters, at -96.0, showed -84.2 dB on IN 2
-and -71.2 dB on IN 1, each 30 ms after +11 dB was written to it, 9.0
-and 9.9 s in. A meter that falls to -96.0 goes on being sent at -96.0
-for about 7.4 s, 110 reports, and then stops.
+and 76 ms after. Before the first press, with IN 1's and IN 2's MUTEs
+still on from earlier, the push had written 0 to `21/05` and `23/05`;
+releasing them, IN 2's 9.0 s in and IN 1's 9.9 s in, wrote +11 dB to
+each, and their meters, at -96.0 until then, showed -84.2
+and -71.2 dB 30 ms later. A meter that falls to -96.0 goes on being
+sent at -96.0 for about 7.4 s, 110 reports, and then stops.
 
 #### Outputs and selectors
 
