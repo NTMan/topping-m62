@@ -278,6 +278,24 @@ review; and once the posting is out, the link in the commit message
 pointed at it, since the Mobile Mode levels and the mutes first appear
 there.
 
+Checked the same night on 7.3-rc6 with the eight patches, from the
+alsa-ucm-conf checkout PipeWire reads -- its `ucm2/USB-Audio/Topping`
+tree 56d38769, the two exported commits -- in all three modes and on
+the E2x2 OTG. A tone through each playback device, set to 30% and
+unmuted for its tone, was heard in the headphones, the output selector
+following the device; each sink's and source's volume moved the card's
+control behind it, and its mute the switch beside that control, or the
+lowest step where there is none; the trims stayed at 0 dB and on, and
+the Playback 1/2 knob too in Mobile Mode. The Tested paragraphs of
+both commits now say so. One step did not hold once: in Pro Audio
+Mode, 0.5 s after the sink was muted, HP's switch read on again with
+the level unchanged, where the five other runs read it off. The check
+writes the sink's volume back and then its mute, and a MUTE written
+after a level held in all 27 probes of 10 and 11 October, so what
+released it is not known. Left: what released HP's MUTE there; the
+push, and the answer to the review; and once the posting is out, the
+link in the commit message pointed at it.
+
 ## UCM, once the next posting is out
 
 - The E2x2 OTG's profile is written, one commit on alsa-ucm-conf
@@ -295,11 +313,15 @@ there.
   `USB-Audio.conf`, without the comment on its bcdDevice, since that
   file no longer reads any; and, as in #826, the verb turns the trims'
   switches on where it pins the trims open. The eighth patch's input
-  MUTEs join the gains' elements with no line in the profile. Left:
-  the branch without the driver, on a kernel without it; Playback 1/2
-  and the inputs with a real signal; the check exported with #826, on
-  the eight patches; the pull request, once the next posting is out,
-  with the link to it in the commit message.
+  MUTEs join the gains' elements with no line in the profile. Checked
+  the same night with the eight patches, with the check exported with
+  #826: a tone through each of the four buses was heard, Output 1+2
+  following the device; each sink's and source's volume moved the
+  card's control behind it, and its mute the input's switch, or the
+  lowest step of `Master` and the loopback faders; the Tested
+  paragraph says so. Left: the branch without the driver, on a kernel
+  without it; the inputs with a real signal; the pull request, once
+  the next posting is out, with the link to it in the commit message.
 - In both profiles a source's volume is the card's own gain, not a USB
   trim: the driver exists so that PerDeviceEQ moves the card's gain
   stages. A source PipeWire sees for the first time starts at 100%,
