@@ -1709,10 +1709,10 @@ Everything in this section comes from captures made with Wireshark
 on macOS (`XHC1`, `LINKTYPE_USB_DARWIN`) of Control Center driving
 a card that reports hardware V1.01 and firmware V1.10: four on
 2 October 2026 (UTC) with Control Center V1.09, a fifth on
-3 October and three on 4 October. Writing to the card from Linux
-began on 4 October, with `tools/e2x2.py`; what those writes showed
-is marked **verified** (see Writing from Linux below), and as in
-the rest of this document anything unmarked is **decoded**.
+3 October, three on 4 October and one on 11 October. Writing to the
+card from Linux began on 4 October, with `tools/e2x2.py`; what those
+writes showed is marked **verified** (see Writing from Linux below),
+and as in the rest of this document anything unmarked is **decoded**.
 
 ### The captures
 
@@ -1760,12 +1760,22 @@ the rest of this document anything unmarked is **decoded**.
   out of the OTG port; Control Center was quit and started again,
   reconnecting 73.5 s in; the phone was plugged back in; the knob
   was touched once more.
+* `E2x2 OTG - Mutes and Faders.pcapng`, 172.0 s, 11 October, from the
+  card's power-on announce 0.4 s in and Control Center's connect 0.7 s
+  in. One strip at a time -- IN 1, IN 2, Mobile IN, Loopback 1+2, 3+4
+  and 5+6, Mobile OUT and S/PDIF OUT -- MUTE was pressed and the
+  strip's level then taken from its bottom to its top and on to +11 dB
+  on the inputs and -6 dB on the others; no MUTE was released once
+  pressed. Output 1+2, which has no MUTE, had its headphone, TRS and
+  AUX buttons switched off in that order, after the loopbacks, and
+  its fader then taken from 0 dB to -inf, back to 0 dB and to -6 dB.
 
-Across the eight, all 2240 frames the program wrote carry `0000`
+Across the first eight, all 2240 frames the program wrote carry `0000`
 in the checksum field, and all 50920 non-empty frames the card sent
-carry a valid CRC-16/MODBUS: the frame and the direction
-discriminator described above apply unchanged. An idle poll
-returns sixteen zeros, as on the M62.
+carry a valid CRC-16/MODBUS: the frame and the direction discriminator
+described above apply unchanged. In the ninth the 1809 frames the
+program wrote carry `0000` and the 5701 the card sent a valid
+checksum. An idle poll returns sixteen zeros, as on the M62.
 
 ### The USB side
 
@@ -1920,6 +1930,25 @@ folds all three into `05`:
   pressed while soloed wrote 0 to IN 1 and the others back to
   their gains.
 
+While MUTE is lit, every step of the gain knob writes 0 as well, so
+the card never gets the gain the screen shows. In `E2x2 OTG - Mutes
+and Faders.pcapng` IN 1, IN 2 and Mobile IN were each muted and their
+knobs turned from bottom to top and on to +11 dB: from the MUTE on, 98
+writes to `21/05`, 110 to `23/05` and 129 to `22/05`, every one 0. The
+Mobile strip's MUTE writes `22/05` alone, never `24/05`, and silences
+both channels.
+
+The card acts on the 0 at once, and on a gain written after it
+(**verified** by the inputs' meters, which follow the gain). IN 1's
+meter, at -69.4 to -73.4 dB, read -96.0 from 82 ms after its MUTE;
+IN 2's, at -80.7 to -84.2 dB, from 40 ms after; the Mobile input's
+two, at -12.3 to -18.8 dB with a signal on both channels, from 74
+and 76 ms after. Before that, the push had written 0 to `21/05` and
+`23/05`, and their meters, at -96.0, showed -84.2 dB on IN 2
+and -71.2 dB on IN 1, each 30 ms after +11 dB was written to it, 9.0
+and 9.9 s in. A meter that falls to -96.0 goes on being sent at -96.0
+for about 7.4 s, 110 reports, and then stops.
+
 #### Outputs and selectors
 
 | Target | Property | Meaning |
@@ -1944,7 +1973,7 @@ output being switched off.
 
 **No selector is ever reported**, and neither is an input gain:
 nothing on these selector properties or on `0x21`..`0x24/05` came
-from the card in any of the eight captures.
+from the card in any of the nine captures.
 
 Faders are Q25 on property `03` of the pairs `0x31`/`0x32`,
 `0x33`/`0x34` and `0x5a`/`0x5b` and of `0x51`..`0x56`; 0 is -inf.
@@ -1960,6 +1989,15 @@ confirms none of it. By the published
 specification the headphone and line volumes are analogue
 potentiometers on the front panel, and no property for them
 appears in any capture.
+
+The MUTE of Mobile OUT, of S/PDIF OUT and of each loopback has no
+property either: it writes 0, -inf, to both targets of the fader's
+pair, and while it is lit every step of the fader writes 0 again. In
+`E2x2 OTG - Mutes and Faders.pcapng`, each muted and its fader then
+taken from bottom to top and on to -6 dB, Loopback 1+2, 3+4 and 5+6,
+Mobile OUT and S/PDIF OUT got 59, 113, 98, 119 and 120 writes on each
+target, every one 0. Output 1+2 has no MUTE; with its three output
+buttons off, its fader went on writing its levels.
 
 #### Output meters
 
@@ -2046,6 +2084,12 @@ two mono sources sit at -6.02 dB on both sides (`0x00fffff0`);
 each stereo source is at unity on its own side and at zero on the
 other. For unity the program writes `0x01ffffe0` here rather than
 `2^25`.
+
+In `E2x2 OTG - Mutes and Faders.pcapng` the push wrote 0 to `61/05`
+and `62/06`, which Mixes B to D have at unity, and nothing was written
+to the matrix after it; Mikhail's screenshot at its end shows the MUTE
+of Playback 1/2 lit in Mix A. That agrees with the guess above, and
+with a mixer MUTE written as 0 like the others.
 
 #### The monitor mix knob
 
