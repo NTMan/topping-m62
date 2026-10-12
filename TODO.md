@@ -230,10 +230,8 @@ a card in Mobile Mode: its twenty controls after a bind, the two
 levels at 0 dB and every MUTE off, and each input's switch, turned
 off, taking that input out of the recording; and the E2x2 OTG's input
 switches, off silencing the input's meter, a gain set while off kept,
-and on bringing that gain back; and the same on the M62 for HP's
-volume under its MUTE, with the switch back of `m62-hpmute3.sh` run
-again; then, in the cover letter, the numbers in the Tested list
-checked against them and the XXX line removed.
+and on bringing that gain back; then, in the cover letter, the numbers
+in the Tested list checked against them and the XXX line removed.
 
 ## #826, the M62's profile
 
@@ -377,9 +375,17 @@ Each step builds with W=1 and sparse, checkpatch finds nothing new,
 the eight apply to af32da4 and give the branch's files, and a test of
 the write, report and put paths cut out of the driver and run in
 userspace against a recorder passes on them and fails on the eight
-before in the cases the change covers. Left: the runs on hardware,
-listed under the next posting; the push, and the answer to the review;
-and once the posting is out, the link.
+before in the cases the change covers.
+
+Run on the M62 that afternoon, on 7.3-rc7 with the change
+(`m62-hpkeep.txt` and `m62-hpmute3.txt`, see PROTOCOL.md): the volume
+set five times under HP's MUTE reached the card only at the unmute,
+just before the MUTE 0, the control showing it meanwhile; and of
+twenty switches back to the muted Playback 1/2 none wrote HP's level,
+none brought a release, and HP's switch and PipeWire's sink read muted
+4 s after each. Left: the other runs before posting, listed under the
+next posting; the push, and the answer to the review; and once the
+posting is out, the link.
 
 ## UCM, once the next posting is out
 
