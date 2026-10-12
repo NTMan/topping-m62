@@ -1555,7 +1555,12 @@ at AUX gain 30 and at gain 60 gave rms -57.8 and -28.1 dBFS on
 the left and -58.0 and -28.2 on the right, that is +29.7 and
 +29.8 dB measured against the +30.0 dB the table predicts. Family
 B is confirmed by a capture of stops at -inf/-80/-60/-40/-20/0,
-which landed on indices 0/9/29/49/69/99 exactly.
+which landed on indices 0/9/29/49/69/99 exactly. BT's and OTG IN's
+gains act before USB: in Pro Audio Mode on 13 October each, written
+0 from 99, took its own capture columns (4/5 and 6/7) to digital
+zero, and written 99 again brought the level back, BT's at -19.21
+and -19.54 dBFS, OTG IN's at -37.28 and -36.59 dBFS, each fed from a
+phone.
 
 ### The mixer matrix
 
