@@ -267,32 +267,40 @@ E2x2 OTG's pass, and the cover letter.
 The second runs, the same night. Mobile Mode's switches read past the
 reverb's tail: IN 1's recording reached digital zero 4.5 s after its
 switch went off and IN 2's 6.5 s after, AUX's and BT's at once; OTG IN
-recorded digital zero even switched on, so for it the first pass
-stands, where off took it from -35.35 dBFS to digital zero. The record
-step with the trims held at their top: Loopback 1/2 at -23.01 dBFS, as
-on 5 October, the rest as in the first pass. The first pass's -38 dB
-came from the runs, not from the driver. The port step creates the
-card three times with hid-topping out, and PipeWire reads the card's
-UCM file only when the card arrives: without the driver's controls the
-M62's HiFi verb has no outputs in conflict -- one profile, which
-PipeWire names just "HiFi" -- and takes their volumes from the USB
-trims, which that verb leaves unpinned. The reading lasted until the
-card arrived again, and the sinks' volumes stood on the trims, -38 dB
-on Playback 1/2 and -23 dB on the rest. The script now ends the port
-step by creating the card once more with hid-topping in place and
-putting the input gains back, and sets PipeWire's profiles through
-`pw-cli` with `save: false`: a profile set through `pactl` WirePlumber
-keeps for the card's name, "off" too, and the card's quick returns had
-WirePlumber name it `...-00.2` now and then. At the second pass's
-switch to Mobile Mode alsactl's restore wrote 0 to BT's and OTG IN's
-gains (`25/04`, `27/04`), which at the first it had written as 99; a
-second later the card reported BT's gain as 99, and nothing for OTG
-IN's. Neither gain is in the card's announce (see PROTOCOL.md), and
-after the port step's first binds nothing in the run set them again;
-whether alsactl stored them as 0 then is to be read in
-`/var/lib/alsa/asound.state`. GNOME's Power settings list the card's
-battery, at 87 % after the runs. Left: the stored zeros, the
-battery's time, the E2x2 OTG's pass, and the cover letter.
+recorded digital zero even switched on, the change of mode having
+stopped the phone playing into it (see PROTOCOL.md), so for it the
+first pass stands, where off took it from -35.35 dBFS to digital zero.
+The record step with the trims held at their top: Loopback 1/2 at
+-23.01 dBFS, as on 5 October, the rest as in the first pass. The first
+pass's -38 dB came from the runs, not from the driver. The port step
+creates the card three times with hid-topping out, and PipeWire reads
+the card's UCM file only when the card arrives: without the driver's
+controls the M62's HiFi verb has no outputs in conflict -- one
+profile, which PipeWire names just "HiFi" -- and takes their volumes
+from the USB trims, which that verb leaves unpinned. The reading
+lasted until the card arrived again, and the sinks' volumes stood on
+the trims, -38 dB on Playback 1/2 and -23 dB on the rest. The script
+now ends the port step by creating the card once more with hid-topping
+in place and putting the input gains back, and sets PipeWire's
+profiles through `pw-cli` with `save: false`: a profile set through
+`pactl` WirePlumber keeps for the card's name, "off" too, and the
+card's quick returns had WirePlumber name it `...-00.2` now and then.
+At the second pass's switch to Mobile Mode alsactl's restore wrote 0
+to BT's and OTG IN's gains (`25/04`, `27/04`), which at the first it
+had written as 99; a second later the card reported BT's gain as 99,
+and nothing for OTG IN's. Neither gain is in the card's announce (see
+PROTOCOL.md), and after the port step's first binds nothing in the run
+set them again. `/var/lib/alsa/asound.state`, stored at 01:48 after
+the runs, holds 99 for both, as the controls read now, so when the
+zeros were stored no longer shows; nor does what a 0 written to either
+gain does to its input, OTG IN's phone having stopped. The record step
+now reads that: each of the two gains written 0 and put back, the
+input in its own columns; and after each change of mode the script
+waits for the card's meters of BT and OTG IN before it reads them.
+GNOME's Power settings list the card's battery, at 87 % after the
+runs. Left: that reading, and with it whether the driver should show 0
+for a gain nobody has reported or set; the battery's time; the E2x2
+OTG's pass; and the cover letter.
 
 ## #826, the M62's profile
 
