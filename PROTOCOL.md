@@ -980,6 +980,30 @@ the two runs in which nothing reached HP after the MUTE, where none of
 the 27 probes of 10 and 11 October, made with HP sounding and the MUTE
 written 2 ms to 1 s after the level, saw a release.
 
+A third run (`m62-hpmute3.txt`, 12 October, the same card, mode and
+kernel) took the switch back to a muted device alone, twenty times:
+the sink muted, the profile switched to Playback 3/4's, back 4 s
+later, and HP's switch and PipeWire's mute read about 4 s after that,
+the script writing nothing in between. Both switches reached the card
+30 to 36 ms after `pactl set-card-profile` was called; in the second
+run the switch back, called 1 s after the switch away, had taken 2.8
+to 2.9 s. Every time the host wrote `64/02` = 12, then `64/04` and
+`63/04` = 1, then `64/03` and `63/03` = 47, 4 ms after the MUTE. The
+card released the MUTE after eleven of the twenty, `64/04` = 0 coming
+32 to 138 ms after the level, with nothing written to `0x63` or `0x64`
+in between. In each of those eleven the host wrote `64/04` and
+`63/04` = 1 again, and nothing else, 1.95 to 1.97 s after the switch
+back was called and 1.77 to 1.90 s after the release; the script was
+waiting then, so the writes were PipeWire's. The card sent nothing
+after them, and at the read HP's switch was off and PipeWire's sink
+muted in all twenty. In the other nine nothing more reached `0x63` or
+`0x64` before the next switch away. The driver sends HP's MUTE only
+when its switch changes, so whether PipeWire wrote the switch again in
+those nine too the frames cannot show. Nothing was listened to, and
+the card sent no `63/01` or `64/01`, HP's meters, in the run. Once,
+30 ms after a switch away had written HP's MUTE 0, the card sent
+`64/04` = 0.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
