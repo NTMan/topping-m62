@@ -302,6 +302,22 @@ runs. Left: that reading, and with it whether the driver should show 0
 for a gain nobody has reported or set; the battery's time; the E2x2
 OTG's pass; and the cover letter.
 
+The third run, 03:34, the port step and the record step with the
+script so changed. After the port step PipeWire had the card's full
+profile, `HiFi (Bluetooth, Line1, ...)`, the trims stood at their top
+before the record step pinned them, Loopback 1/2 read -23.01 dBFS, and
+at the end the profile and the five input gains were as at the start,
+the profiles having gone through `pw-cli`. BT's and OTG IN's gains,
+each written 0 from 99, took their columns to digital zero, and 99
+written again brought the level back (see PROTOCOL.md). So a 0 that
+alsactl has stored for either, as it had before the second runs,
+silences that input when it is restored, where the card keeps it:
+after the restore's 0 at the switch to Mobile Mode the card reported
+BT's gain as 99, and BT was heard in that step's recording. To
+decide: whether the first bind should write those two gains at 0 dB,
+as it writes the other values the card does not report. Left: that,
+the battery's time, the E2x2 OTG's pass, and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
