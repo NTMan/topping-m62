@@ -397,19 +397,26 @@ puts mute at index 0 and full scale at index 99, so a program that
 defaults to zero tells the user the headphone output is silent
 when it may be at maximum.
 
-**Writing a "sensible default" at connect is the wrong answer for
-the analogue gains**, because the card is about to report them: a
-write at 90 ms destroys a value that would have arrived at 5.2 s.
-Anything that wants the truth has to not publish, or not accept
-writes, until the second wave lands.
+**Writing a default at connect destroys an analogue gain the card
+is about to report**: a write at 90 ms replaces a value that would
+have arrived at 5.2 s. Anything that wants the card's own value has
+to not publish, or not accept writes, until the second wave lands.
 
 For the last two rows nothing will arrive, so there the default is
 the right answer, and since v8 the driver gives it: at its first
 bind it writes both selectors and both output volumes, which makes
-what it shows what the card holds. BT's and OTG IN's gains get no
-default: the driver writes no gain at its first bind, and leaves
-them, like the others, to what userspace restores when the card
-appears.
+what it shows what the card holds. The gains it left to what
+userspace restores when the card appears, until 13 October: a gain
+the card had not reported showed 0, for alsactl to store, and that
+day alsactl's restore wrote a stored 0 to BT's and OTG IN's gains
+(TODO.md), where 0 is -inf. The card reports a gain only for an input
+with something plugged into it, never BT's or OTG IN's, so its report
+is not a read a host can count on. Decided on 13 October: the driver
+takes the card's state as unreadable and writes every gain at its
+first bind too, at 0 dB, where it changes nothing, and the two port
+power settings, at Charge and Off (see `11/1c` below); userspace's
+restore then puts back the user's own values, as M Control Center's
+connect push puts back its own on the Mac.
 
 ### A device arriving from another host
 
@@ -1244,6 +1251,15 @@ them (`12/03`, `12/04`, `12/03`, ...), past the time of the next items,
 which were then not sent; `11/1e` went missing only after `12/01` had
 been repeated 9 times or more. The other half came in announces with
 nothing unusual around them.
+
+Decided on 13 October: the driver writes both settings at its first
+bind, the USB-C port to Charge and the OTG port to Off, and alsactl's
+restore then writes whatever the user stored. Control Center does not
+push them, as above; the driver does because an announce cannot be
+counted on to carry them, and a card left on Off by another host takes
+no power from this one. With Off stored for the USB-C port, every
+arrival switches it from Charge to Off, the switch that under macOS
+has at times taken the card off the bus.
 
 ### EQ
 
