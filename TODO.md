@@ -354,9 +354,19 @@ eleven PipeWire wrote the MUTE again 1.95 to 1.97 s after the switch
 back; the card sent nothing after it, and 4 s after the switch HP's
 switch was off and PipeWire's sink muted in all twenty. With the eight
 patches as they stand, then, a switch back to a muted HP releases it
-in about half the switches, for 1.8 to 1.9 s. Left: whether the
-decision of 11 October on HP's switch stands with that; the push, and
-the answer to the review; and once the posting is out, the link.
+in about half the switches, for 1.8 to 1.9 s.
+
+Decided on 12 October, after that run: for every MUTE of the M62, a
+level set while its switch is off is only kept, and written when the
+switch is turned on, just before the MUTE is released, as M Control
+Center writes a level turned under a MUTE before its MUTE 0. That
+takes back the part of the decision of 11 October on HP's volume: the
+driver is to hold it back under the MUTE, as the eighth patch holds
+the E2x2 OTG's input gains, and as PipeWire holds the volume of a
+control it mutes by the bottom step. HP's switch still follows the
+card's reports, of a release by a knob among them. Left: that change
+to the seventh patch, and the runs on HP's MUTE again on it; the push,
+and the answer to the review; and once the posting is out, the link.
 
 ## UCM, once the next posting is out
 
