@@ -1004,6 +1004,25 @@ the card sent no `63/01` or `64/01`, HP's meters, in the run. Once,
 30 ms after a switch away had written HP's MUTE 0, the card sent
 `64/04` = 0.
 
+With the seventh patch then keeping a level set while its switch is
+off, and writing it at the release just before the MUTE 0, the run was
+made again (`m62-hpmute3.txt`, 12 October, from 16:04, kernel 7.3-rc7,
+the same card and mode). Each of the twenty switches back wrote
+`64/02` = 12 and then `64/04` and `63/04` = 1, and nothing more
+reached `0x63` or `0x64` before the next switch away; the card sent no
+`64/04`, and at the read HP's switch was off and PipeWire's sink muted
+in all twenty. At each switch away after the first, where PipeWire
+puts Playback 3/4's route back unmuted, the driver wrote the kept
+level, 51, then the MUTE 0, 3.5 to 4 ms after it, and PipeWire wrote
+Playback 3/4's level, 0, 4 to 4.6 ms after that; the card sent
+`64/04` = 0 after six of the nineteen, 8 to 106 ms after the MUTE 0.
+In `m62-hpkeep.txt`, run just before, the sink was muted and its
+volume moved from 40% to 20% under the MUTE five times: nothing
+reached `0x63` or `0x64` between the mute and the unmute, HP's volume
+control read the kept value, 39, meanwhile, and the unmute wrote 39
+and then the MUTE 0, 2.4 to 4.2 ms after it, after which the card sent
+`64/04` = 0 three times of five, 68 to 88 ms after the MUTE 0.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
