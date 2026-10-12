@@ -233,6 +233,37 @@ switches, off silencing the input's meter, a gain set while off kept,
 and on bringing that gain back; then, in the cover letter, the numbers
 in the Tested list checked against them and the XXX line removed.
 
+The runs on the eight patches began on 13 October with `m62-runs.sh`,
+written anew from the logs of 5 October, whose script was not kept.
+The E2x2 OTG gets a pass of its own: one phone cannot feed the inputs
+of both cards. The M62's pass, on 7.3-rc7 with the series' four new
+files as posted and the loaded modules matched by build ID: a suspend
+that reached S3, after which the driver's controls read as before and
+the headphone knob was reported, the RTC alarm at 120 s, since at 20 s
+it fired before the devices had suspended and so aborted the suspend;
+two cable pulls under playback and a loop of writes, each followed by
+a bind, the loop's writes taken and no error from the drivers, and the
+battery shown 2.3 s and in UPower 2.4 s after the card came on USB;
+Mobile Mode's twenty controls, its first bind writing every MUTE 0 and
+both levels at 0 dB, and the battery shown 3.3 s after the card;
+fifty reloads and fifty binds, amixer's contents unchanged; five
+audio-side rebinds, every control back; alsactl's store and restore
+through a file exiting 0; both port power settings written Off through
+the controls and read back from the card's announce at three first
+binds; Loopback 1/2 at digital zero on Playback 3/4 and moved by
+-20.00 and +12.00 dB by its gain; in Pro Audio Mode every input's
+switch taking its columns to digital zero; nothing in the kernel log.
+The tone reached Loopback 1/2 at -61.01 dBFS, not at the -23.01 of
+5 October: the USB trims of Playback 1/2 stood at -38 dB, set by
+something other than the driver, and the record step now holds the
+trims at their top while it measures. Not yet usable: the inputs'
+switches in Mobile Mode, read inside the tail of the card's reverb
+(see PROTOCOL.md), to be read again past it; and the battery, which in
+15 minutes a half moved by no more than its readings swing -- Off 92
+to 93 %, Charge 93 to 88 % with steps back and forth of up to 4 % -- so
+the time for each half is still to be decided. Left: those two, the
+E2x2 OTG's pass, and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
