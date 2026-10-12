@@ -230,8 +230,10 @@ a card in Mobile Mode: its twenty controls after a bind, the two
 levels at 0 dB and every MUTE off, and each input's switch, turned
 off, taking that input out of the recording; and the E2x2 OTG's input
 switches, off silencing the input's meter, a gain set while off kept,
-and on bringing that gain back; then, in the cover letter, the numbers
-in the Tested list checked against them and the XXX line removed.
+and on bringing that gain back; and the same on the M62 for HP's
+volume under its MUTE, with the switch back of `m62-hpmute3.sh` run
+again; then, in the cover letter, the numbers in the Tested list
+checked against them and the XXX line removed.
 
 ## #826, the M62's profile
 
@@ -364,9 +366,20 @@ takes back the part of the decision of 11 October on HP's volume: the
 driver is to hold it back under the MUTE, as the eighth patch holds
 the E2x2 OTG's input gains, and as PipeWire holds the volume of a
 control it mutes by the bottom step. HP's switch still follows the
-card's reports, of a release by a knob among them. Left: that change
-to the seventh patch, and the runs on HP's MUTE again on it; the push,
-and the answer to the review; and once the posting is out, the link.
+card's reports, of a release by a knob among them.
+
+The same day the seventh patch got that: a level set while its switch
+is off is only kept, the switch writes it on its way on, before the
+MUTE 0, a bind and a resume write a muted level's MUTE alone, and a
+level or a release the card reports drops a level kept under that
+MUTE. The eighth patch's zero_mute switches stand beside it unchanged.
+Each step builds with W=1 and sparse, checkpatch finds nothing new,
+the eight apply to af32da4 and give the branch's files, and a test of
+the write, report and put paths cut out of the driver and run in
+userspace against a recorder passes on them and fails on the eight
+before in the cases the change covers. Left: the runs on hardware,
+listed under the next posting; the push, and the answer to the review;
+and once the posting is out, the link.
 
 ## UCM, once the next posting is out
 
