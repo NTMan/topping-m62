@@ -934,6 +934,43 @@ IN 2 a releasing step the card does not report is counted and not
 applied, and IN 2 sounds at the gain last reported; on AUX and OTG OUT
 the step is applied, and the gain last reported falls behind.
 
+Under PipeWire on 12 October (`m62-hpmute.txt` and `m62-hpmute2.txt`,
+Pro Audio Mode, bcdDevice 0327, the kernel with the eight patches),
+usbmon on the card's bus recorded every frame to and from it. With
+nothing playing and PipeWire's card on its profile for Playback 1/2,
+the sink's volume put back, which writes HP's level, and the sink
+muted at once, which writes HP's MUTE 25 to 29 ms after the level,
+left HP muted in all twenty cycles of the first run: nothing else
+reached `0x63` or `0x64` until the unmute, and the card sent no
+`64/04`.
+
+A switch of PipeWire's profile puts each device's route back as
+WirePlumber saved it, its MUTE and its volume in one Route param, and
+ACP applies the MUTE in such a param first and the volume after it.
+Switched back to Playback 1/2's profile with that sink muted, ten
+times in the second run, the host wrote `64/02` = 12, then `64/04` and
+`63/04` = 1, then the level, `64/03` and `63/03` = 47, 4 ms after the
+MUTE, every time, HP's level having been 0 on Playback 3/4's profile.
+The card released the MUTE after four of the ten, `64/04` = 0
+coming 24 to 86 ms after the level; in two of the four the host had
+meanwhile written the MUTE 0 and then 1 again. The switch back reached
+the card 2.8 to 2.9 s after `pactl set-card-profile` was called, the
+switch away 31 to 36 ms after it; the script read HP's switch about
+then, so its reads in those cycles show nothing.
+
+Ten more cycles switched the profile away and back before the first
+run's step. In the first of them the route came back muted, the level
+written before the MUTE this time, and the next level, the step's
+first, written under that MUTE, released it 162 ms later. In the nine
+others HP's level was put back with its MUTE off and the MUTE
+written 26 to 28 ms after it; eight held, and in one the card released
+the MUTE 155 ms after it, with nothing written to `0x63` or `0x64` in
+between, and reported the release. So a MUTE written after a level
+does not always hold: it was released in one of the 29 cycles of the
+two runs in which nothing reached HP after the MUTE, where none of
+the 27 probes of 10 and 11 October, made with HP sounding and the MUTE
+written 2 ms to 1 s after the level, saw a release.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
