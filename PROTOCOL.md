@@ -973,9 +973,10 @@ first, written under that MUTE, released it 162 ms later. In the nine
 others HP's level was put back with its MUTE off and the MUTE
 written 26 to 28 ms after it; eight held, and in one the card released
 the MUTE 155 ms after it, with nothing written to `0x63` or `0x64` in
-between, and reported the release. So a MUTE written after a level
-does not always hold: it was released in one of the 29 cycles of the
-two runs in which nothing reached HP after the MUTE, where none of
+between, and reported the release; within 0.4 s of the report HP's
+switch read on and PipeWire's sink unmuted. So a MUTE written after a
+level does not always hold: it was released in one of the 29 cycles of
+the two runs in which nothing reached HP after the MUTE, where none of
 the 27 probes of 10 and 11 October, made with HP sounding and the MUTE
 written 2 ms to 1 s after the level, saw a release.
 
