@@ -1411,6 +1411,24 @@ came out as 69 on AUX and HP OUT and as 87 on BT, OTG IN and OTG OUT,
 -6.0 dB on the two tapers of Pro Audio Mode (see "The two volume
 tapers"), and as -6 on Playback 1/2 and the Recording.
 
+The card's reverb goes on sounding after an input's MUTE (**verified**
+on Linux, 13 October 2026: the Mobile Mode step of `m62-runs.sh`, its
+frames recorded with usbmon). The card announced Reverb HALL (`44/0b`
+= 4), Dry/Wet 100, Room Size 4, Decay 11 and Width 70, with the Noise
+Reduction and the Compressor bypassed and IN 1's DUCKING off. Each
+input was switched on alone, the other four MUTEs on. On the MUTE of
+IN 1 and of IN 2 their meters `21/01` and `22/01` read -140.0 within
+0.25 s, and so did `46/0c`, while `39/03` and `39/04` fell by about
+25 dB a second -- from -24 to -63 in 1.75 s after IN 2's -- and then
+read -90.2 for some seconds: after IN 2's MUTE they were at -140.0
+again within 6.3 s. On the MUTE of AUX and of OTG IN, `39/03` and
+`39/04` read -140.0 within 0.25 s, as the input's own meter did. So
+the reverb carried IN 1 and IN 2 and neither AUX nor OTG IN; BT had
+nothing on it. `39/03` and `39/04` follow the mix after the reverb and
+`46/0c` a signal before it, and a recording read within some seconds
+of a MUTE holds the reverb's tail: the step read -48.6 dBFS RMS from
+0.65 to 1.9 s after IN 2's MUTE.
+
 ## Live Streaming Mode
 
 bcdDevice 02xx. M Control Center's Live Streaming screen (seen on 10
