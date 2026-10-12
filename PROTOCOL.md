@@ -951,12 +951,20 @@ Switched back to Playback 1/2's profile with that sink muted, ten
 times in the second run, the host wrote `64/02` = 12, then `64/04` and
 `63/04` = 1, then the level, `64/03` and `63/03` = 47, 4 ms after the
 MUTE, every time, HP's level having been 0 on Playback 3/4's profile.
-The card released the MUTE after four of the ten, `64/04` = 0
-coming 24 to 86 ms after the level; in two of the four the host had
-meanwhile written the MUTE 0 and then 1 again. The switch back reached
-the card 2.8 to 2.9 s after `pactl set-card-profile` was called, the
-switch away 31 to 36 ms after it; the script read HP's switch about
-then, so its reads in those cycles show nothing.
+The switch back reached the card 2.8 to 2.9 s after
+`pactl set-card-profile` was called, the switch away 31 to 36 ms after
+it. The script read HP's switch and unmuted the sink about then, so
+its reads in those cycles show nothing, and in seven of the ten its
+unmute reached HP 27 to 52 ms after the level, inside the 13 to 111 ms
+in which the card's `64/04` = 0 has come after a level written under
+the MUTE: those seven do not show whether the card would have released
+it. In the other three the host wrote nothing more to `0x63` or `0x64`
+for over half a second after the level. The card released the MUTE in
+two of them, `64/04` = 0 coming 24 and 26 ms after the level, and sent
+nothing in the third, where HP's switch read off about a second after
+the level. In two of the seven the card reported a release, 72 and
+86 ms after the level, the host having written the MUTE 0 and then 1
+again in between.
 
 Ten more cycles switched the profile away and back before the first
 run's step. In the first of them the route came back muted, the level
