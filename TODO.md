@@ -307,9 +307,27 @@ version. `m62-hpmute.sh` repeats the check's step that did not hold,
 the sink's volume put back and the sink muted at once, twenty times in
 Pro Audio Mode, with usbmon recording every vendor frame to and from
 the card, so that each cycle shows whether the host wrote HP's level
-after the MUTE and whether the card reported a release. Left: that
-run; the push, and the answer to the review; and once the posting is
-out, the link.
+after the MUTE and whether the card reported a release.
+
+It ran the same night (`m62-hpmute.txt`, Pro Audio Mode, twenty
+cycles, PipeWire's profile unchanged throughout): HP's MUTE held in
+all twenty. In each cycle the level went out 15 ms after the volume
+was put back and the MUTE 25 to 29 ms after the level; nothing else
+reached HP until the unmute, the card reported no release, and usbmon
+dropped nothing. Nothing but the loop's frames and the driver's
+keepalive went to the card. So the check's step does not release HP's
+MUTE; in the run where it was released, the check had switched
+profiles and begun its step on the sink a second after the switch. At
+a switch, WirePlumber puts each selected route back with one Route
+param carrying its mute and its volumes (`apply-routes.lua`), and ACP
+applies a mute in such a param at once and the volumes after it
+(`apply_device_props` in `alsa-acp-device.c`): a route saved muted
+gets HP's MUTE written first and, where the level changes, the level
+after it, under the MUTE. `m62-hpmute2.sh` takes that next, ten cycles
+of each kind: the sink muted, the profile switched to Playback 3/4's
+and back; and the profile switched away and back before the check's
+step. Left: that run; the push, and the answer to the review; and once
+the posting is out, the link.
 
 ## UCM, once the next posting is out
 
