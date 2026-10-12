@@ -382,7 +382,11 @@ October 2026) the announce brought `21/04`, `22/04` and `23/04` with
 `21/06`, `22/06` and `23/06` all 1, and BT's and the OTG port's jacks
 as `25/06` and `62/06` = 1, but neither BT's gain nor OTG IN's. In Pro
 Audio Mode (`M62 - Pro - Mutes.pcapng`) `25/06` came as 1 without
-`25/04` as well. No announce has carried `27/06`.
+`25/04` as well. No announce has carried `27/06`. On Linux, in the
+runs of 13 October, the card did send `25/04` in Mobile Mode, twice,
+about a second after alsactl's restore had written it at connect: 99
+both times, in one run after a write of 99 and in the other after a
+write of 0. `27/04`, written in the same restore, it sent in neither.
 
 The two output volumes are knowable but not immediately: nothing
 reports them until a hand moves the knob. A program that shows one
@@ -1263,6 +1267,13 @@ with other USB descriptors in each. The rest of this document is Pro
 Audio Mode unless it says otherwise. Mobile Mode keeps the frame, the
 session and the device scope, but part of the address map means
 something else in it.
+
+A mode is chosen as the card powers on: changing it on the panel is
+switching the card off and on again with the microphone selector
+button held (Mikhail, 13 October 2026). So the card leaves USB and
+comes back with the new bcdDevice, and phones playing into BT and OTG
+IN stop until they are started again by hand; a check that reads
+those two inputs after a change of mode has to wait for that.
 
 M Control Center's Mobile Mode screen (9 October 2026) has input
 strips IN 1, IN 2, AUX, BT, OTG IN and Playback 1/2, each with a gain
