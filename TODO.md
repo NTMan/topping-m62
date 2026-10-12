@@ -331,18 +331,22 @@ step.
 The second run (`m62-hpmute2.txt`, see PROTOCOL.md) found HP's MUTE
 lost under PipeWire in two ways. Switched back to Playback 1/2's
 profile with the sink muted, the host wrote HP's MUTE and then its
-level 4 ms later, ten times in ten, and the card released the MUTE
-after four of them: with the eight patches as they stand, a muted HP
-comes back unmuted on some of the switches back to its device, and the
-switch, following the card's report, shows it. And in one of the 29
-cycles of the two runs that wrote nothing to HP after the MUTE, the
-card released a MUTE written 26 ms after the level, as in the check.
-The switch back to Playback 1/2's profile reached the card 2.8
-to 2.9 s after it was asked for, so a script that reads after a switch
-has to wait for it. Left: whether the decision of 11 October on HP's
-switch stands, now that PipeWire writes the level under the MUTE at
-every such switch; the push, and the answer to the review; and once
-the posting is out, the link.
+level 4 ms later, ten times in ten. In the three of those cycles where
+nothing more was written to HP for half a second after the level, the
+card released the MUTE in two; the other seven do not tell, the
+script's own unmute having reached HP 27 to 52 ms after the level. So
+with the eight patches as they stand a muted HP can come back unmuted
+at a switch back to its device. That run's reads came as the switch
+back reached the card; where the card released the check's own MUTE
+and reported it, HP's switch read on within 0.4 s and PipeWire's sink
+unmuted. And in one of the 29 cycles of the two runs that wrote
+nothing to HP after the MUTE, the card released a MUTE written 26 ms
+after the level, as in the check. The switch back to Playback 1/2's
+profile reached the card 2.8 to 2.9 s after it was asked for, so a
+script that reads after a switch has to wait for it. Left: whether the
+decision of 11 October on HP's switch stands, now that PipeWire writes
+the level under the MUTE at every such switch; the push, and the
+answer to the review; and once the posting is out, the link.
 
 ## UCM, once the next posting is out
 
