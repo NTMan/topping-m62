@@ -318,6 +318,27 @@ decide: whether the first bind should write those two gains at 0 dB,
 as it writes the other values the card does not report. Left: that,
 the battery's time, the E2x2 OTG's pass, and the cover letter.
 
+Decided on 13 October: the battery step leaves the runs. Whether the
+card charges depends on the current its port can give, which a hub
+may not have -- on Charge in these runs the battery fell, 93 to 88 %
+in 15 minutes, and GNOME showed 87 % after them -- so an hour of
+waiting would show the hub, not the driver. What is the driver's the
+other steps show: the setting reaching the card and coming back in its
+announce at a first bind (the port step), the capacity the card
+reports reaching the power supply 2.3 s and UPower 2.4 s after each
+plug (the cable pulls), and GNOME's Power settings listing it. The
+question of the gains is not BT's and OTG IN's alone: the card leaves
+out of its connect report the gain of an analogue input with nothing
+plugged into it (see PROTOCOL.md), whose control then shows the same 0
+-- 0 dB for IN 1 and IN 2, -inf for AUX -- for alsactl to store; the
+runs never had an analogue input empty. The inputs differ only in when
+the card reports a gain. To decide: whether the driver writes, once
+the card's connect report is over, every gain nobody has reported or
+set, and at what -- 0 dB for all five, or the quiet end as for the
+headphones; a write at the first bind would destroy the gain the card
+is about to report for an input with a jack in it. Left: that, the
+E2x2 OTG's pass, and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
