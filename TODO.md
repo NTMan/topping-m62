@@ -339,6 +339,31 @@ headphones; a write at the first bind would destroy the gain the card
 is about to report for an input with a jack in it. Left: that, the
 E2x2 OTG's pass, and the cover letter.
 
+Decided on 13 October: the driver takes the card's state as unreadable
+-- the card reports a gain only for an input with something plugged
+into it, never BT's or OTG IN's, and its announce leaves out a port
+setting now and then -- and writes everything at its first bind: the
+five input gains at 0 dB, the scale's 0 for IN 1 and IN 2, 81 for AUX
+and 99 for BT and OTG IN; the USB-C port at Charge, without which a
+card set elsewhere to Off runs its battery down; and the OTG port at
+Off, Discharge spending the card's battery on a phone. alsactl's
+restore then writes what the user stored, as M Control Center's
+connect push writes its own. Done the same day as a new version of the
+eight patches, the old kept beside it until this one is reviewed: the
+second patch writes the gains at the first bind and the sixth the port
+settings, and the record the driver kept of which values the card had
+reported is gone, 42 lines fewer. A resume now writes the gains and
+the port settings too, so a gain turned on the panel while the
+computer slept is put back. Each of the eight compiles with W=1 and
+sparse without a warning in the files it touches, and checkpatch
+--strict reports only what it reported before: the CamelCase of the
+USB descriptors' fields, and MAINTAINERS at the first patch. With Off
+stored for the USB-C port, every arrival switches it from Charge to
+Off, which under macOS has at times taken the card off the bus (see
+PROTOCOL.md); the runs are to watch for it. Left: the review; the
+runs' port step changed for the new first bind, and every run again on
+that build; the E2x2 OTG's pass; and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
