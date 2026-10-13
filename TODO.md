@@ -378,6 +378,47 @@ simulator, with the card also made to leave the bus at the setting
 before a bind and at the write after one. Left: the review; every run
 again on the new build; the E2x2 OTG's pass; and the cover letter.
 
+The runs on the reworked eight, 13 October at 11:43, on 7.3-rc7 with
+the series' files as posted and the modules matched by build ID, the
+M62 alone: the suspend reached S3 and the headphone knob was reported
+after it; two cable pulls, the battery shown 2.5 s and in UPower 2.6
+to 2.7 s after each plug; fifty reloads with amixer's contents
+unchanged; five audio-side rebinds; alsactl's store and restore;
+Loopback 1/2 at -23.01 dBFS, moved -20.00 and +12.00 dB by its gain;
+every input's switch taking it to digital zero in both modes, IN 1 and
+IN 2 in Mobile Mode 4.8 and 6.5 s after it, past the reverb's tail;
+BT's and OTG IN's gains at 0 doing the same; nothing in the kernel
+log. The first bind in Mobile Mode wrote the five gains at 0 dB and
+the port settings at Charge and Off, and alsactl's restore wrote the
+gains it had stored 0.11 s later, IN 1's 28, IN 2's 88 and AUX's 99;
+after the bind nothing was written for BT's and OTG IN's gains or the
+port settings. In the port step three first binds, the card set to Off
+and Discharge before each, wrote Charge and Off, the controls read
+them and the card announced them; Off and Discharge written 0.01 to
+0.03 s after three more binds did not take the card off the bus.
+
+At the end IN 1's gain read 88 against 28 at the start, and PipeWire
+named the card ...-00.2, as it had since the port step's last
+re-creation of the card. From WirePlumber's and PipeWire's sources of
+12 October: WirePlumber gives a card that appears while it still holds
+one of the same name a ".2" (monitors/alsa.lua), keeps route volumes
+by the card's name and gives a route it has nothing stored for the
+default volume, 1.0 for a source (device/state-routes.lua,
+apply-routes.lua), and PipeWire puts 1.0 at the top of the source's
+mixer element (acp.c, base volume -max_dB), which in the M62's profile
+is the driver's gain: 88, +88 dB, on IN 1. IN 1 recorded at
+-66.77 dBFS in the record step, near its -69.96 dBFS in Mobile Mode at
+28, so the gain moved after that step's measurements, which end by
+turning PipeWire's profile back on. The runs now wait at every
+audio-side rebind until PipeWire has dropped the old card; in the
+simulator, with PipeWire made to drop a card 0.3 s late, the names and
+the gains then stayed as at the start. By the same code, a system that
+has stored nothing for the card gives every source 1.0 when the card
+first appears: IN 1 and IN 2 at +88 dB, whatever the driver wrote.
+Left: whether the port step's capture holds a write of 88 after that
+last re-creation; the runs again with the change; the E2x2 OTG's pass;
+and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
