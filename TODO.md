@@ -540,6 +540,33 @@ diffstat is new, and an XXX line stands in Tested until those runs.
 `mixer_topping.c`. Left: those runs and the check; Tested written from
 them; the review of the patches; and posting.
 
+The runs at 16:35 on the branch's build, the M62 alone, every step, the
+four files as posted and both modules matched by build ID: the suspend
+reached S3 and the knob was reported after it; two cable pulls, the
+battery shown 2.7 s and in UPower 2.7 to 3.0 s after each plug, and the
+loop's writes taken again; at the switch to Mobile Mode the first bind
+wrote all twenty controls and alsactl's restore IN 1's 28, IN 2's 88
+and AUX's 99 0.12 s later, the battery shown 3.4 s and in UPower 3.6 s
+after, and every input's switch took it to digital zero, IN 1 and IN 2
+4.8 and 6.5 s after it; fifty reloads with amixer's contents unchanged;
+five audio-side rebinds; alsactl's store and restore; Off and Discharge
+written right after three first binds did not take the card off the
+bus; Loopback 1/2 at -23.01 dBFS, moved -20.00 and +12.00 dB by its
+gain; every input's switch, and BT's and OTG IN's gains at 0, took the
+input to digital zero; nothing in the kernel log; the card's name,
+profile and gains as at the start. One thing differs from the runs
+before. At the first of the three first binds over Off and Discharge
+the bind wrote Charge and Off at +0.14 s, and the card announced
+Charge at +1.63 s but Discharge at +1.71 s, which `OTG Port Power` then
+showed; the other two announced Off, as had the eight of the nine such
+binds at 11:43, 12:19 and 12:46 whose announce carried `11/1b`. Nothing
+else wrote `11/1b` after the bind, and the code that writes it is the
+same as in those runs. Whether the card did not take the write or went
+back from it the log does not say; the frames of that bind are in the
+run's `usbmon-ports.txt`. Left: those frames; the run with both cards;
+the profiles' check; Tested from them; the review of the patches; and
+posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
