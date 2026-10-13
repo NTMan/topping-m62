@@ -434,6 +434,26 @@ arrival WirePlumber writes the volumes it has stored about a second
 after alsactl's restore, and the gains end at those. Left: the runs
 again with the change; the E2x2 OTG's pass; and the cover letter.
 
+The runs again at 12:19, the rebind waiting for PipeWire to drop the
+card: every step as at 11:43, one announce without 11/1b, and IN 1's
+gain at 88 from the switch to Mobile Mode on, where alsactl's restore
+wrote 88, stored while the 11:43 runs had left it there; IN 1 recorded
+at -7.21 dBFS in Mobile Mode and at -5.37 dBFS in the record step.
+PipeWire named the card ...-00.2 from the start, and again after the
+change of mode, so WirePlumber still held the card's own name. In
+monitors/alsa.lua a removed card's name is given back only if
+WirePlumber has finished creating the card's device; a card removed
+before that leaves its name taken until WirePlumber restarts, and the
+rebind step removed the card about 0.3 s after binding it. The runs
+now also wait, after each rebind of that step and of the port step,
+until PipeWire has taken the card and chosen its profile. In the
+simulator, with a card's name left taken when it goes within 0.5 s of
+arriving, the scripts of 11:43 and 12:19 ended with the card at
+...-00.6 and ...-00.5 and IN 1 at 88, the new one with the card's own
+name and the gains as at the start. Before the next runs: WirePlumber
+restarted, and IN 1 at 28 in alsactl's state. Left: those runs; the
+E2x2 OTG's pass; and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
