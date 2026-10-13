@@ -364,6 +364,20 @@ PROTOCOL.md); the runs are to watch for it. Left: the review; the
 runs' port step changed for the new first bind, and every run again on
 that build; the E2x2 OTG's pass; and the cover letter.
 
+The runs changed with it the same morning. The port step makes six
+first binds with hid-topping loaded after udev: three with the card
+set to Off and Discharge before each, for what the bind writes and
+what the card then announces, and three with Off and Discharge written
+as soon as the controls are there, as alsactl's restore of a stored
+Off would; after each switch from Charge to Off it watches the bus,
+5 s before a bind and 10 s after one. The Mobile Mode step lists the
+port settings among what the first bind writes; the record step,
+finding BT's or OTG IN's gain at 0, compares at 0 dB instead; and
+every step puts back what it changed, a 0 included. Run in the
+simulator, with the card also made to leave the bus at the setting
+before a bind and at the write after one. Left: the review; every run
+again on the new build; the E2x2 OTG's pass; and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
