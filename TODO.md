@@ -661,6 +661,20 @@ bound on the wait from them; then the runs again, the E2x2 OTG's step
 with the phone on its OTG port; the profiles' check; Tested; the
 review of the patches; and posting.
 
+The reloads' frames, `usbmon-reload.txt` (see PROTOCOL.md): the late
+answers came with sessions following each other closely, the slowest
+while the card was still sending the identification of an announce
+asked for by an earlier bind; at single binds the answer came within
+163 ms. An announce lasts 3.08 to 3.32 s from its request, so the wait
+is now bounded by 3.5 s instead of 500 ms, in 5/8 alone, its comment
+and commit message saying why. W=1 and sparse are clean on each commit
+and checkpatch finds what it did before. The runs expect the new
+`hid-topping.c`. Left: the runs on that build -- every step with both
+cards and the phone on the M62's OTG port, then the E2x2 OTG's step
+with the phone on its own OTG port, the port step twice more -- and the
+profiles' check; Tested from them; the review of the patches; and
+posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
