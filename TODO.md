@@ -479,6 +479,23 @@ switch, and BT's and OTG IN's gains at 0, took the input to digital
 zero; nothing in the kernel log. Left: the E2x2 OTG's pass; and the
 cover letter.
 
+The E2x2 OTG's pass at 13:00, both cards connected, the steps the two
+share: the suspend reached S3, the controls of both unchanged, the
+M62's knob and the E2x2 OTG's MON reported each to its own card; two
+cable pulls on each card, the loops' writes taken again after each
+plug and no error from the drivers; fifty reloads, a hundred binds,
+amixer's contents of both unchanged; five audio-side rebinds of each;
+alsactl's store and restore on both; each E2x2 OTG input's switch off
+silencing its meter, +14 dB set under it not written, and on writing
+it and bringing the meter back; nothing in the kernel log; both cards'
+names, profiles and input gains as at the start. The cover letter's
+Tested now gives these runs and the M62's of 12:46, without the XXX
+line. Its paragraph on PipeWire, the M62's headphone level following
+the desktop and the knob both ways and the desktop moving the
+E2x2 OTG's Master, is from 5 October, and stays as it is until it is
+checked on this build. Left: that, the review of the reworked patches,
+and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
