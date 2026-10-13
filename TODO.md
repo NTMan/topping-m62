@@ -530,6 +530,16 @@ come again on that build. The cover letter's paragraph on PipeWire is
 confirmed on this build (see #826). Left: whether the branch goes into
 the posting; the review of the reworked patches; and posting.
 
+Agreed at 14:27: the branch goes into the posting, and the runs come
+again on its build, the M62 alone and both cards, with the profiles'
+check in the three modes and on the E2x2 OTG, which also stands behind
+#826's Tested paragraphs. The posting files are made from it: in the
+cover letter the bullet on 3/8 and 4/8 says what a model now holds, the
+diffstat is new, and an XXX line stands in Tested until those runs.
+`m62-runs.sh` now expects the branch's `hid-topping.c` and
+`mixer_topping.c`. Left: those runs and the check; Tested written from
+them; the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
