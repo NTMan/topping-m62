@@ -739,6 +739,12 @@ the kernel line is all that ran: the runs compare the four new files
 with the posting, not the seven the series changes. Left: that; the
 review of the patches; and posting.
 
+Said at 23:20: the tree these runs were built from is 24a19b953e2a and
+the eight, nothing else. The seven files the runs did not compare are
+the same in the eight as posted as in the reworked eight, and no change
+since touched them. So the kernel line in Tested stands, and its XXX
+line is gone. Left: the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
@@ -917,6 +923,11 @@ the check gave, line for line, what it gave from 13:27 to 13:34, but
 for the headphone level it found and the knob's steps from that level.
 Left: whether every tone was heard; the push and the answer; and once
 the posting is out, the link.
+
+Said at 23:20: every tone was heard, in the three modes and on the
+E2x2 OTG, whose check was run apart from the M62's so that its tones
+were the ones listened to. The Tested paragraphs stand as written.
+Left: the push and the answer; and once the posting is out, the link.
 
 ## UCM, once the next posting is out
 
