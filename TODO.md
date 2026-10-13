@@ -622,6 +622,45 @@ session's two frames and the bind's writes before every one. Left: the
 runs on that build, the port step twice more, and the profiles' check;
 Tested from them; the review of the patches; and posting.
 
+The runs at 18:49 on the build that waits for the answer, both cards
+connected throughout, every step, the four files as posted and both
+modules matched by build ID: the suspend reached S3, the controls of
+both unchanged, the knob and MON reported each to its own card; two
+cable pulls on each card, the M62's battery shown 2.5 to 2.6 s and in
+UPower 2.7 s after each plug, the loops' writes taken again; at the
+switch to Mobile Mode the first bind wrote all twenty controls and
+alsactl's restore the gains 0.11 s later, the battery shown 3.3 s and
+in UPower 3.5 s after, and every input's switch took it to digital
+zero, IN 1 and IN 2 4.8 and 6.5 s after it; fifty reloads, a hundred
+binds, amixer's contents of both unchanged; five audio-side rebinds of
+each; alsactl's store and restore on both; the three first binds over
+Off and Discharge all announced Off, one without `11/1c`, and Off and
+Discharge written right after three more did not take the card off the
+bus; Loopback 1/2 at -23.01 dBFS, moved -20.00 and +12.00 dB; every
+input's switch, and BT's and OTG IN's gains at 0, took the input to
+digital zero; nothing in the kernel log; both cards' names, profiles
+and gains as at the start. The M62 answered the handshake 60 and 11 ms
+after it at the two changes of mode and 20 to 107 ms after it at the
+seven binds of the port step, with nothing sent before the answer.
+
+Three things are not as wanted. In the reloads one handshake of fifty
+was answered 851 ms after it, past the driver's 500 ms, and the driver
+sent `11/24`, `11/26` and its thirty-four writes at +504 ms, before the
+answer; the other answers came from 8 ms on. Across the suspend usbmon
+lost 98830 events, its reader frozen through the 92 s from suspend
+entry to S3 while the cards went on reporting, so the resume's
+handshake is not in the capture; and the runs' closing count of losses
+read 0, being only the last of the kernel's counts, which it resets at
+each read. The runs now give the losses' total, and take the kernel's
+largest ring, 64 MiB, across the suspend, wait for the reader to catch
+up after it, and say when the capture lost events. And no signal
+reached the E2x2 OTG's Mobile IN, the phone being on the M62's OTG
+port, so that input's switch went unchecked. Left: the reloads' frames,
+`usbmon-reload.txt`, to see when the card is slow to answer, and the
+bound on the wait from them; then the runs again, the E2x2 OTG's step
+with the phone on its OTG port; the profiles' check; Tested; the
+review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
