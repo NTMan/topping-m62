@@ -567,6 +567,42 @@ run's `usbmon-ports.txt`. Left: those frames; the run with both cards;
 the profiles' check; Tested from them; the review of the patches; and
 posting.
 
+The runs at 16:56 on the same build, both cards, the steps the two
+share and the E2x2 OTG's: the suspend reached S3, the controls of both
+unchanged, the M62's knob and the E2x2 OTG's MON reported each to its
+own card; two cable pulls on each card, the M62's battery shown 2.5 s
+and in UPower 2.6 s after each plug, the loops' writes taken again and
+no error from the drivers; fifty reloads, a hundred binds, amixer's
+contents of both unchanged; five audio-side rebinds of each; alsactl's
+store and restore on both; each E2x2 OTG input's switch off silencing
+its meter, +14 dB set under it not written, and on writing it and
+bringing the meter back; nothing in the kernel log; both cards' names,
+profiles and input gains as at the start.
+
+The frames of the 16:35 port step, `usbmon-ports.txt`, timed from each
+bind's `11/01`. At the first bind the driver sent `11/01`, `11/24` and
+`11/26` and then its thirty-four writes 2 ms apart, the last `11/1c` =
+1 at +72 ms and `11/1b` = 0 at +74 ms; the card answered the handshake,
+`11/01` = 3, at +76 ms. It took the rest of that burst: the announce
+carried `11/1c` = 1, not the Off written 6.1 s before the bind, and the
+second wave at +5.5 s had IN 1, IN 2 and AUX at 0, 0 and 81 and both
+output mutes at 0, as the burst wrote them. Only `11/1b` came back as
+1, the Discharge written 6.1 s before, and the card sent no `11/1b` in
+between. In the six other binds the answer came 11 to 163 ms after the
+handshake: 30 to 92 ms after the last write in five, and in one in the
+middle of the burst, 2 ms after `21/05` = 0, which changed nothing the
+card would show. M Control Center, in each of the seven captures in
+which it opens a session (Pro Audio, Live Streaming and Mobile Mode),
+sends nothing after `11/01` until the card's answer, which came 14 to
+130 ms after it, and writes first 4 to 6 ms after the answer. The
+driver writes at once. One lost write proves nothing about what lost
+it, but the one that did not take is the one that reached the card
+just before it answered, and the vendor application never writes
+before the answer. Left: whether the driver waits for the answer
+before anything is written, at bind and at resume; if it does, the
+runs again on that build; the profiles' check; Tested; the review of
+the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
