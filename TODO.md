@@ -496,6 +496,40 @@ E2x2 OTG's Master, is from 5 October, and stays as it is until it is
 checked on this build. Left: that, the review of the reworked patches,
 and posting.
 
+The aim, as Mikhail put it on 13 October: a card that speaks the same
+protocol is added by adding what it lacks, and works, with no change to
+the code that serves the others. The eight come close. The engine runs
+off the model's tables and the HID side off the flags in its device
+table, so a new card is its rows and a case in `snd_topping_init()`, an
+entry with its flags in the HID device table, and one line each in
+`hid-ids.h`, `hid-quirks.c` and `mixer_quirks.c`; outside the kernel,
+its UCM profile, its part of PROTOCOL.md and its steps in the runs.
+Three things in the code still stand for the two cards rather than for
+the protocol. The probe takes interface 4 and nothing else, so a card
+with the protocol on another interface would be refused without a
+word. The M62's rule for its mode, from bcdDevice, is code in the M62's
+case. And the per-card state is sized for 32 rows and 8 selectors: the
+M62 already has 8 selectors, and the guard against a longer table is a
+`static_assert` per table that the next one's author has to remember.
+Besides, since the rework took out `known` and `sel_known`, the
+`BITS_PER_LONG` asserts guard nothing until 7/8 adds `kept`, and the
+one on the selectors nothing at all. What a row must get right is still
+left to its author and the review: a MUTE right after its level, a map
+with a value for every step, a resend target that exists.
+
+On the branch `scalable` over the same base, for review: the device
+table gives each card's interface with its flags (3/8, 5/8), the model
+says whether bcdDevice tells its mode (4/8), and the cache, the MUTE
+bitmap and the controls' slots are allocated to the model's size, which
+takes out the limits and their asserts (4/8, 6/8, 7/8); the unused
+assert leaves 2/8, whose object code stays the same. W=1 and sparse are
+clean on each commit, and checkpatch finds what it found before.
+Nothing in it is meant to change what either card does, but the code
+is not the code that was run, so if it goes into the posting the runs
+come again on that build. The cover letter's paragraph on PipeWire is
+confirmed on this build (see #826). Left: whether the branch goes into
+the posting; the review of the reworked patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
@@ -690,9 +724,11 @@ the link.
   following the device; each sink's and source's volume moved the
   card's control behind it, and its mute the input's switch, or the
   lowest step of `Master` and the loopback faders; the Tested
-  paragraph says so. Left: the branch without the driver, on a kernel
-  without it; the inputs with a real signal; the pull request, once
-  the next posting is out, with the link to it in the commit message.
+  paragraph says so. Agreed on 13 October: it stays out of #826 and
+  goes as a pull request of its own over it. Left: the branch without
+  the driver, on a kernel without it; the inputs with a real signal;
+  the pull request, once the next posting is out, with the link to it
+  in the commit message.
 - In both profiles a source's volume is the card's own gain, not a USB
   trim: the driver exists so that PerDeviceEQ moves the card's gain
   stages. A source PipeWire sees for the first time starts at 100%,
