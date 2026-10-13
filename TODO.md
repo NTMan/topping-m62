@@ -675,6 +675,35 @@ with the phone on its own OTG port, the port step twice more -- and the
 profiles' check; Tested from them; the review of the patches; and
 posting.
 
+The runs at 21:49 on that build, both cards connected throughout and
+the phone on the M62's OTG port, every step, the four files as posted
+and both modules matched by build ID: the suspend reached S3, the
+controls of both unchanged, the knob and MON reported each to its own
+card, and usbmon lost nothing across it; two cable pulls on each card,
+the M62's battery shown 2.6 s and in UPower 2.6 to 2.8 s after each
+plug, the loops' writes taken again; at the switch to Mobile Mode the
+first bind wrote all twenty controls and alsactl's restore the gains
+0.11 s later, the battery shown 3.5 s and in UPower 3.7 s after, and
+every input's switch took it to digital zero, IN 1 and IN 2 3.0 and
+6.5 s after it; fifty reloads, a hundred binds, amixer's contents of
+both unchanged; five audio-side rebinds of each; alsactl's store and
+restore on both; the three first binds over Off and Discharge all
+announced Charge and Off, as they wrote them, and Off and Discharge
+written right after three more did not take the card off the bus;
+Loopback 1/2 at -23.01 dBFS, moved -20.00 and +12.00 dB; every input's
+switch, and BT's and OTG IN's gains at 0, took the input to digital
+zero; the E2x2 OTG's IN 1 and IN 2 switches off silencing their
+meters, +14 dB set under them not written, and on writing it and
+bringing the meters back; nothing in the kernel log; both cards'
+names, profiles and gains as at the start. The M62 answered all sixty
+handshakes, those of the fifty reloads 13 to 314 ms after them and the
+ten others 10 to 104 ms after, with nothing sent before an answer; the
+slowest bind of the reloads came 0.57 s after the load. The E2x2 OTG's
+Mobile IN again had no signal, the phone being on the M62's port.
+Left: the port step twice more, then the E2x2 OTG's step with the
+phone on its own OTG port, and the profiles' check; Tested from them;
+the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
