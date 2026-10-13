@@ -719,6 +719,26 @@ eighteen announces carried both. Left: the E2x2 OTG's step with the
 phone on its own OTG port, and the profiles' check; Tested from them;
 the review of the patches; and posting.
 
+The E2x2 OTG's step at 22:52 on that build, the phone on the E2x2 OTG's
+own OTG port: each of IN 1, IN 2 and Mobile IN switched off silenced its
+meter, +14 dB set under it was not written, and switched on wrote it and
+brought the meter back, Mobile IN's at a highest of -12.2 dB against
+-6.3 dB at +20 dB; usbmon lost nothing, and nothing came in the kernel
+log. The profiles' check on this build, from 22:54 to 23:00, is under
+#826. Tested in the cover letter is now written from these runs, at
+21:49, 22:17, 22:18 and 22:52, and from that check, and each of its
+statements was read against their logs: the port settings at eighteen
+first binds, every value the card announced the one last written; the
+74 handshakes captured, answered 10 to 314 ms after them, with nothing
+sent in between, the binds at the cable pulls and the audio-side
+rebinds having no capture; the battery shown 2.6 to 2.8 s after a plug
+and 3.5 to 3.7 s after the switch to Mobile Mode. The paragraph on
+PipeWire now gives the E2x2 OTG's Master to that card's own profile,
+which is to follow #826. The XXX line in Tested stays only for whether
+the kernel line is all that ran: the runs compare the four new files
+with the posting, not the seven the series changes. Left: that; the
+review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
@@ -889,6 +909,14 @@ whose old one still says Mobile Mode gets no profile, and an answer to
 the review. Left: whether every tone was heard, which the Tested
 paragraphs say; the push and the answer; and once the posting is out,
 the link.
+
+Checked again the same day from 22:54 to 23:00, on the build of the
+eight as they are to be posted, from the same checkout and Topping
+tree: in Pro Audio, Live Streaming and Mobile Mode and on the E2x2 OTG
+the check gave, line for line, what it gave from 13:27 to 13:34, but
+for the headphone level it found and the knob's steps from that level.
+Left: whether every tone was heard; the push and the answer; and once
+the posting is out, the link.
 
 ## UCM, once the next posting is out
 
