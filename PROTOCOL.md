@@ -250,7 +250,11 @@ frames before the answer; before the others it sent its meters, now
 and then with a jack or a few identification frames. At single binds,
 in the port step at 16:35, an announce began 0.98 to 1.21 s after its
 request and ended with `11/25` 3.08 to 3.32 s after it; in the reloads
-none of the fifty got to its `11/25`.
+none of the fifty got to its `11/25`. In the runs at 21:49, with the
+driver of the next posting, which sends nothing after the handshake
+until the answer, the M62 answered the fifty reloads' handshakes 13 to
+314 ms after them, and the ten others -- at the resume, at both changes
+of mode and at the port step's seven binds -- 10 to 104 ms after.
 
 All 162 of MCC's outgoing frames carry `0000` in the checksum
 field, which is the same "MCC does not sign its writes" noted
