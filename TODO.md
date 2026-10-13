@@ -419,6 +419,21 @@ Left: whether the port step's capture holds a write of 88 after that
 last re-creation; the runs again with the change; the E2x2 OTG's pass;
 and the cover letter.
 
+Confirmed the same day from the port step's capture and WirePlumber's
+state file, ~/.local/state/wireplumber/default-routes: at the card's
+last re-creation the bind wrote IN 1's gain 0, alsactl's restore 28
+0.12 s later, and 88 came 1.0 s after that, the card then named
+...-00.2, for which WirePlumber had stored no input route. Under the
+card's own name it had stored IN 1's route at 0.001, -60 dB, which
+PipeWire's base volume of -88 dB makes +28 dB, the 28 of the start;
+and the routes of IN 2, AUX, BT, OTG IN and the four loopback returns
+at 1.0, the top of each scale, where IN 2, AUX, BT and OTG IN stood at
+the start. A write of 88 came also 2.6 s into the port step, after the
+rebind step's five quick re-creations of the card. So at a card's
+arrival WirePlumber writes the volumes it has stored about a second
+after alsactl's restore, and the gains end at those. Left: the runs
+again with the change; the E2x2 OTG's pass; and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
