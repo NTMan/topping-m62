@@ -227,16 +227,17 @@ answer. In `E2x2 OTG - Mutes and Faders` the E2x2 OTG answered 2 ms
 after `11/01` and the program wrote 2 ms after that. What the card
 does before it answers is not known.
 
-The driver sends `11/24`, `11/26` and its first bind's writes at once.
-In the seven binds of the port step run on 13 October at 16:35
-(`usbmon-ports.txt`) the M62, already reporting, answered 11 to 163 ms
-after `11/01`. At the first of them the last write, `11/1b` = 0,
-reached the card 2 ms before the answer, and of that bind's writes it
-alone did not take: the announce brought back the Discharge written
-6.1 s before the bind, while the USB-C setting, the gains and the
-output mutes came back as the bind wrote them. In the other six no
-write reached the card within 2 ms before the answer but one, `21/05`
-= 0, whose effect the card does not show. One case.
+The driver of the runs that day sent `11/24`, `11/26` and its first
+bind's writes at once; for the next posting it waits for the answer,
+for at most 500 ms. In the seven binds of the port step run on 13
+October at 16:35 (`usbmon-ports.txt`) the M62, already reporting,
+answered 11 to 163 ms after `11/01`. At the first of them the last
+write, `11/1b` = 0, reached the card 2 ms before the answer, and of
+that bind's writes it alone did not take: the announce brought back
+the Discharge written 6.1 s before the bind, while the USB-C setting,
+the gains and the output mutes came back as the bind wrote them. In
+the other six no write reached the card within 2 ms before the answer
+but one, `21/05` = 0, whose effect the card does not show. One case.
 
 All 162 of MCC's outgoing frames carry `0000` in the checksum
 field, which is the same "MCC does not sign its writes" noted
