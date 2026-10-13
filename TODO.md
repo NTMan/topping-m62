@@ -459,6 +459,26 @@ card, ...-00.2, so nothing else held the card's own name; after the
 restart it listed ...-00. IN 1 put at 28 and alsactl's state stored.
 Left: the runs; the E2x2 OTG's pass; and the cover letter.
 
+The runs at 12:46, after WirePlumber's restart, the M62 alone, on the
+build to be posted: the card kept its own name throughout, and at the
+end PipeWire's profile and the five input gains were as at the start.
+The suspend reached S3 and the headphone knob was reported after it;
+two cable pulls, the battery shown 2.5 s and in UPower 2.6 to 2.7 s
+after each plug; fifty reloads with amixer's contents unchanged; five
+audio-side rebinds; alsactl's store and restore. At the switch to
+Mobile Mode the first bind wrote the five gains at 0 dB and the port
+settings at Charge and Off, and alsactl's restore wrote IN 1's 28,
+IN 2's 88 and AUX's 99 0.10 s later; in Mobile Mode every input's
+switch took it to digital zero, IN 1 and IN 2 3.3 and 6.5 s after it.
+Three first binds wrote Charge and Off over Off and Discharge and the
+card announced them; Off and Discharge written 0.01 to 0.03 s after
+three more binds did not take the card off the bus, and one announce
+after them came without 11/1c. Loopback 1/2 at -23.01 dBFS, moved
+-20.00 and +12.00 dB by its gain; in Pro Audio Mode every input's
+switch, and BT's and OTG IN's gains at 0, took the input to digital
+zero; nothing in the kernel log. Left: the E2x2 OTG's pass; and the
+cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
