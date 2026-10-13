@@ -603,6 +603,25 @@ before anything is written, at bind and at resume; if it does, the
 runs again on that build; the profiles' check; Tested; the review of
 the patches; and posting.
 
+Agreed at 17:12: the driver waits for the card's answer to `11/01`. In
+5/8, where the handshake comes in, `topping_open_session()` sends
+`11/01`, waits for the answer, which `.raw_event()` signals, for at
+most 500 ms, three times the longest seen, and only then sends `11/24`
+and `11/26`; the audio side writes after it returns, at a bind and at a
+resume. A handshake that could not be sent is not waited for, and the
+E2x2 OTG, which gets none, is untouched. W=1 and sparse are clean on
+each commit and checkpatch finds what it did before. In the cover
+letter the bullet on 5/8 says so, and its XXX line stays. The runs now
+time every handshake of the M62 they record -- at the resume after the
+suspend, in the fifty reloads, at the port step's first binds and at
+both changes of mode -- and give, in each step and in the summary, how
+soon the card answered and what reached it before the answer. In the
+simulator, the card answering 11 to 163 ms after a handshake, the new
+order sent nothing before any of 60 answers, and the old order the
+session's two frames and the bind's writes before every one. Left: the
+runs on that build, the port step twice more, and the profiles' check;
+Tested from them; the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
