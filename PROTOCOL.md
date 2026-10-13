@@ -229,7 +229,7 @@ does before it answers is not known.
 
 The driver of the runs that day sent `11/24`, `11/26` and its first
 bind's writes at once; for the next posting it waits for the answer,
-for at most 500 ms. In the seven binds of the port step run on 13
+for at most 3.5 s. In the seven binds of the port step run on 13
 October at 16:35 (`usbmon-ports.txt`) the M62, already reporting,
 answered 11 to 163 ms after `11/01`. At the first of them the last
 write, `11/1b` = 0, reached the card 2 ms before the answer, and of
@@ -238,6 +238,19 @@ the Discharge written 6.1 s before the bind, while the USB-C setting,
 the gains and the output mutes came back as the bind wrote them. In
 the other six no write reached the card within 2 ms before the answer
 but one, `21/05` = 0, whose effect the card does not show. One case.
+
+The answer comes later when sessions follow each other closely. In the
+fifty reloads of the runs at 18:49 that day (`usbmon-reload.txt`), a
+bind every 0.4 to 0.9 s, the M62 answered 8 to 851 ms after the
+handshake, 13 times of the 50 later than the 163 ms seen at single
+binds. The four slowest, 386 to 851 ms, came while the card was
+sending the identification of an announce asked for by an earlier
+bind, `12/02` to `12/06` and `11/1a` each over and over, up to 66 such
+frames before the answer; before the others it sent its meters, now
+and then with a jack or a few identification frames. At single binds,
+in the port step at 16:35, an announce began 0.98 to 1.21 s after its
+request and ended with `11/25` 3.08 to 3.32 s after it; in the reloads
+none of the fifty got to its `11/25`.
 
 All 162 of MCC's outgoing frames carry `0000` in the checksum
 field, which is the same "MCC does not sign its writes" noted
