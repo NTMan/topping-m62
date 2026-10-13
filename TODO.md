@@ -454,6 +454,11 @@ name and the gains as at the start. Before the next runs: WirePlumber
 restarted, and IN 1 at 28 in alsactl's state. Left: those runs; the
 E2x2 OTG's pass; and the cover letter.
 
+Done at 12:45: before WirePlumber's restart PipeWire listed one M62
+card, ...-00.2, so nothing else held the card's own name; after the
+restart it listed ...-00. IN 1 put at 28 and alsactl's state stored.
+Left: the runs; the E2x2 OTG's pass; and the cover letter.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
