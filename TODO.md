@@ -650,6 +650,23 @@ none brought a release, and HP's switch and PipeWire's sink read muted
 next posting; the push, and the answer to the review; and once the
 posting is out, the link.
 
+Checked again on 13 October on 7.3-rc7 with the reworked eight, from
+the same checkout, its Topping tree 56d38769, with the check now
+reading the UCM tree PipeWire reads and the M62's headphone knob: in
+Pro Audio, Live Streaming and Mobile Mode and on the E2x2 OTG the
+output selectors, where there are any, followed the devices, every
+sink's and source's volume moved the card's control behind it and its
+mute the switch beside it, or the lowest step where there is none, the
+trims stayed at 0 dB and on, and in each mode the knob moved the
+sink's volume. That also confirms on this build the cover letter's
+paragraph on PipeWire. The Tested paragraphs of both commits now say
+7.3-rc7, the M62's with the knob; the profile is unchanged. Exported
+for the push to #826 with a new description for the pull request,
+whose old one still says Mobile Mode gets no profile, and an answer to
+the review. Left: whether every tone was heard, which the Tested
+paragraphs say; the push and the answer; and once the posting is out,
+the link.
+
 ## UCM, once the next posting is out
 
 - The E2x2 OTG's profile is written, one commit on alsa-ucm-conf
