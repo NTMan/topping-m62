@@ -704,6 +704,21 @@ Left: the port step twice more, then the E2x2 OTG's step with the
 phone on its own OTG port, and the profiles' check; Tested from them;
 the review of the patches; and posting.
 
+The port step twice more on that build, at 22:17 and 22:18, the phone
+still on the M62's OTG port: at each of the six first binds over Off
+and Discharge the bind wrote Charge and Off and the controls showed
+them, and after each of the six with Off and Discharge written right
+after the bind the card stayed on the bus; the M62 answered the
+fourteen handshakes 24 to 120 ms after them, with nothing sent before
+an answer; usbmon lost nothing, and nothing came in the kernel log. At
+22:17 three announces lacked one of the two settings, `11/1b` at the
+second and fourth binds and `11/1c` at the sixth, as an announce at
+times does (see PROTOCOL.md); every value announced was the last one
+written. Over the three port steps on this build fifteen of the
+eighteen announces carried both. Left: the E2x2 OTG's step with the
+phone on its own OTG port, and the profiles' check; Tested from them;
+the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
