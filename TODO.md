@@ -745,6 +745,19 @@ the same in the eight as posted as in the reworked eight, and no change
 since touched them. So the kernel line in Tested stands, and its XXX
 line is gone. Left: the review of the patches; and posting.
 
+On 16 October Jiri Kosina acked v8, answering its cover letter, and
+asked Takashi Iwai to take the series through the ALSA tree. 1/8 of the
+next posting is v8's 1/2 unchanged, code and message, so it now carries
+his Acked-by, and the cover letter says so; the eight give the same
+tree as before and checkpatch finds the same in 1/8. 3/8 and 5/8, the
+HID patches v8 did not have, have no ack. v8's 2/2 differs from 2/8 in
+what a user sees: it treats Mobile Mode as Pro Audio Mode and writes
+there, at the first bind, the two output selectors that mode has not;
+an input gain the card has not reported reads 0, which alsactl stores
+and writes back at the next connect, muting AUX, BT and OTG IN; and
+IN 1's and IN 2's gains are "Mic-1" and "Mic-2". Left: the answer on
+the list; the review of the patches; and posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
