@@ -758,6 +758,18 @@ and writes back at the next connect, muting AUX, BT and OTG IN; and
 IN 1's and IN 2's gains are "Mic-1" and "Mic-2". Left: the answer on
 the list; the review of the patches; and posting.
 
+The answer went out on 16 October: Takashi to hold off on v8, which v9
+replaces, and 3/8 and 5/8 for Jiri to look at; nobody had answered it
+by 18 October. That day, before posting, the eight no longer applied to
+Takashi's for-next: the Audient EVO 4 had gone into mixer_quirks.c
+where 2/8 and 4/8 add their lines. They are now rebased onto sound
+for-next f6e8d5ebde5c, their own lines unchanged and only that context
+new; each step builds there with W=1 and sparse without a warning, the
+eight apply to sound for-next and to linux-next of 16 October,
+checkpatch finds what it found before, and the cover letter ends with
+that base-commit. They go to the people and lists v8 went to. Left:
+posting; then the link in #826, and the E2x2 OTG's pull request.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
