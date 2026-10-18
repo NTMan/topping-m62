@@ -794,6 +794,15 @@ commit message is made to link v9, its tree unchanged. Left: whether
 these three go in; the answer to Sashiko; the runs on that build; the
 next posting; the push of #826; and the E2x2 OTG's pull request.
 
+Agreed at 19:41: the three go into the next posting, 1/8 keeping
+Jiri Kosina's ack with pm_ptr() named among the changes since v9, and
+the runs come again on that build. `m62-runs.sh` now expects its
+`hid-topping.c` and looks for the M62's battery supply after each
+audio-side rebind, which in v9 could take the supply away, and after
+the last of the fifty reloads, the supply now going in .remove().
+Left: the answer to Sashiko; the runs on that build; the next posting;
+the push of #826; and the E2x2 OTG's pull request.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
