@@ -803,6 +803,37 @@ the last of the fifty reloads, the supply now going in .remove().
 Left: the answer to Sashiko; the runs on that build; the next posting;
 the push of #826; and the E2x2 OTG's pull request.
 
+The runs on that build on 18 October: every step at 22:48, the port
+step at 23:16 and 23:17, and the E2x2 OTG's step at 23:20, on
+7.3.0-rc7-32c52ec87d62 with the four files as posted and both modules
+matched by build ID. git found the tree's HEAD at 32c52ec87d62 and nine
+tracked files changed, where the series changes seven; `m62-runs.sh`
+now names the changed files and hashes the files as they are, so that a
+series applied without a commit is checked as well. Shown: fifty
+reloads and five audio-side rebinds per card, every control back, the
+M62's battery supply there after each rebind and 2.0 s after the last
+load; `alsactl restore`; the suspend, with the knob and MON reported
+after it, the session at the resume not captured, usbmon having lost
+390686 events across the suspend; two cable pulls per card; Mobile
+Mode's twenty controls, all written at the first bind; the port
+settings at eighteen first binds, every value announced the one last
+written, two announces each lacking one of the two; 73 handshakes
+captured, answered 11 to 378 ms after them, with nothing sent before an
+answer; Loopback 1/2's source and gain; the E2x2 OTG's three input
+switches; nothing in the kernel log. Both cards had power/control on,
+so the bind's runtime PM reference was never needed. Not shown: in Pro
+Audio Mode IN 2 and OTG IN had no signal, IN 2 because its source had
+been forgotten (Mikhail, 23:32); and in Mobile Mode, with IN 2 alone
+switched on and then off, the Recording held -66.9 dBFS, the level AUX
+gave alone, where the same five switches off at IN 1's turn had given
+digital zero. The profiles' check ran an older copy of
+`topping-ucm-check.sh`: it printed no `UCM tree` line, and its alsaucm
+found no profile, so it checked nothing. Left: the usbmon capture of
+the Mobile Mode step, to see on the card's meters which input sounded
+at IN 2's turn; the record step again with IN 2 and OTG IN fed; the
+profiles' check again; Tested from these; the review of the patches;
+and the next posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
