@@ -1075,6 +1075,19 @@ control read the kept value, 39, meanwhile, and the unmute wrote 39
 and then the MUTE 0, 2.4 to 4.2 ms after it, after which the card sent
 `64/04` = 0 three times of five, 68 to 88 ms after the MUTE 0.
 
+AUX's jack coming in released AUX's MUTE, seen once: in the Mobile Mode
+step of `m62-runs.sh` on 18 October 2026, its frames recorded with
+usbmon. AUX's jack had been reported absent, `23/06` = 0, in both waves
+after the session opened, and AUX's MUTE written 1 28 s before, when
+39.75 s into the session the card sent `23/05` = 0 and `23/06` = 1 in
+one report with `22/06`, `21/04` and `21/06`. From that report on,
+AUX's meter `23/01`, silent until then, and the mix's `39/03`, at
+-140.0 just before, read -66.1, until the host wrote AUX's MUTE again
+26 s later. 5.3 and 3.3 s before the report the card had reported HP's
+jack out and in, `64/06` = 0 and then 1. The driver took the `23/05` =
+0, so AUX's switch showed on. So there a MUTE written to AUX with
+nothing plugged into it did not hold once something was.
+
 ### Device scope and identification
 
 `11/01` session handshake (host 1, device answers 3 in Pro Audio Mode
