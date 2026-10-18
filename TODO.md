@@ -770,6 +770,30 @@ checkpatch finds what it found before, and the cover letter ends with
 that base-commit. They go to the people and lists v8 went to. Left:
 posting; then the link in #826, and the E2x2 OTG's pull request.
 
+v9 went out on 18 October at 17:48, nine messages, the cover letter
+https://lore.kernel.org/all/20261018124838.129349-1-mikhail.v.gavrilov@gmail.com/
+and the eight as lore has them apply to sound for-next and give the
+tree that was sent. Sashiko answered 1/8 and 5/8 within half an hour.
+On 5/8, rightly: component_bind() keeps a devres group open on the HID
+device while topping_bind() runs, and a battery report that comes in
+meanwhile -- the end of an earlier session's announce, when binds
+follow each other closely -- puts the supply the work registers with
+devm into that group, so the audio side's next unbind frees it under
+th->psy. Also on 5/8: a bind outside any USB probe, when hid-topping
+is loaded onto an interface usbhid already holds, can outlast the
+autosuspend delay while it waits for the answer; its other case, an
+interface asleep at a bind, does not arise, since a USB probe resumes
+the whole device until it returns. On 1/8: pm_ptr() for the PM
+callbacks, as most HID drivers have them. For the next posting, three
+changes over v9: the supply registered without devres, its name made
+at probe and the supply unregistered in .remove(); the bind's session
+under a runtime PM reference taken before the component is published;
+pm_ptr() in 1/8. Each step builds on sound for-next with W=1 and sparse
+without a warning, and checkpatch finds what it did before. #826's
+commit message is made to link v9, its tree unchanged. Left: whether
+these three go in; the answer to Sashiko; the runs on that build; the
+next posting; the push of #826; and the E2x2 OTG's pull request.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
