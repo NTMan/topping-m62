@@ -834,6 +834,28 @@ at IN 2's turn; the record step again with IN 2 and OTG IN fed; the
 profiles' check again; Tested from these; the review of the patches;
 and the next posting.
 
+At 23:42 the record step again with IN 2 and OTG IN fed: each input's
+switch took its own columns to digital zero and back, BT's and OTG IN's
+gains at 0 as well, and Loopback 1/2's source and gain gave what they
+gave before. The tree line named the two files beyond the series'
+seven, `Makefile` and `include/linux/irq-entry-common.h`. The Mobile
+Mode step's capture shows where the -66.9 dBFS at IN 2's turn came
+from: 5.5 s into the turn the card reported AUX's jack in and AUX's
+MUTE released together (see PROTOCOL.md), the driver followed, and
+AUX's meter and the mix read -66.1 from then on, while IN 2 had no jack
+throughout. `m62-runs.sh` now names an input that the card turned on
+during a turn of that step, and gives lockdep's debug_locks at the
+start and at the end. The profiles' check at 23:45 and 23:46 ran on the
+head of pull request #826 of 14 October with the E2x2 OTG's commit on
+it, their Topping tree 7191f79266f4 as rebuilt from those two commits:
+in Pro Audio Mode HP followed the desktop volume, its mute and the
+knob, and HP's source followed each playback device; the E2x2 OTG's
+Master followed the desktop volume. Live Streaming and Mobile Mode were
+not checked in this pass. Left: what the two files beyond the series
+carry; debug_locks for these runs; the Mobile Mode step again with IN 2
+fed and no cable touched; whether the tones were heard; Tested from
+these; the review of the patches; and the next posting.
+
 ## #826, the M62's profile
 
 Jaroslav Kysela's review of 9 October asks for three things: the mode
