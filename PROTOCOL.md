@@ -449,8 +449,8 @@ bind it writes both selectors and both output volumes, which makes
 what it shows what the card holds. The gains it left to what
 userspace restores when the card appears, until 13 October: a gain
 the card had not reported showed 0, for alsactl to store, and that
-day alsactl's restore wrote a stored 0 to BT's and OTG IN's gains
-(TODO.md), where 0 is -inf. The card reports a gain only for an input
+day alsactl's restore wrote a stored 0 to BT's and OTG IN's gains,
+where 0 is -inf. The card reports a gain only for an input
 with something plugged into it, never BT's or OTG IN's, so its report
 is not a read a host can count on. Decided on 13 October: the driver
 takes the card's state as unreadable and writes every gain at its
